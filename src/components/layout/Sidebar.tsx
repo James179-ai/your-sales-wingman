@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
@@ -14,7 +15,7 @@ import {
 } from "lucide-react";
 
 const navigation = [
-  { name: "Dashboard", icon: LayoutDashboard, href: "/", current: true },
+  { name: "Dashboard", icon: LayoutDashboard, href: "/", current: false },
   { name: "Campaigns", icon: Target, href: "/campaigns", current: false },
   { name: "Prospects", icon: Users, href: "/prospects", current: false },
   { name: "Messages", icon: MessageSquare, href: "/messages", current: false },
@@ -26,6 +27,8 @@ const navigation = [
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   return (
     <div className={cn(
@@ -56,18 +59,22 @@ export function Sidebar() {
       <nav className="flex-1 space-y-1 p-4">
         {navigation.map((item) => {
           const Icon = item.icon;
+          const isActive = currentPath === item.href;
           return (
-            <Button
+            <NavLink
               key={item.name}
-              variant={item.current ? "sidebar-active" : "sidebar"}
-              className={cn(
-                "w-full justify-start",
-                collapsed && "justify-center px-2"
+              to={item.href}
+              className={({ isActive: navIsActive }) => cn(
+                "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                collapsed && "justify-center px-2",
+                navIsActive
+                  ? "bg-primary/10 text-primary font-medium"
+                  : "text-muted-foreground hover:text-foreground hover:bg-surface-elevated"
               )}
             >
               <Icon className={cn("w-5 h-5", !collapsed && "mr-3")} />
               {!collapsed && <span>{item.name}</span>}
-            </Button>
+            </NavLink>
           );
         })}
       </nav>

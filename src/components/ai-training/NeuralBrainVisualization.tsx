@@ -270,8 +270,15 @@ export function NeuralBrainVisualization() {
 
         <div className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Learning Progress</CardTitle>
+            <CardHeader className="flex flex-row items-center space-y-0 pb-2">
+              <div className="flex-1">
+                <CardTitle className="text-lg">Learning Progress</CardTitle>
+              </div>
+              <img 
+                src={arthurAvatar} 
+                alt="Arthur AI Avatar" 
+                className="w-10 h-10 rounded-full border border-primary/20"
+              />
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -301,8 +308,15 @@ export function NeuralBrainVisualization() {
           </Card>
 
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Active Learning</CardTitle>
+            <CardHeader className="flex flex-row items-center space-y-0 pb-2">
+              <div className="flex-1">
+                <CardTitle className="text-lg">Active Learning</CardTitle>
+              </div>
+              <img 
+                src={arthurAvatar} 
+                alt="Arthur AI Avatar" 
+                className="w-10 h-10 rounded-full border border-primary/20"
+              />
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">

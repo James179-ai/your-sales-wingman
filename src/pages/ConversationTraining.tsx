@@ -33,6 +33,7 @@ interface ConversationMessage {
   content: string;
   timestamp: string;
   needsTraining?: boolean;
+  trained?: boolean;
   context?: string;
 }
 
@@ -127,20 +128,27 @@ const ConversationTraining = () => {
   const handleTrainMessage = (conversationId: string, messageId: string, newContent: string) => {
     setConversations(prev => prev.map(conv => {
       if (conv.id === conversationId) {
+        const updatedMessages = conv.messages.map(msg => 
+          msg.id === messageId 
+            ? { ...msg, content: newContent, needsTraining: false, trained: true }
+            : msg
+        );
+        
+        // Check if all training is complete for this conversation
+        const hasUntrainedMessages = updatedMessages.some(msg => msg.needsTraining);
+        const newStatus = hasUntrainedMessages ? 'needs_training' : 'active';
+        
         return {
           ...conv,
-          messages: conv.messages.map(msg => 
-            msg.id === messageId 
-              ? { ...msg, content: newContent, needsTraining: false }
-              : msg
-          )
+          messages: updatedMessages,
+          status: newStatus
         };
       }
       return conv;
     }));
 
     toast({
-      title: "Message Updated",
+      title: "AI Trained Successfully! ✨",
       description: "Arthur has learned from your edit and will apply this style to future messages.",
     });
 
@@ -152,8 +160,16 @@ const ConversationTraining = () => {
     switch (status) {
       case 'needs_training': return 'bg-orange-500/20 text-orange-700 border-orange-500/30';
       case 'active': return 'bg-green-500/20 text-green-700 border-green-500/30';
-      case 'completed': return 'bg-gray-500/20 text-gray-700 border-gray-500/30';
+      case 'completed': return 'bg-blue-500/20 text-blue-700 border-blue-500/30';
       default: return 'bg-gray-500/20 text-gray-700 border-gray-500/30';
+    }
+  };
+
+  const getStatusText = (status: Conversation['status']) => {
+    switch (status) {
+      case 'needs_training': return 'Needs Training';
+      case 'active': return 'Fully Trained';
+      case 'completed': return 'Completed';
     }
   };
 
@@ -238,7 +254,7 @@ const ConversationTraining = () => {
                       </div>
                     </div>
                     <Badge className={getStatusColor(conversation.status)}>
-                      {conversation.status.replace('_', ' ')}
+                      {getStatusText(conversation.status)}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -281,7 +297,7 @@ const ConversationTraining = () => {
                       </div>
                     </div>
                     <Badge className={getStatusColor(selectedConv.status)}>
-                      {selectedConv.status.replace('_', ' ')}
+                      {getStatusText(selectedConv.status)}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -347,7 +363,7 @@ const ConversationTraining = () => {
                                   {message.needsTraining && (
                                     <div className="mt-2 pt-2 border-t border-orange-200">
                                       <div className="flex items-center justify-between">
-                                        <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700">
+                                        <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-300">
                                           Needs Training
                                         </Badge>
                                         <Button
@@ -364,6 +380,20 @@ const ConversationTraining = () => {
                                       {message.context && (
                                         <p className="text-xs text-orange-600 mt-1">{message.context}</p>
                                       )}
+                                    </div>
+                                  )}
+                                  {message.trained && (
+                                    <div className="mt-2 pt-2 border-t border-green-200">
+                                      <div className="flex items-center justify-between">
+                                        <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-300">
+                                          ✨ AI Trained
+                                        </Badge>
+                                        <div className="flex items-center text-green-600">
+                                          <Brain className="h-3 w-3 mr-1" />
+                                          <span className="text-xs">Improved</span>
+                                        </div>
+                                      </div>
+                                      <p className="text-xs text-green-600 mt-1">Arthur learned your preferred style from this edit</p>
                                     </div>
                                   )}
                                 </>

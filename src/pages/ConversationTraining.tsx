@@ -113,6 +113,374 @@ const mockConversations: Conversation[] = [
         context: 'Technical question - needs more detailed response'
       }
     ]
+  },
+  {
+    id: '3',
+    prospect: {
+      name: 'Emily Rodriguez',
+      company: 'Healthcare Solutions Inc',
+    },
+    status: 'needs_training',
+    trainingPoints: ['Industry-specific messaging', 'Compliance questions'],
+    messages: [
+      {
+        id: '3-1',
+        sender: 'arthur',
+        content: "Hi Emily, I help companies improve their sales processes. Would you be interested in learning more?",
+        timestamp: 'Monday 11:00 AM',
+        needsTraining: true,
+        context: 'Generic message - needs healthcare industry personalization'
+      },
+      {
+        id: '3-2',
+        sender: 'prospect',
+        content: "We work in healthcare, so compliance is critical. Are you HIPAA compliant?",
+        timestamp: 'Monday 3:45 PM'
+      },
+      {
+        id: '3-3',
+        sender: 'arthur',
+        content: "Yes, we take security seriously and follow best practices.",
+        timestamp: 'Monday 4:00 PM',
+        needsTraining: true,
+        context: 'Compliance question - needs specific HIPAA details'
+      }
+    ]
+  },
+  {
+    id: '4',
+    prospect: {
+      name: 'David Kim',
+      company: 'E-commerce Plus',
+    },
+    status: 'needs_training',
+    trainingPoints: ['Objection handling', 'Value proposition'],
+    messages: [
+      {
+        id: '4-1',
+        sender: 'arthur',
+        content: "Hi David, I noticed E-commerce Plus has been growing rapidly. Our platform could help optimize your sales funnel.",
+        timestamp: 'Tuesday 2:00 PM'
+      },
+      {
+        id: '4-2',
+        sender: 'prospect',
+        content: "We already have a sales system that works fine. Why would we need to change?",
+        timestamp: 'Tuesday 4:30 PM'
+      },
+      {
+        id: '4-3',
+        sender: 'arthur',
+        content: "I understand you have a system in place. Our platform offers additional features that might complement what you're already doing.",
+        timestamp: 'Tuesday 4:45 PM',
+        needsTraining: true,
+        context: 'Weak objection handling - needs stronger value proposition'
+      }
+    ]
+  },
+  {
+    id: '5',
+    prospect: {
+      name: 'Lisa Thompson',
+      company: 'Manufacturing Corp',
+    },
+    status: 'needs_training',
+    trainingPoints: ['Follow-up strategy', 'Meeting scheduling'],
+    messages: [
+      {
+        id: '5-1',
+        sender: 'arthur',
+        content: "Hi Lisa, I help manufacturing companies streamline their sales operations. Would love to show you how we've helped similar companies increase efficiency by 35%.",
+        timestamp: 'Last week'
+      },
+      {
+        id: '5-2',
+        sender: 'prospect',
+        content: "Sounds interesting. Can we set up a call next week?",
+        timestamp: '3 days ago'
+      },
+      {
+        id: '5-3',
+        sender: 'arthur',
+        content: "Absolutely! When works best for you?",
+        timestamp: '3 days ago',
+        needsTraining: true,
+        context: 'Should provide specific time slots and calendar link'
+      }
+    ]
+  },
+  {
+    id: '6',
+    prospect: {
+      name: 'James Wilson',
+      company: 'Financial Services Ltd',
+    },
+    status: 'needs_training',
+    trainingPoints: ['Security concerns', 'ROI questions'],
+    messages: [
+      {
+        id: '6-1',
+        sender: 'arthur',
+        content: "Hi James, I help financial services companies automate their sales processes while maintaining security standards.",
+        timestamp: 'Yesterday 10:00 AM'
+      },
+      {
+        id: '6-2',
+        sender: 'prospect',
+        content: "Security is our top priority. What certifications do you have?",
+        timestamp: 'Yesterday 2:15 PM'
+      },
+      {
+        id: '6-3',
+        sender: 'arthur',
+        content: "We have enterprise-grade security measures in place.",
+        timestamp: 'Yesterday 2:30 PM',
+        needsTraining: true,
+        context: 'Needs specific security certifications (SOC 2, ISO 27001, etc.)'
+      },
+      {
+        id: '6-4',
+        sender: 'prospect',
+        content: "What kind of ROI can we expect in the first year?",
+        timestamp: 'Today 9:00 AM'
+      },
+      {
+        id: '6-5',
+        sender: 'arthur',
+        content: "Our clients typically see good returns on their investment.",
+        timestamp: 'Today 9:15 AM',
+        needsTraining: true,
+        context: 'Vague ROI response - needs specific metrics and case studies'
+      }
+    ]
+  },
+  {
+    id: '7',
+    prospect: {
+      name: 'Maria Garcia',
+      company: 'Retail Chain Co',
+    },
+    status: 'needs_training',
+    trainingPoints: ['Feature explanation', 'Competitive advantage'],
+    messages: [
+      {
+        id: '7-1',
+        sender: 'arthur',
+        content: "Hi Maria, I noticed Retail Chain Co has multiple locations. Our platform helps multi-location businesses coordinate their sales efforts.",
+        timestamp: 'Monday 3:00 PM'
+      },
+      {
+        id: '7-2',
+        sender: 'prospect',
+        content: "How is this different from Salesforce or HubSpot?",
+        timestamp: 'Tuesday 11:00 AM'
+      },
+      {
+        id: '7-3',
+        sender: 'arthur',
+        content: "We offer similar features but with better pricing and support.",
+        timestamp: 'Tuesday 11:30 AM',
+        needsTraining: true,
+        context: 'Weak competitive differentiation - needs specific unique value props'
+      }
+    ]
+  },
+  {
+    id: '8',
+    prospect: {
+      name: 'Robert Brown',
+      company: 'Tech Innovations',
+    },
+    status: 'active',
+    trainingPoints: ['Demo scheduling', 'Technical requirements'],
+    messages: [
+      {
+        id: '8-1',
+        sender: 'arthur',
+        content: "Hi Robert, I help tech companies like yours scale their sales operations efficiently. Our AI-powered platform has helped similar companies increase conversion rates by 40%.",
+        timestamp: '2 days ago'
+      },
+      {
+        id: '8-2',
+        sender: 'prospect',
+        content: "That sounds impressive. Can you show me a demo?",
+        timestamp: 'Yesterday 4:00 PM'
+      },
+      {
+        id: '8-3',
+        sender: 'arthur',
+        content: "Of course! I can walk you through the platform.",
+        timestamp: 'Yesterday 4:15 PM',
+        needsTraining: true,
+        context: 'Should offer specific demo time slots and preparation requirements'
+      }
+    ]
+  },
+  {
+    id: '9',
+    prospect: {
+      name: 'Jennifer Lee',
+      company: 'Education Partners',
+    },
+    status: 'needs_training',
+    trainingPoints: ['Budget questions', 'Implementation timeline'],
+    messages: [
+      {
+        id: '9-1',
+        sender: 'arthur',
+        content: "Hi Jennifer, I help educational organizations streamline their enrollment and outreach processes.",
+        timestamp: 'Last Friday 2:00 PM'
+      },
+      {
+        id: '9-2',
+        sender: 'prospect',
+        content: "This could be useful. What's the typical budget range for organizations our size?",
+        timestamp: 'Monday 10:00 AM'
+      },
+      {
+        id: '9-3',
+        sender: 'arthur',
+        content: "Our pricing is very competitive and depends on your specific needs.",
+        timestamp: 'Monday 10:30 AM',
+        needsTraining: true,
+        context: 'Needs specific pricing ranges and package options'
+      },
+      {
+        id: '9-4',
+        sender: 'prospect',
+        content: "How long does implementation typically take?",
+        timestamp: 'Monday 2:00 PM'
+      },
+      {
+        id: '9-5',
+        sender: 'arthur',
+        content: "It varies based on complexity, but we work to get you up and running quickly.",
+        timestamp: 'Monday 2:15 PM',
+        needsTraining: true,
+        context: 'Vague timeline - needs specific implementation phases and duration'
+      }
+    ]
+  },
+  {
+    id: '10',
+    prospect: {
+      name: 'Kevin Martinez',
+      company: 'Construction Management',
+    },
+    status: 'needs_training',
+    trainingPoints: ['Industry understanding', 'Mobile requirements'],
+    messages: [
+      {
+        id: '10-1',
+        sender: 'arthur',
+        content: "Hi Kevin, I help businesses improve their sales processes through automation.",
+        timestamp: 'Wednesday 9:00 AM',
+        needsTraining: true,
+        context: 'Generic message - needs construction industry personalization'
+      },
+      {
+        id: '10-2',
+        sender: 'prospect',
+        content: "Our team is mostly in the field. Does your platform work well on mobile devices?",
+        timestamp: 'Wednesday 1:00 PM'
+      },
+      {
+        id: '10-3',
+        sender: 'arthur',
+        content: "Yes, we have a mobile app available.",
+        timestamp: 'Wednesday 1:15 PM',
+        needsTraining: true,
+        context: 'Needs details about mobile features and field-specific functionality'
+      }
+    ]
+  },
+  {
+    id: '11',
+    prospect: {
+      name: 'Amanda Foster',
+      company: 'Digital Marketing Agency',
+    },
+    status: 'needs_training',
+    trainingPoints: ['Agency-specific features', 'Client management'],
+    messages: [
+      {
+        id: '11-1',
+        sender: 'arthur',
+        content: "Hi Amanda, I help marketing agencies manage their client relationships and sales processes more effectively.",
+        timestamp: 'Thursday 11:00 AM'
+      },
+      {
+        id: '11-2',
+        sender: 'prospect',
+        content: "We manage multiple clients. Can your system handle separate pipelines for each client?",
+        timestamp: 'Thursday 3:00 PM'
+      },
+      {
+        id: '11-3',
+        sender: 'arthur',
+        content: "Yes, our platform supports multiple pipelines.",
+        timestamp: 'Thursday 3:30 PM',
+        needsTraining: true,
+        context: 'Needs details about multi-client management and agency-specific features'
+      },
+      {
+        id: '11-4',
+        sender: 'prospect',
+        content: "Can we white-label it for our clients?",
+        timestamp: 'Friday 10:00 AM'
+      },
+      {
+        id: '11-5',
+        sender: 'arthur',
+        content: "That's something we might be able to accommodate.",
+        timestamp: 'Friday 10:15 AM',
+        needsTraining: true,
+        context: 'Uncertain response - needs clear white-label policy and pricing'
+      }
+    ]
+  },
+  {
+    id: '12',
+    prospect: {
+      name: 'Thomas Anderson',
+      company: 'Logistics Solutions',
+    },
+    status: 'active',
+    trainingPoints: ['Integration questions', 'Scalability'],
+    messages: [
+      {
+        id: '12-1',
+        sender: 'arthur',
+        content: "Hi Thomas, I help logistics companies optimize their sales operations and improve customer acquisition rates.",
+        timestamp: '2 weeks ago'
+      },
+      {
+        id: '12-2',
+        sender: 'prospect',
+        content: "We use SAP for our operations. Can your platform integrate with our existing systems?",
+        timestamp: '10 days ago'
+      },
+      {
+        id: '12-3',
+        sender: 'arthur',
+        content: "We offer integrations with many popular business systems including SAP.",
+        timestamp: '10 days ago'
+      },
+      {
+        id: '12-4',
+        sender: 'prospect',
+        content: "We're growing rapidly. How well does your platform scale?",
+        timestamp: '5 days ago'
+      },
+      {
+        id: '12-5',
+        sender: 'arthur',
+        content: "Our platform is built to handle growth, but I'd need to understand your specific scaling needs better.",
+        timestamp: '5 days ago',
+        needsTraining: true,
+        context: 'Should provide specific scalability metrics and enterprise features'
+      }
+    ]
   }
 ];
 

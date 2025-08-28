@@ -141,9 +141,9 @@ const Activity = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Activity Feed</h1>
+            <h1 className="text-3xl font-bold text-foreground">Arthur's Activity Report</h1>
             <p className="text-muted-foreground mt-2">
-              Track all your outreach activities and engagement metrics
+              Watch how Arthur's been working hard for you! Every action tracked in real-time.
             </p>
           </div>
           <div className="flex gap-2">
@@ -162,39 +162,39 @@ const Activity = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Today's Activities</CardTitle>
+              <CardTitle className="text-sm font-medium">Arthur's Activity Today</CardTitle>
               <ActivityIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">47</div>
               <p className="text-xs text-muted-foreground">
-                +12% from yesterday
+                Arthur's on fire today!
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Messages Sent</CardTitle>
+              <CardTitle className="text-sm font-medium">Messages Arthur Sent</CardTitle>
               <MessageCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">23</div>
               <p className="text-xs text-muted-foreground">
-                +5% from yesterday
+                Staying consistent!
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Connections Made</CardTitle>
+              <CardTitle className="text-sm font-medium">Connections Arthur Made</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">8</div>
               <p className="text-xs text-muted-foreground">
-                +25% from yesterday
+                Great networking day!
               </p>
             </CardContent>
           </Card>
@@ -207,7 +207,7 @@ const Activity = () => {
             <CardContent>
               <div className="text-2xl font-bold">34%</div>
               <p className="text-xs text-muted-foreground">
-                +8% from yesterday
+                Arthur's messages are hitting the mark!
               </p>
             </CardContent>
           </Card>
@@ -255,9 +255,9 @@ const Activity = () => {
         {/* Activity Feed */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle>Arthur's Recent Work</CardTitle>
             <CardDescription>
-              Latest activities from your outreach campaigns
+              Here's everything Arthur accomplished in your campaigns
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -307,9 +307,9 @@ const Activity = () => {
             {filteredActivities.length === 0 && (
               <div className="text-center py-12">
                 <ActivityIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-                <h3 className="mt-2 text-sm font-semibold text-foreground">No activities found</h3>
+                <h3 className="mt-2 text-sm font-semibold text-foreground">No activities to show yet</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Try adjusting your search or filter criteria.
+                  Arthur's getting ready to start working! Check back soon to see his progress.
                 </p>
               </div>
             )}

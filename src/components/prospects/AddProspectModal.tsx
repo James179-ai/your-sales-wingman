@@ -262,10 +262,10 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <User className="w-5 h-5" />
-            Add New Prospects
+            Help Arthur Add Prospects
           </DialogTitle>
           <DialogDescription>
-            Choose from three methods to add prospects to your database
+            Arthur suggests three great ways to build your prospect database
           </DialogDescription>
         </DialogHeader>
 
@@ -291,10 +291,10 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Linkedin className="w-5 h-5 text-blue-600" />
-                  Add Prospect Manually
+                  Let Arthur Extract From LinkedIn
                 </CardTitle>
                 <CardDescription>
-                  Enter LinkedIn URL for automatic extraction or fill in details manually
+                  Arthur can automatically extract profile info from any LinkedIn URL - just paste it below!
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -307,7 +307,7 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
                     onChange={(e) => setManualProspect(prev => ({...prev, linkedinUrl: e.target.value}))}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Paste LinkedIn URL to automatically extract profile information
+                    Arthur will extract all the details automatically - it's like magic!
                   </p>
                 </div>
 
@@ -387,7 +387,7 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
 
                 <Button onClick={handleManualSubmit} className="w-full">
                   <User className="w-4 h-4 mr-2" />
-                  Add Prospect
+                  Let Arthur Add This Prospect
                 </Button>
               </CardContent>
             </Card>
@@ -399,10 +399,10 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Upload className="w-5 h-5" />
-                  Upload CSV File
+                  Let Arthur Process Your CSV
                 </CardTitle>
                 <CardDescription>
-                  Upload a CSV file with multiple prospects. Download our template to get started.
+                  Arthur can handle hundreds of prospects at once! Just upload your CSV and he'll organize everything.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -412,7 +412,7 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
                     Download Template
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    Required columns: firstName, lastName, company, position
+                    Arthur needs: firstName, lastName, company, position
                   </span>
                 </div>
 
@@ -426,8 +426,8 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
                   />
                   <Label htmlFor="csvUpload" className="cursor-pointer">
                     <FileText className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                    <p className="text-sm font-medium">Click to upload CSV file</p>
-                    <p className="text-xs text-muted-foreground">CSV files up to 10MB</p>
+                    <p className="text-sm font-medium">Arthur will process your CSV instantly</p>
+                    <p className="text-xs text-muted-foreground">CSV files up to 10MB - Arthur loves big lists!</p>
                   </Label>
                 </div>
 
@@ -435,7 +435,7 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span className="text-sm">Processing CSV file...</span>
+                      <span className="text-sm">Arthur is processing your prospects...</span>
                     </div>
                     <Progress value={66} className="w-full" />
                   </div>
@@ -443,7 +443,7 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
 
                 {csvResults.length > 0 && (
                   <div className="space-y-4">
-                    <h4 className="font-medium">Processing Results</h4>
+                    <h4 className="font-medium">Arthur's Processing Results</h4>
                     <div className="space-y-2 max-h-60 overflow-y-auto">
                       {csvResults.map((result, index) => (
                         <div key={index} className="flex items-center justify-between p-2 border rounded">
@@ -467,10 +467,10 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">
-                        {csvResults.filter(r => r.status === "valid").length} valid prospects found
+                        Arthur found {csvResults.filter(r => r.status === "valid").length} perfect prospects!
                       </span>
                       <Button onClick={handleCsvImport}>
-                        Import Valid Prospects
+                        Let Arthur Import These
                       </Button>
                     </div>
                   </div>
@@ -485,10 +485,10 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Brain className="w-5 h-5 text-purple-600" />
-                  AI Prospect Discovery
+                  Let Arthur Find Perfect Prospects
                 </CardTitle>
                 <CardDescription>
-                  Let AI find high-quality prospects based on your business criteria
+                  Arthur's AI will analyze your business and discover ideal prospects automatically - just tell him what you're looking for!
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -570,18 +570,18 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <Sparkles className="w-4 h-4 animate-pulse text-purple-600" />
-                      <span className="text-sm">AI is discovering prospects...</span>
+                      <span className="text-sm">Arthur is hunting for your perfect prospects...</span>
                     </div>
                     <Progress value={aiProgress} className="w-full" />
                     <p className="text-xs text-muted-foreground">
-                      This may take a moment as we search across professional networks
+                      Arthur is searching across professional networks - this is where the magic happens!
                     </p>
                   </div>
                 )}
 
                 {aiResults.length > 0 && (
                   <div className="space-y-4">
-                    <h4 className="font-medium">AI-Discovered Prospects</h4>
+                    <h4 className="font-medium">Arthur Found These Perfect Matches!</h4>
                     <div className="space-y-3 max-h-60 overflow-y-auto">
                       {aiResults.map((prospect, index) => (
                         <Card key={index} className="p-3">
@@ -608,7 +608,7 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
                     </div>
                     <Button onClick={() => handleAiImport(aiResults)} className="w-full">
                       <Brain className="w-4 h-4 mr-2" />
-                      Add All AI Prospects ({aiResults.length})
+                      Let Arthur Add All These ({aiResults.length})
                     </Button>
                   </div>
                 )}
@@ -616,7 +616,7 @@ export const AddProspectModal = ({ open, onOpenChange, onProspectsAdded }: AddPr
                 {!aiProcessing && aiResults.length === 0 && (
                   <Button onClick={handleAiDiscovery} className="w-full">
                     <Sparkles className="w-4 h-4 mr-2" />
-                    Start AI Discovery
+                    Let Arthur Start Hunting
                   </Button>
                 )}
               </CardContent>

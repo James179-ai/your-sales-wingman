@@ -146,10 +146,10 @@ export default function Messages() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
-            Messages
+            Arthur's Message Center
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage conversations with your prospects
+            Here are all your active conversations. Arthur's been keeping them warm!
           </p>
         </div>
 
@@ -157,7 +157,7 @@ export default function Messages() {
           {/* Prospects List */}
           <Card className="bg-white/40 backdrop-blur-xl border-white/20 shadow-glass">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg">Conversations</CardTitle>
+              <CardTitle className="text-lg">Conversations Arthur Started</CardTitle>
               
               {/* Search and Filter */}
               <div className="space-y-3">
@@ -276,7 +276,7 @@ export default function Messages() {
                     
                     <Button variant="outline" size="sm" className="border-white/30 hover:bg-white/60">
                       <Calendar className="h-4 w-4 mr-2" />
-                      Schedule Meeting
+                      Let Arthur Book Meeting
                     </Button>
                   </div>
                 </div>
@@ -338,7 +338,7 @@ export default function Messages() {
                     </Button>
                   </div>
                   <p className="text-xs text-muted-foreground mt-2">
-                    Press Enter to send, Shift+Enter for new line
+                    Arthur suggests: Press Enter to send, Shift+Enter for new line
                   </p>
                 </div>
               </CardContent>

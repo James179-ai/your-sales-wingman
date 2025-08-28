@@ -150,10 +150,10 @@ export default function Settings() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
-            Settings
+            Arthur's Settings
           </h1>
           <p className="text-muted-foreground mt-1">
-            Configure your account, integrations, and preferences
+            Configure how Arthur works for you. He adapts to your preferences!
           </p>
         </div>
 
@@ -184,14 +184,14 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Zap className="h-5 w-5" />
-                  <span>Integration Status</span>
+                  <span>Arthur's Integrations</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {[
-                  { key: 'unipile', name: 'LinkedIn (Unipile)', icon: Linkedin, description: 'LinkedIn automation and messaging' },
-                  { key: 'openai', name: 'OpenAI', icon: Key, description: 'AI message generation and analysis' },
-                  { key: 'calendly', name: 'Calendly', icon: Calendar, description: 'Meeting scheduling integration' }
+                    { key: 'unipile', name: 'LinkedIn (Arthur\'s Engine)', icon: Linkedin, description: 'Arthur uses this to send messages and connect with prospects' },
+                    { key: 'openai', name: 'OpenAI (Arthur\'s Brain)', icon: Key, description: 'Arthur\'s AI engine for crafting personalized messages' },
+                    { key: 'calendly', name: 'Calendly (Arthur\'s Scheduler)', icon: Calendar, description: 'Arthur includes meeting links in booking messages' }
                 ].map(({ key, name, icon: Icon, description }) => {
                   const integration = integrations[key];
                   return (
@@ -216,9 +216,9 @@ export default function Settings() {
                             : "bg-destructive/10 text-destructive border-destructive/20"
                         }>
                           {integration.connected ? (
-                            <><CheckCircle className="h-3 w-3 mr-1" />Connected</>
-                          ) : (
-                            <><AlertCircle className="h-3 w-3 mr-1" />Disconnected</>
+                              <><CheckCircle className="h-3 w-3 mr-1" />Arthur Connected</>
+                            ) : (
+                              <><AlertCircle className="h-3 w-3 mr-1" />Arthur Needs This</>
                           )}
                         </Badge>
                         
@@ -230,7 +230,7 @@ export default function Settings() {
                           className="border-white/30 hover:bg-white/60"
                         >
                           <TestTube className="h-4 w-4 mr-2" />
-                          Test
+                          Test Arthur's Connection
                         </Button>
                       </div>
                     </div>
@@ -244,7 +244,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Linkedin className="h-5 w-5" />
-                  <span>LinkedIn Configuration</span>
+                  <span>Arthur's LinkedIn Setup</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -279,7 +279,7 @@ export default function Settings() {
                   className="bg-gradient-primary hover:opacity-90"
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  Save LinkedIn Settings
+                  Update Arthur's LinkedIn Access
                 </Button>
               </CardContent>
             </Card>
@@ -289,7 +289,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Calendar className="h-5 w-5" />
-                  <span>Calendly Integration</span>
+                  <span>Arthur's Meeting Scheduler</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -303,7 +303,7 @@ export default function Settings() {
                     className="bg-white/60 border-white/30"
                   />
                   <p className="text-sm text-muted-foreground">
-                    This link will be automatically included in booking messages
+                    Arthur will automatically include this link when prospects want to book meetings
                   </p>
                 </div>
                 
@@ -313,7 +313,7 @@ export default function Settings() {
                   className="bg-gradient-primary hover:opacity-90"
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  Save Calendly Settings
+                  Update Arthur's Scheduler
                 </Button>
               </CardContent>
             </Card>
@@ -325,7 +325,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <MessageSquare className="h-5 w-5" />
-                  <span>Message Configuration</span>
+                  <span>Arthur's Communication Style</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -362,9 +362,9 @@ export default function Settings() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label htmlFor="includeCalendly">Include Calendly in Follow-ups</Label>
+                      <Label htmlFor="includeCalendly">Arthur Auto-Books Meetings</Label>
                       <p className="text-sm text-muted-foreground">
-                        Automatically include booking link in follow-up messages
+                        Let Arthur automatically include your booking link when prospects show interest
                       </p>
                     </div>
                     <Switch
@@ -399,7 +399,7 @@ export default function Settings() {
                   className="bg-gradient-primary hover:opacity-90"
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  Save Message Settings
+                  Update Arthur's Communication Style
                 </Button>
               </CardContent>
             </Card>

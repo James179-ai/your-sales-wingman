@@ -1,6 +1,7 @@
 import { KPICard } from "./KPICard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { 
   Users, 
   MessageSquare, 
@@ -9,6 +10,7 @@ import {
   Plus,
   BarChart3
 } from "lucide-react";
+import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 const mockKPIs = [
   {
@@ -73,11 +75,17 @@ export function Dashboard() {
     <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground mt-1">
-            Welcome back! Here's your LinkedIn outreach performance.
-          </p>
+        <div className="flex items-center gap-4">
+          <Avatar className="h-16 w-16 border-2 border-primary/20">
+            <AvatarImage src={aiSalesmanAvatar} alt="AI Sales Assistant" />
+            <AvatarFallback>AI</AvatarFallback>
+          </Avatar>
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Good Evening, Karl-Martin</h1>
+            <p className="text-muted-foreground mt-1">
+              Your AI sales assistant is ready. Here's your LinkedIn outreach performance.
+            </p>
+          </div>
         </div>
         <Button variant="primary" className="gap-2">
           <Plus className="w-4 h-4" />

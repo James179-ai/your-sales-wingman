@@ -54,8 +54,8 @@ export default function Settings() {
   // Settings state
   const [settings, setSettings] = useState({
     // Company Info
-    companyName: "Tiim AI",
-    companyWebsite: "https://tiim.ai",
+    companyName: "Closerly",
+    companyWebsite: "https://closerly.com",
     defaultCalendlyLink: "",
     
     // LinkedIn Settings

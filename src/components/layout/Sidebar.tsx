@@ -42,7 +42,7 @@ export function Sidebar() {
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
               <Target className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-lg text-foreground">Tiim AI</span>
+            <span className="font-bold text-lg text-foreground">Closerly</span>
           </div>
         )}
         <Button

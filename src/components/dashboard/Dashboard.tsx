@@ -16,7 +16,7 @@ import {
   Bot,
   MessageCircle
 } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line, RadialBarChart, RadialBar, Legend, ReferenceLine, CartesianGrid } from "recharts";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 const mockKPIs = [
@@ -77,23 +77,23 @@ const mockCampaigns = [
   }
 ];
 
-// Chart data with high-tech colors
+// Advanced chart data for high-tech visualizations
 const performanceData = [
-  { name: "Mon", connections: 12, responses: 3, meetings: 1 },
-  { name: "Tue", connections: 19, responses: 5, meetings: 2 },
-  { name: "Wed", connections: 15, responses: 4, meetings: 1 },
-  { name: "Thu", connections: 22, responses: 8, meetings: 3 },
-  { name: "Fri", connections: 18, responses: 6, meetings: 2 },
-  { name: "Sat", connections: 8, responses: 2, meetings: 0 },
-  { name: "Sun", connections: 5, responses: 1, meetings: 0 }
+  { name: "Mon", connections: 12, responses: 3, meetings: 1, efficiency: 85 },
+  { name: "Tue", connections: 19, responses: 5, meetings: 2, efficiency: 92 },
+  { name: "Wed", connections: 15, responses: 4, meetings: 1, efficiency: 78 },
+  { name: "Thu", connections: 22, responses: 8, meetings: 3, efficiency: 96 },
+  { name: "Fri", connections: 18, responses: 6, meetings: 2, efficiency: 88 },
+  { name: "Sat", connections: 8, responses: 2, meetings: 0, efficiency: 65 },
+  { name: "Sun", connections: 5, responses: 1, meetings: 0, efficiency: 45 }
 ];
 
-const campaignSuccessData = [
-  { name: "Tech Startups", value: 23, fill: "hsl(var(--chart-1))" },
-  { name: "SaaS Companies", value: 13, fill: "hsl(var(--chart-2))" },
-  { name: "Marketing Directors", value: 19, fill: "hsl(var(--chart-3))" },
-  { name: "Healthcare", value: 31, fill: "hsl(var(--chart-4))" },
-  { name: "Finance", value: 28, fill: "hsl(var(--chart-5))" }
+const radialData = [
+  { name: "Tech Startups", value: 85, fill: "hsl(var(--chart-1))" },
+  { name: "SaaS Companies", value: 68, fill: "hsl(var(--chart-2))" },
+  { name: "Marketing Directors", value: 72, fill: "hsl(var(--chart-3))" },
+  { name: "Healthcare", value: 91, fill: "hsl(var(--chart-4))" },
+  { name: "Finance", value: 79, fill: "hsl(var(--chart-5))" }
 ];
 
 const chartConfig = {
@@ -108,6 +108,10 @@ const chartConfig = {
   meetings: {
     label: "Meetings",
     color: "hsl(var(--chart-3))"
+  },
+  efficiency: {
+    label: "AI Efficiency",
+    color: "hsl(var(--chart-4))"
   }
 };
 
@@ -171,133 +175,178 @@ export function Dashboard() {
         ))}
       </div>
 
-      {/* Charts Section */}
+      {/* Advanced Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6 bg-gradient-glass border-border-subtle">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">Arthur's Weekly Performance</h3>
-            <BarChart3 className="w-5 h-5 text-muted-foreground" />
+        <Card className="p-6 bg-gradient-glass border-border-subtle backdrop-blur-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-foreground">Neural Performance Analytics</h3>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-chart-1 rounded-full animate-pulse"></div>
+              <span className="text-xs text-muted-foreground font-mono">LIVE</span>
+            </div>
           </div>
-          <ChartContainer config={chartConfig} className="h-64">
-            <BarChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <ChartContainer config={chartConfig} className="h-80">
+            <AreaChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
               <defs>
                 <linearGradient id="connectionsGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--chart-1))" stopOpacity={0.9}/>
-                  <stop offset="100%" stopColor="hsl(var(--chart-1))" stopOpacity={0.3}/>
+                  <stop offset="0%" stopColor="hsl(var(--chart-1))" stopOpacity={0.6}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-1))" stopOpacity={0.1}/>
                 </linearGradient>
                 <linearGradient id="responsesGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--chart-2))" stopOpacity={0.9}/>
-                  <stop offset="100%" stopColor="hsl(var(--chart-2))" stopOpacity={0.3}/>
+                  <stop offset="0%" stopColor="hsl(var(--chart-2))" stopOpacity={0.6}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-2))" stopOpacity={0.1}/>
                 </linearGradient>
-                <linearGradient id="meetingsGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--chart-3))" stopOpacity={0.9}/>
-                  <stop offset="100%" stopColor="hsl(var(--chart-3))" stopOpacity={0.3}/>
+                <linearGradient id="efficiencyGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--chart-4))" stopOpacity={0.6}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-4))" stopOpacity={0.1}/>
                 </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge> 
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
               </defs>
               <XAxis 
                 dataKey="name" 
-                tickLine={false}
                 axisLine={false}
-                className="text-xs fill-muted-foreground"
+                tickLine={false}
+                tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))", fontFamily: "monospace" }}
+                dy={10}
               />
               <YAxis 
-                tickLine={false}
                 axisLine={false}
-                className="text-xs fill-muted-foreground"
+                tickLine={false}
+                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))", fontFamily: "monospace" }}
+                width={35}
               />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar 
-                dataKey="connections" 
-                fill="url(#connectionsGradient)" 
-                radius={[6, 6, 0, 0]}
-                stroke="hsl(var(--chart-1))"
-                strokeWidth={2}
+              <CartesianGrid 
+                strokeDasharray="1 3" 
+                stroke="hsl(var(--border))" 
+                strokeOpacity={0.3}
+                horizontal={true}
+                vertical={false}
               />
-              <Bar 
-                dataKey="responses" 
-                fill="url(#responsesGradient)" 
-                radius={[6, 6, 0, 0]}
-                stroke="hsl(var(--chart-2))"
-                strokeWidth={2}
-              />
-              <Bar 
-                dataKey="meetings" 
-                fill="url(#meetingsGradient)" 
-                radius={[6, 6, 0, 0]}
-                stroke="hsl(var(--chart-3))"
-                strokeWidth={2}
-              />
-            </BarChart>
-          </ChartContainer>
-        </Card>
-
-        <Card className="p-6 bg-gradient-glass border-border-subtle">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">Campaign Success by Industry</h3>
-            <TrendingUp className="w-5 h-5 text-muted-foreground" />
-          </div>
-          <ChartContainer config={chartConfig} className="h-64">
-            <PieChart>
-              <defs>
-                <linearGradient id="pieGradient1" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--chart-1))" stopOpacity={1}/>
-                  <stop offset="100%" stopColor="hsl(var(--chart-1))" stopOpacity={0.7}/>
-                </linearGradient>
-                <linearGradient id="pieGradient2" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--chart-2))" stopOpacity={1}/>
-                  <stop offset="100%" stopColor="hsl(var(--chart-2))" stopOpacity={0.7}/>
-                </linearGradient>
-                <linearGradient id="pieGradient3" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--chart-3))" stopOpacity={1}/>
-                  <stop offset="100%" stopColor="hsl(var(--chart-3))" stopOpacity={0.7}/>
-                </linearGradient>
-                <linearGradient id="pieGradient4" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--chart-4))" stopOpacity={1}/>
-                  <stop offset="100%" stopColor="hsl(var(--chart-4))" stopOpacity={0.7}/>
-                </linearGradient>
-                <linearGradient id="pieGradient5" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--chart-5))" stopOpacity={1}/>
-                  <stop offset="100%" stopColor="hsl(var(--chart-5))" stopOpacity={0.7}/>
-                </linearGradient>
-              </defs>
-              <Pie
-                data={campaignSuccessData.map((item, index) => ({
-                  ...item,
-                  fill: `url(#pieGradient${index + 1})`
-                }))}
-                cx="50%"
-                cy="50%"
-                innerRadius={65}
-                outerRadius={105}
-                paddingAngle={3}
-                dataKey="value"
-                stroke="hsl(var(--background))"
-                strokeWidth={3}
-              >
-                {campaignSuccessData.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={`url(#pieGradient${index + 1})`}
-                    filter="drop-shadow(0 4px 8px rgba(0,0,0,0.1))"
-                  />
-                ))}
-              </Pie>
               <ChartTooltip 
-                content={({ active, payload }) => {
+                content={({ active, payload, label }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-3 shadow-lg">
-                        <p className="text-sm font-medium text-foreground">{payload[0].payload.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          Response Rate: <span className="font-medium text-primary">{payload[0].value}%</span>
-                        </p>
+                      <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-4 shadow-xl">
+                        <p className="font-mono text-xs text-muted-foreground mb-2">{label}</p>
+                        {payload.map((entry, index) => (
+                          <div key={index} className="flex items-center gap-2 mb-1">
+                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }}></div>
+                            <span className="text-sm font-medium">{entry.dataKey}: {entry.value}</span>
+                          </div>
+                        ))}
                       </div>
                     );
                   }
                   return null;
                 }}
               />
-            </PieChart>
+              <Area
+                type="monotone"
+                dataKey="efficiency"
+                stroke="hsl(var(--chart-4))"
+                strokeWidth={3}
+                fill="url(#efficiencyGradient)"
+                filter="url(#glow)"
+              />
+              <Area
+                type="monotone"
+                dataKey="connections"
+                stroke="hsl(var(--chart-1))"
+                strokeWidth={2}
+                fill="url(#connectionsGradient)"
+              />
+              <Area
+                type="monotone"
+                dataKey="responses"
+                stroke="hsl(var(--chart-2))"
+                strokeWidth={2}
+                fill="url(#responsesGradient)"
+              />
+              <ReferenceLine y={80} stroke="hsl(var(--chart-6))" strokeDasharray="2 2" strokeOpacity={0.6} />
+            </AreaChart>
+          </ChartContainer>
+        </Card>
+
+        <Card className="p-6 bg-gradient-glass border-border-subtle backdrop-blur-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-foreground">Industry Penetration Matrix</h3>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-chart-2 rounded-full animate-pulse"></div>
+              <span className="text-xs text-muted-foreground font-mono">ACTIVE</span>
+            </div>
+          </div>
+          <ChartContainer config={chartConfig} className="h-80">
+            <RadialBarChart 
+              cx="50%" 
+              cy="50%" 
+              innerRadius="30%" 
+              outerRadius="90%" 
+              data={radialData}
+              startAngle={90}
+              endAngle={450}
+            >
+              <defs>
+                <filter id="radialGlow">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge> 
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <RadialBar
+                dataKey="value"
+                cornerRadius={6}
+                stroke="hsl(var(--background))"
+                strokeWidth={3}
+                filter="url(#radialGlow)"
+              />
+              <Legend 
+                content={({ payload }) => (
+                  <div className="flex flex-col gap-2 mt-4">
+                    {payload?.map((entry, index) => (
+                      <div key={index} className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                          <div 
+                            className="w-3 h-3 rounded-full shadow-lg"
+                            style={{ backgroundColor: entry.color }}
+                          ></div>
+                          <span className="font-mono text-xs text-muted-foreground">
+                            {(entry as any).payload?.name || entry.value}
+                          </span>
+                        </div>
+                        <span className="font-mono text-xs font-bold text-foreground">
+                          {(entry as any).payload?.value || entry.value}%
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              />
+              <ChartTooltip 
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-4 shadow-xl">
+                        <p className="font-mono text-xs text-muted-foreground mb-1">SECTOR</p>
+                        <p className="text-sm font-bold text-foreground mb-2">{payload[0].payload.name}</p>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: payload[0].fill }}></div>
+                          <span className="text-sm font-medium">Success Rate: {payload[0].value}%</span>
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+            </RadialBarChart>
           </ChartContainer>
         </Card>
       </div>

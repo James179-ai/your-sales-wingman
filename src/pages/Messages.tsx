@@ -22,6 +22,9 @@ import {
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
+import sarahJohnsonAvatar from "@/assets/prospects/sarah-johnson.jpg";
+import michaelChenAvatar from "@/assets/prospects/michael-chen.jpg";
+import emilyRodriguezAvatar from "@/assets/prospects/emily-rodriguez.jpg";
 
 // Mock data
 const mockProspects = [
@@ -35,7 +38,8 @@ const mockProspects = [
     status: "responded_positive",
     lastMessageAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
     unreadCount: 2,
-    campaign: "Q4 Enterprise Outreach"
+    campaign: "Q4 Enterprise Outreach",
+    avatar: sarahJohnsonAvatar
   },
   {
     id: "2", 
@@ -47,7 +51,8 @@ const mockProspects = [
     status: "messaged",
     lastMessageAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
     unreadCount: 0,
-    campaign: "Tech Leaders Q4"
+    campaign: "Tech Leaders Q4",
+    avatar: michaelChenAvatar
   },
   {
     id: "3",
@@ -59,7 +64,8 @@ const mockProspects = [
     status: "followed_up",
     lastMessageAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
     unreadCount: 0,
-    campaign: "Marketing Leaders"
+    campaign: "Marketing Leaders",
+    avatar: emilyRodriguezAvatar
   }
 ];
 
@@ -211,6 +217,7 @@ export default function Messages() {
                         <div className="flex items-start justify-between">
                           <div className="flex items-start space-x-3">
                             <Avatar className="h-10 w-10">
+                              <AvatarImage src={prospect.avatar} alt={`${prospect.firstName} ${prospect.lastName}`} />
                               <AvatarFallback className="bg-gradient-primary text-white">
                                 {prospect.firstName[0]}{prospect.lastName[0]}
                               </AvatarFallback>
@@ -257,6 +264,7 @@ export default function Messages() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <Avatar className="h-12 w-12">
+                      <AvatarImage src={selectedProspect.avatar} alt={`${selectedProspect.firstName} ${selectedProspect.lastName}`} />
                       <AvatarFallback className="bg-gradient-primary text-white">
                         {selectedProspect.firstName[0]}{selectedProspect.lastName[0]}
                       </AvatarFallback>

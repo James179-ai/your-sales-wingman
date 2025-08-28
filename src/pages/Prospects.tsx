@@ -124,8 +124,8 @@ export default function Prospects() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">Prospects</h1>
-            <p className="text-muted-foreground">Manage your prospect database and track outreach progress</p>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">Arthur's Prospect Database</h1>
+            <p className="text-muted-foreground">Arthur is managing your prospect pipeline. Here's who's in the queue!</p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm">
@@ -138,7 +138,7 @@ export default function Prospects() {
             </Button>
             <Button className="bg-gradient-primary text-primary-foreground hover:opacity-90" onClick={() => setShowAddModal(true)}>
               <Plus className="w-4 h-4 mr-2" />
-              Add Prospect
+              Help Arthur Add Prospects
             </Button>
           </div>
         </div>
@@ -147,7 +147,7 @@ export default function Prospects() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card className="bg-gradient-surface border-border-subtle">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Prospects</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Arthur's Database</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-foreground">1,247</div>
@@ -157,7 +157,7 @@ export default function Prospects() {
           
           <Card className="bg-gradient-surface border-border-subtle">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Active</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Ready to Contact</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">823</div>
@@ -171,7 +171,7 @@ export default function Prospects() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-blue-600">298</div>
-              <p className="text-xs text-muted-foreground">Awaiting response</p>
+              <p className="text-xs text-muted-foreground">Arthur reached out</p>
             </CardContent>
           </Card>
           
@@ -181,7 +181,7 @@ export default function Prospects() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-purple-600">126</div>
-              <p className="text-xs text-muted-foreground">+8% response rate</p>
+              <p className="text-xs text-muted-foreground">Great success rate!</p>
             </CardContent>
           </Card>
         </div>
@@ -189,8 +189,8 @@ export default function Prospects() {
         {/* Filters and Search */}
         <Card className="bg-gradient-surface border-border-subtle">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-foreground">Prospect Database</CardTitle>
-            <CardDescription>Search, filter, and manage your prospects</CardDescription>
+            <CardTitle className="text-lg font-semibold text-foreground">Arthur's Prospect Intel</CardTitle>
+            <CardDescription>Search and filter through your carefully curated prospect list</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-4">

@@ -42,7 +42,7 @@ export function Sidebar() {
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
               <Target className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-lg text-foreground">Closerly</span>
+            <span className="font-bold text-lg text-foreground">Closerly + Arthur</span>
           </div>
         )}
         <Button
@@ -85,14 +85,14 @@ export function Sidebar() {
           "flex items-center space-x-3",
           collapsed && "justify-center"
         )}>
-          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-            <span className="text-sm font-medium text-primary-foreground">JD</span>
-          </div>
+           <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+             <span className="text-sm font-medium text-primary-foreground">KM</span>
+           </div>
           {!collapsed && (
-            <div>
-              <p className="text-sm font-medium text-foreground">John Doe</p>
-              <p className="text-xs text-muted-foreground">Admin</p>
-            </div>
+             <div>
+               <p className="text-sm font-medium text-foreground">Karl-Martin</p>
+               <p className="text-xs text-muted-foreground">Arthur's Partner</p>
+             </div>
           )}
         </div>
       </div>

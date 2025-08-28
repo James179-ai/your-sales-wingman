@@ -764,8 +764,8 @@ const NewCampaign = () => {
               Back to Campaigns
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Create New Campaign</h1>
-              <p className="text-muted-foreground">Set up your LinkedIn outreach campaign</p>
+              <h1 className="text-3xl font-bold text-foreground">Let Arthur Build Your Campaign</h1>
+              <p className="text-muted-foreground">Arthur will guide you through creating a high-performing LinkedIn outreach campaign</p>
             </div>
           </div>
         </div>
@@ -819,11 +819,11 @@ const NewCampaign = () => {
               {steps[currentStep - 1].name}
             </CardTitle>
             <CardDescription>
-              {currentStep === 1 && "Start by giving your campaign a name and defining its purpose"}
-              {currentStep === 2 && "Define who you want to reach with this campaign"}
-              {currentStep === 3 && "Craft your outreach messages and follow-up sequence"}
-              {currentStep === 4 && "Set your campaign schedule and sending limits"}
-              {currentStep === 5 && "Review your campaign settings and launch"}
+              {currentStep === 1 && "Arthur needs some basic info to get started. Let's set up your campaign foundation!"}
+              {currentStep === 2 && "Now Arthur will help you target the perfect prospects for maximum success"}
+              {currentStep === 3 && "Time to craft messages that convert! Arthur has templates to get you started"}
+              {currentStep === 4 && "Arthur will optimize your sending schedule for the best response rates"}
+              {currentStep === 5 && "Everything looks great! Arthur is ready to launch your campaign"}
             </CardDescription>
           </CardHeader>
           <CardContent>

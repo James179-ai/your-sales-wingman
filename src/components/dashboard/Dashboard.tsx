@@ -89,7 +89,7 @@ export function Dashboard() {
         </div>
         <Button variant="primary" className="gap-2">
           <Plus className="w-4 h-4" />
-          New Campaign
+          Let Arthur Start a New Campaign
         </Button>
       </div>
 

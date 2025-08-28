@@ -125,14 +125,14 @@ export default function Campaigns() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Campaigns</h1>
+            <h1 className="text-3xl font-bold text-foreground">Arthur's Campaign Command Center</h1>
             <p className="text-muted-foreground mt-1">
-              Manage your LinkedIn outreach campaigns
+              Here's how your campaigns are performing. Arthur's got everything under control!
             </p>
           </div>
           <Button variant="primary" onClick={() => navigate('/campaigns/new')}>
             <Plus className="w-4 h-4 mr-2" />
-            New Campaign
+            Let Arthur Create New Campaign
           </Button>
         </div>
 
@@ -141,7 +141,7 @@ export default function Campaigns() {
           <Card className="p-6 bg-gradient-glass border-border-subtle">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Campaigns</p>
+                <p className="text-sm font-medium text-muted-foreground">Campaigns Arthur Built</p>
                 <p className="text-2xl font-bold text-foreground">{mockCampaigns.length}</p>
               </div>
               <BarChart3 className="w-8 h-8 text-primary" />
@@ -150,7 +150,7 @@ export default function Campaigns() {
           <Card className="p-6 bg-gradient-glass border-border-subtle">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Active Campaigns</p>
+                <p className="text-sm font-medium text-muted-foreground">Currently Running</p>
                 <p className="text-2xl font-bold text-foreground">
                   {mockCampaigns.filter(c => c.status === 'active').length}
                 </p>
@@ -161,7 +161,7 @@ export default function Campaigns() {
           <Card className="p-6 bg-gradient-glass border-border-subtle">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Prospects</p>
+                <p className="text-sm font-medium text-muted-foreground">Prospects Arthur Found</p>
                 <p className="text-2xl font-bold text-foreground">
                   {mockCampaigns.reduce((sum, c) => sum + c.prospects, 0)}
                 </p>
@@ -310,13 +310,13 @@ export default function Campaigns() {
             <h3 className="text-lg font-semibold text-foreground mb-2">No campaigns found</h3>
             <p className="text-muted-foreground mb-6">
               {searchTerm ? 
-                "No campaigns match your search criteria." : 
-                "Get started by creating your first LinkedIn outreach campaign."
+                "Arthur couldn't find any campaigns matching your search." : 
+                "Ready to get started? Let Arthur build your first campaign and start filling your pipeline!"
               }
             </p>
             <Button variant="primary" onClick={() => navigate('/campaigns/new')}>
               <Plus className="w-4 h-4 mr-2" />
-              Create Campaign
+              Let Arthur Start Your First Campaign
             </Button>
           </Card>
         )}

@@ -15,83 +15,54 @@ interface NeuronProps {
 
 function Neuron({ position, active, intensity, region }: NeuronProps) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const dendriteRefs = useRef<THREE.Group>(null);
+  const glowRef = useRef<THREE.Mesh>(null);
   
   useFrame((state) => {
     if (meshRef.current && active) {
-      meshRef.current.scale.setScalar(1 + Math.sin(state.clock.elapsedTime * 4) * 0.2 * intensity);
-    }
-    if (dendriteRefs.current) {
-      dendriteRefs.current.rotation.z = Math.sin(state.clock.elapsedTime * 2) * 0.1;
+      const pulseFactor = 1 + Math.sin(state.clock.elapsedTime * 8) * 0.3 * intensity;
+      meshRef.current.scale.setScalar(pulseFactor);
+      
+      if (glowRef.current) {
+        glowRef.current.scale.setScalar(pulseFactor * 2);
+      }
     }
   });
 
-  const getRegionColor = () => {
-    switch (region) {
-      case 'cortex': return active ? '#3b82f6' : '#1e293b';
-      case 'hippocampus': return active ? '#10b981' : '#064e3b';
-      case 'amygdala': return active ? '#f59e0b' : '#451a03';
-      case 'frontal': return active ? '#8b5cf6' : '#2e1065';
-      default: return active ? '#3b82f6' : '#1e293b';
-    }
-  };
-
-  const createDendrites = () => {
-    const dendrites = [];
-    const numDendrites = 3 + Math.floor(Math.random() * 4);
-    
-    for (let i = 0; i < numDendrites; i++) {
-      const angle = (Math.PI * 2 * i) / numDendrites;
-      const length = 0.2 + Math.random() * 0.3;
-      const curve = new THREE.QuadraticBezierCurve3(
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(
-          Math.cos(angle) * length * 0.5,
-          Math.sin(angle) * length * 0.5,
-          (Math.random() - 0.5) * 0.2
-        ),
-        new THREE.Vector3(
-          Math.cos(angle) * length,
-          Math.sin(angle) * length,
-          (Math.random() - 0.5) * 0.4
-        )
-      );
-      
-      const points = curve.getPoints(10);
-      const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      
-      dendrites.push(
-        <primitive
-          key={i}
-          object={new THREE.Line(
-            geometry,
-            new THREE.LineBasicMaterial({
-              color: getRegionColor(),
-              opacity: active ? 0.6 : 0.2,
-              transparent: true,
-            })
-          )}
-        />
-      );
-    }
-    return dendrites;
-  };
-
   return (
     <group position={position}>
+      {/* Main neuron node */}
       <mesh ref={meshRef}>
-        <sphereGeometry args={[0.08 + intensity * 0.04, 12, 12]} />
-        <meshStandardMaterial 
-          color={getRegionColor()}
-          emissive={active ? getRegionColor() : '#000000'}
-          emissiveIntensity={active ? 0.3 : 0}
-          roughness={0.4}
-          metalness={0.1}
+        <sphereGeometry args={[0.05, 8, 8]} />
+        <meshBasicMaterial 
+          color={active ? '#00ffff' : '#004466'}
+          transparent
+          opacity={active ? 1 : 0.3}
         />
       </mesh>
-      <group ref={dendriteRefs}>
-        {createDendrites()}
-      </group>
+      
+      {/* Outer glow effect */}
+      {active && (
+        <mesh ref={glowRef}>
+          <sphereGeometry args={[0.08, 8, 8]} />
+          <meshBasicMaterial 
+            color="#00ffff"
+            transparent
+            opacity={0.2 * intensity}
+          />
+        </mesh>
+      )}
+      
+      {/* Bright core for active neurons */}
+      {active && (
+        <mesh>
+          <sphereGeometry args={[0.02, 6, 6]} />
+          <meshBasicMaterial 
+            color="#ffffff"
+            transparent
+            opacity={0.8}
+          />
+        </mesh>
+      )}
     </group>
   );
 }
@@ -106,11 +77,18 @@ interface SynapseProps {
 
 function Synapse({ start, end, active, pulse, strength }: SynapseProps) {
   const lineRef = useRef<THREE.Line>(null);
+  const glowLineRef = useRef<THREE.Line>(null);
   
   useFrame(() => {
     if (lineRef.current && active) {
       const material = lineRef.current.material as THREE.LineBasicMaterial;
-      material.opacity = 0.2 + Math.sin(pulse * 6) * 0.4 * strength;
+      const pulseBrightness = 0.6 + Math.sin(pulse * 8) * 0.4;
+      material.opacity = pulseBrightness * strength;
+      
+      if (glowLineRef.current) {
+        const glowMaterial = glowLineRef.current.material as THREE.LineBasicMaterial;
+        glowMaterial.opacity = pulseBrightness * 0.3;
+      }
     }
   });
 
@@ -119,29 +97,44 @@ function Synapse({ start, end, active, pulse, strength }: SynapseProps) {
   const endVec = new THREE.Vector3(...end);
   const midPoint = startVec.clone().lerp(endVec, 0.5);
   
-  // Add some randomness to make it more organic
-  midPoint.add(
-    new THREE.Vector3(
-      (Math.random() - 0.5) * 0.5,
-      (Math.random() - 0.5) * 0.5,
-      (Math.random() - 0.5) * 0.5
+  // Add slight curve for more organic look
+  const perpendicular = new THREE.Vector3()
+    .crossVectors(
+      startVec.clone().sub(endVec).normalize(),
+      new THREE.Vector3(0, 0, 1)
     )
-  );
+    .multiplyScalar((Math.random() - 0.5) * 0.3);
+  
+  midPoint.add(perpendicular);
   
   const curve = new THREE.QuadraticBezierCurve3(startVec, midPoint, endVec);
-  const points = curve.getPoints(20);
+  const points = curve.getPoints(30);
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
   return (
-    <primitive 
-      ref={lineRef}
-      object={new THREE.Line(geometry, new THREE.LineBasicMaterial({
-        color: active ? 0x60a5fa : 0x334155,
-        opacity: active ? 0.6 : 0.15,
-        transparent: true,
-        linewidth: strength * 2
-      }))} 
-    />
+    <group>
+      {/* Main synapse line */}
+      <primitive 
+        ref={lineRef}
+        object={new THREE.Line(geometry, new THREE.LineBasicMaterial({
+          color: active ? 0x00ffff : 0x002244,
+          opacity: active ? 0.8 : 0.1,
+          transparent: true
+        }))} 
+      />
+      
+      {/* Glow effect for active synapses */}
+      {active && (
+        <primitive 
+          ref={glowLineRef}
+          object={new THREE.Line(geometry, new THREE.LineBasicMaterial({
+            color: 0x66ffff,
+            opacity: 0.4,
+            transparent: true
+          }))} 
+        />
+      )}
+    </group>
   );
 }
 
@@ -342,22 +335,33 @@ function BrainStructure() {
         />
       ))}
       
-      {/* Brain hemispheres outline */}
-      <mesh position={[-0.6, 0, 0]}>
-        <sphereGeometry args={[1.6, 16, 16, 0, Math.PI]} />
-        <meshStandardMaterial 
-          color="#1e293b" 
+      {/* Brain wireframe outline */}
+      <mesh position={[-0.4, 0, 0]} rotation={[0, Math.PI * 0.1, 0]}>
+        <sphereGeometry args={[1.4, 24, 16, 0, Math.PI]} />
+        <meshBasicMaterial 
+          color="#00aaff" 
           transparent 
-          opacity={0.05} 
+          opacity={0.15} 
           wireframe
         />
       </mesh>
-      <mesh position={[0.6, 0, 0]}>
-        <sphereGeometry args={[1.6, 16, 16, 0, Math.PI]} />
-        <meshStandardMaterial 
-          color="#1e293b" 
+      <mesh position={[0.4, 0, 0]} rotation={[0, -Math.PI * 0.1, 0]}>
+        <sphereGeometry args={[1.4, 24, 16, 0, Math.PI]} />
+        <meshBasicMaterial 
+          color="#00aaff" 
           transparent 
-          opacity={0.05} 
+          opacity={0.15} 
+          wireframe
+        />
+      </mesh>
+      
+      {/* Brain stem */}
+      <mesh position={[0, -1.2, -0.5]}>
+        <cylinderGeometry args={[0.2, 0.3, 0.8, 8]} />
+        <meshBasicMaterial 
+          color="#0088cc" 
+          transparent 
+          opacity={0.3} 
           wireframe
         />
       </mesh>
@@ -401,29 +405,26 @@ export function NeuralBrainVisualization() {
             </CardHeader>
             <CardContent>
               <div className="h-96 w-full">
-                <Canvas camera={{ position: [0, 0, 4], fov: 60 }}>
-                  <ambientLight intensity={0.3} />
-                  <pointLight position={[5, 5, 5]} intensity={0.8} color="#60a5fa" />
-                  <pointLight position={[-5, -5, 5]} intensity={0.6} color="#8b5cf6" />
-                  <spotLight 
-                    position={[0, 10, 0]} 
-                    angle={0.3} 
-                    intensity={0.5} 
-                    color="#10b981"
-                    castShadow
-                  />
+                <Canvas 
+                  camera={{ position: [0, 0, 4], fov: 60 }}
+                  style={{ background: '#000011' }}
+                >
+                  <ambientLight intensity={0.1} color="#001122" />
+                  <pointLight position={[0, 0, 5]} intensity={0.5} color="#00ffff" />
+                  <pointLight position={[3, 3, 3]} intensity={0.3} color="#0099ff" />
+                  <pointLight position={[-3, -3, 3]} intensity={0.3} color="#0066ff" />
                   <BrainStructure />
                   <OrbitControls 
                     enablePan={false} 
-                    minDistance={3} 
+                    minDistance={2} 
                     maxDistance={8}
                     autoRotate
-                    autoRotateSpeed={0.2}
+                    autoRotateSpeed={0.3}
                   />
                 </Canvas>
               </div>
               <div className="mt-4 text-sm text-muted-foreground text-center">
-                <p>Interactive 3D visualization • Click and drag to rotate • Scroll to zoom</p>
+                <p className="animate-fade-in">Neural pathways lighting up • Click and drag to rotate • Scroll to zoom</p>
               </div>
             </CardContent>
           </Card>

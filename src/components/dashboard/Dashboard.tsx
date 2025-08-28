@@ -14,30 +14,30 @@ import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 const mockKPIs = [
   {
-    title: "Connections Sent Today",
+    title: "Connections Arthur Sent Today",
     value: 18,
-    change: "+15% vs yesterday",
+    change: "Crushing yesterday by +15%!",
     changeType: "positive" as const,
     icon: Users
   },
   {
-    title: "Messages Sent",
+    title: "Messages Arthur Crafted",
     value: 42,
-    change: "+8% vs last week",
+    change: "Up +8% from last week",
     changeType: "positive" as const,
     icon: MessageSquare
   },
   {
-    title: "Response Rate",
+    title: "Response Rate We're Getting",
     value: "23%",
-    change: "+2% vs last month",
+    change: "Improved +2% this month!",
     changeType: "positive" as const,
     icon: TrendingUp
   },
   {
-    title: "Meetings Booked",
+    title: "Meetings Arthur Booked",
     value: 7,
-    change: "3 this week",
+    change: "3 more this week - nice!",
     changeType: "neutral" as const,
     icon: Calendar
   }
@@ -83,7 +83,7 @@ export function Dashboard() {
           <div>
             <h1 className="text-3xl font-bold text-foreground">Good Evening, Karl-Martin</h1>
             <p className="text-muted-foreground mt-1">
-              Your AI sales assistant is ready. Here's your LinkedIn outreach performance.
+              Arthur here! I've been working hard on your pipeline. Here's what we accomplished today.
             </p>
           </div>
         </div>
@@ -104,7 +104,7 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="p-6 bg-gradient-glass border-border-subtle">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">Performance Trends</h3>
+            <h3 className="text-lg font-semibold text-foreground">Arthur's Performance Insights</h3>
             <BarChart3 className="w-5 h-5 text-muted-foreground" />
           </div>
           <div className="h-64 flex items-center justify-center text-muted-foreground bg-surface-elevated rounded-lg">
@@ -114,7 +114,7 @@ export function Dashboard() {
 
         <Card className="p-6 bg-gradient-glass border-border-subtle">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">Response Rate by Campaign</h3>
+            <h3 className="text-lg font-semibold text-foreground">Campaign Success Rates</h3>
             <TrendingUp className="w-5 h-5 text-muted-foreground" />
           </div>
           <div className="h-64 flex items-center justify-center text-muted-foreground bg-surface-elevated rounded-lg">
@@ -127,7 +127,7 @@ export function Dashboard() {
       <Card className="bg-gradient-glass border-border-subtle">
         <div className="p-6 border-b border-border-subtle">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-foreground">Active Campaigns</h3>
+            <h3 className="text-lg font-semibold text-foreground">Campaigns Arthur is Managing</h3>
             <Button variant="outline" size="sm">View All</Button>
           </div>
         </div>

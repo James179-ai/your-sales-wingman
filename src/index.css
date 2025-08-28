@@ -74,12 +74,13 @@ Blue/white/gray modern aesthetic with glassmorphism effects.
 
     --radius: 0.75rem;
 
-    /* Chart Colors */
-    --chart-1: 220 91% 52%; /* Blue */
-    --chart-2: 142 76% 36%; /* Green */
-    --chart-3: 38 92% 50%; /* Orange */
-    --chart-4: 271 91% 52%; /* Purple */
-    --chart-5: 346 77% 49%; /* Pink */
+    /* Chart Colors - High-Tech Palette */
+    --chart-1: 198 93% 60%; /* Cyan #00bcd4 */
+    --chart-2: 158 64% 52%; /* Teal #26a69a */
+    --chart-3: 265 89% 78%; /* Light Purple #b39ddb */
+    --chart-4: 291 64% 42%; /* Deep Purple #8e24aa */
+    --chart-5: 338 83% 67%; /* Pink #e91e63 */
+    --chart-6: 45 93% 47%; /* Amber #ffc107 */
 
     /* Sidebar */
     --sidebar-background: 220 20% 98%;
@@ -146,12 +147,13 @@ Blue/white/gray modern aesthetic with glassmorphism effects.
     --gradient-surface: linear-gradient(135deg, hsl(220 20% 8%), hsl(220 20% 6%));
     --gradient-glass: linear-gradient(135deg, hsl(220 20% 8% / 0.8), hsl(220 20% 6% / 0.9));
 
-    /* Chart Colors - Dark Theme */
-    --chart-1: 220 91% 65%; /* Blue */
-    --chart-2: 142 76% 46%; /* Green */
-    --chart-3: 38 92% 60%; /* Orange */
-    --chart-4: 271 91% 65%; /* Purple */
-    --chart-5: 346 77% 59%; /* Pink */
+    /* Chart Colors - High-Tech Palette Dark */
+    --chart-1: 198 93% 70%; /* Brighter Cyan */
+    --chart-2: 158 64% 62%; /* Brighter Teal */
+    --chart-3: 265 89% 85%; /* Lighter Purple */
+    --chart-4: 291 64% 52%; /* Brighter Deep Purple */
+    --chart-5: 338 83% 77%; /* Brighter Pink */
+    --chart-6: 45 93% 57%; /* Brighter Amber */
 
     /* Sidebar */
     --sidebar-background: 240 5.9% 10%;

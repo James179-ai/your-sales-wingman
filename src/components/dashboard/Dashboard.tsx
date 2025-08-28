@@ -77,7 +77,7 @@ const mockCampaigns = [
   }
 ];
 
-// Chart data with colors
+// Chart data with high-tech colors
 const performanceData = [
   { name: "Mon", connections: 12, responses: 3, meetings: 1 },
   { name: "Tue", connections: 19, responses: 5, meetings: 2 },
@@ -179,7 +179,21 @@ export function Dashboard() {
             <BarChart3 className="w-5 h-5 text-muted-foreground" />
           </div>
           <ChartContainer config={chartConfig} className="h-64">
-            <BarChart data={performanceData}>
+            <BarChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <defs>
+                <linearGradient id="connectionsGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--chart-1))" stopOpacity={0.9}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-1))" stopOpacity={0.3}/>
+                </linearGradient>
+                <linearGradient id="responsesGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--chart-2))" stopOpacity={0.9}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-2))" stopOpacity={0.3}/>
+                </linearGradient>
+                <linearGradient id="meetingsGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--chart-3))" stopOpacity={0.9}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-3))" stopOpacity={0.3}/>
+                </linearGradient>
+              </defs>
               <XAxis 
                 dataKey="name" 
                 tickLine={false}
@@ -194,18 +208,24 @@ export function Dashboard() {
               <ChartTooltip content={<ChartTooltipContent />} />
               <Bar 
                 dataKey="connections" 
-                fill="hsl(var(--chart-1))" 
-                radius={[4, 4, 0, 0]}
+                fill="url(#connectionsGradient)" 
+                radius={[6, 6, 0, 0]}
+                stroke="hsl(var(--chart-1))"
+                strokeWidth={2}
               />
               <Bar 
                 dataKey="responses" 
-                fill="hsl(var(--chart-2))" 
-                radius={[4, 4, 0, 0]}
+                fill="url(#responsesGradient)" 
+                radius={[6, 6, 0, 0]}
+                stroke="hsl(var(--chart-2))"
+                strokeWidth={2}
               />
               <Bar 
                 dataKey="meetings" 
-                fill="hsl(var(--chart-3))" 
-                radius={[4, 4, 0, 0]}
+                fill="url(#meetingsGradient)" 
+                radius={[6, 6, 0, 0]}
+                stroke="hsl(var(--chart-3))"
+                strokeWidth={2}
               />
             </BarChart>
           </ChartContainer>
@@ -218,27 +238,58 @@ export function Dashboard() {
           </div>
           <ChartContainer config={chartConfig} className="h-64">
             <PieChart>
+              <defs>
+                <linearGradient id="pieGradient1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--chart-1))" stopOpacity={1}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-1))" stopOpacity={0.7}/>
+                </linearGradient>
+                <linearGradient id="pieGradient2" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--chart-2))" stopOpacity={1}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-2))" stopOpacity={0.7}/>
+                </linearGradient>
+                <linearGradient id="pieGradient3" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--chart-3))" stopOpacity={1}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-3))" stopOpacity={0.7}/>
+                </linearGradient>
+                <linearGradient id="pieGradient4" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--chart-4))" stopOpacity={1}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-4))" stopOpacity={0.7}/>
+                </linearGradient>
+                <linearGradient id="pieGradient5" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--chart-5))" stopOpacity={1}/>
+                  <stop offset="100%" stopColor="hsl(var(--chart-5))" stopOpacity={0.7}/>
+                </linearGradient>
+              </defs>
               <Pie
-                data={campaignSuccessData}
+                data={campaignSuccessData.map((item, index) => ({
+                  ...item,
+                  fill: `url(#pieGradient${index + 1})`
+                }))}
                 cx="50%"
                 cy="50%"
-                innerRadius={60}
-                outerRadius={100}
-                paddingAngle={2}
+                innerRadius={65}
+                outerRadius={105}
+                paddingAngle={3}
                 dataKey="value"
+                stroke="hsl(var(--background))"
+                strokeWidth={3}
               >
                 {campaignSuccessData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={`url(#pieGradient${index + 1})`}
+                    filter="drop-shadow(0 4px 8px rgba(0,0,0,0.1))"
+                  />
                 ))}
               </Pie>
               <ChartTooltip 
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
-                        <p className="text-sm font-medium">{payload[0].payload.name}</p>
+                      <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-3 shadow-lg">
+                        <p className="text-sm font-medium text-foreground">{payload[0].payload.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          Response Rate: {payload[0].value}%
+                          Response Rate: <span className="font-medium text-primary">{payload[0].value}%</span>
                         </p>
                       </div>
                     );

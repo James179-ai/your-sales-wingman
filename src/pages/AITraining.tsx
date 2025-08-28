@@ -1,6 +1,7 @@
 import { AppLayout } from "@/components/layout/AppLayout";
 import { MessageTraining } from "@/components/ai-training/MessageTraining";
 import { StyleGuideUpload } from "@/components/ai-training/StyleGuideUpload";
+import { NeuralBrainVisualization } from "@/components/ai-training/NeuralBrainVisualization";
 
 const AITraining = () => {
   return (
@@ -17,12 +18,7 @@ const AITraining = () => {
         
         <StyleGuideUpload />
         
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <h2 className="text-xl font-semibold mb-4">Neural Brain Visualization</h2>
-          <p className="text-muted-foreground">
-            Watch Arthur's AI brain learn and adapt to your preferences.
-          </p>
-        </div>
+        <NeuralBrainVisualization />
       </div>
     </AppLayout>
   );

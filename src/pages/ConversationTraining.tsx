@@ -26,6 +26,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import arthurAvatar from '@/assets/ai-salesman-avatar.jpg';
+import sarahJohnson from '@/assets/prospects/sarah-johnson.jpg';
+import michaelChen from '@/assets/prospects/michael-chen.jpg';
+import emilyRodriguez from '@/assets/prospects/emily-rodriguez.jpg';
+import davidKim from '@/assets/prospects/david-kim.jpg';
+import lisaThompson from '@/assets/prospects/lisa-thompson.jpg';
+import jamesWilson from '@/assets/prospects/james-wilson.jpg';
+import mariaGarcia from '@/assets/prospects/maria-garcia.jpg';
+import robertBrown from '@/assets/prospects/robert-brown.jpg';
+import jenniferLee from '@/assets/prospects/jennifer-lee.jpg';
+import kevinMartinez from '@/assets/prospects/kevin-martinez.jpg';
+import amandaFoster from '@/assets/prospects/amanda-foster.jpg';
+import thomasAnderson from '@/assets/prospects/thomas-anderson.jpg';
 
 interface ConversationMessage {
   id: string;
@@ -55,6 +67,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'Sarah Johnson',
       company: 'TechCorp',
+      avatar: sarahJohnson,
     },
     status: 'needs_training',
     trainingPoints: ['First message approach', 'Pricing questions'],
@@ -88,6 +101,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'Michael Chen',
       company: 'StartupXYZ',
+      avatar: michaelChen,
     },
     status: 'active',
     trainingPoints: ['Follow-up timing', 'Technical questions'],
@@ -119,6 +133,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'Emily Rodriguez',
       company: 'Healthcare Solutions Inc',
+      avatar: emilyRodriguez,
     },
     status: 'needs_training',
     trainingPoints: ['Industry-specific messaging', 'Compliance questions'],
@@ -152,6 +167,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'David Kim',
       company: 'E-commerce Plus',
+      avatar: davidKim,
     },
     status: 'needs_training',
     trainingPoints: ['Objection handling', 'Value proposition'],
@@ -183,6 +199,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'Lisa Thompson',
       company: 'Manufacturing Corp',
+      avatar: lisaThompson,
     },
     status: 'needs_training',
     trainingPoints: ['Follow-up strategy', 'Meeting scheduling'],
@@ -214,6 +231,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'James Wilson',
       company: 'Financial Services Ltd',
+      avatar: jamesWilson,
     },
     status: 'needs_training',
     trainingPoints: ['Security concerns', 'ROI questions'],
@@ -259,6 +277,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'Maria Garcia',
       company: 'Retail Chain Co',
+      avatar: mariaGarcia,
     },
     status: 'needs_training',
     trainingPoints: ['Feature explanation', 'Competitive advantage'],
@@ -290,6 +309,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'Robert Brown',
       company: 'Tech Innovations',
+      avatar: robertBrown,
     },
     status: 'active',
     trainingPoints: ['Demo scheduling', 'Technical requirements'],
@@ -321,6 +341,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'Jennifer Lee',
       company: 'Education Partners',
+      avatar: jenniferLee,
     },
     status: 'needs_training',
     trainingPoints: ['Budget questions', 'Implementation timeline'],
@@ -366,6 +387,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'Kevin Martinez',
       company: 'Construction Management',
+      avatar: kevinMartinez,
     },
     status: 'needs_training',
     trainingPoints: ['Industry understanding', 'Mobile requirements'],
@@ -399,6 +421,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'Amanda Foster',
       company: 'Digital Marketing Agency',
+      avatar: amandaFoster,
     },
     status: 'needs_training',
     trainingPoints: ['Agency-specific features', 'Client management'],
@@ -444,6 +467,7 @@ const mockConversations: Conversation[] = [
     prospect: {
       name: 'Thomas Anderson',
       company: 'Logistics Solutions',
+      avatar: thomasAnderson,
     },
     status: 'active',
     trainingPoints: ['Integration questions', 'Scalability'],

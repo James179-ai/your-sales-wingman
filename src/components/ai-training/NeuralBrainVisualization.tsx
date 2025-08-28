@@ -19,35 +19,38 @@ function Neuron({ position, active, intensity, region }: NeuronProps) {
   
   useFrame((state) => {
     if (meshRef.current && active) {
-      const pulseFactor = 1 + Math.sin(state.clock.elapsedTime * 8) * 0.3 * intensity;
+      const pulseFactor = 1 + Math.sin(state.clock.elapsedTime * 8) * 0.4 * intensity;
       meshRef.current.scale.setScalar(pulseFactor);
       
       if (glowRef.current) {
-        glowRef.current.scale.setScalar(pulseFactor * 2);
+        glowRef.current.scale.setScalar(pulseFactor * 2.5);
       }
     }
   });
+
+  const nodeSize = region === 'cortex' ? 0.04 : 0.06;
+  const glowSize = region === 'cortex' ? 0.08 : 0.12;
 
   return (
     <group position={position}>
       {/* Main neuron node */}
       <mesh ref={meshRef}>
-        <sphereGeometry args={[0.05, 8, 8]} />
+        <sphereGeometry args={[nodeSize, 12, 12]} />
         <meshBasicMaterial 
-          color={active ? '#00ffff' : '#004466'}
+          color={active ? '#8b5cf6' : '#6b46c1'}
           transparent
-          opacity={active ? 1 : 0.3}
+          opacity={active ? 1 : 0.6}
         />
       </mesh>
       
       {/* Outer glow effect */}
       {active && (
         <mesh ref={glowRef}>
-          <sphereGeometry args={[0.08, 8, 8]} />
+          <sphereGeometry args={[glowSize, 12, 12]} />
           <meshBasicMaterial 
-            color="#00ffff"
+            color="#a855f7"
             transparent
-            opacity={0.2 * intensity}
+            opacity={0.3 * intensity}
           />
         </mesh>
       )}
@@ -55,11 +58,11 @@ function Neuron({ position, active, intensity, region }: NeuronProps) {
       {/* Bright core for active neurons */}
       {active && (
         <mesh>
-          <sphereGeometry args={[0.02, 6, 6]} />
+          <sphereGeometry args={[nodeSize * 0.5, 8, 8]} />
           <meshBasicMaterial 
             color="#ffffff"
             transparent
-            opacity={0.8}
+            opacity={0.9}
           />
         </mesh>
       )}
@@ -79,36 +82,23 @@ function Synapse({ start, end, active, pulse, strength }: SynapseProps) {
   const lineRef = useRef<THREE.Line>(null);
   const glowLineRef = useRef<THREE.Line>(null);
   
-  useFrame(() => {
-    if (lineRef.current && active) {
+  useFrame((state) => {
+    if (lineRef.current) {
       const material = lineRef.current.material as THREE.LineBasicMaterial;
-      const pulseBrightness = 0.6 + Math.sin(pulse * 8) * 0.4;
+      const pulseBrightness = active ? 0.7 + Math.sin(state.clock.elapsedTime * 6 + pulse) * 0.3 : 0.2;
       material.opacity = pulseBrightness * strength;
       
-      if (glowLineRef.current) {
+      if (glowLineRef.current && active) {
         const glowMaterial = glowLineRef.current.material as THREE.LineBasicMaterial;
-        glowMaterial.opacity = pulseBrightness * 0.3;
+        glowMaterial.opacity = pulseBrightness * 0.4;
       }
     }
   });
 
-  // Create curved connection using spline
+  // Create straight lines for radiating effect
   const startVec = new THREE.Vector3(...start);
   const endVec = new THREE.Vector3(...end);
-  const midPoint = startVec.clone().lerp(endVec, 0.5);
-  
-  // Add slight curve for more organic look
-  const perpendicular = new THREE.Vector3()
-    .crossVectors(
-      startVec.clone().sub(endVec).normalize(),
-      new THREE.Vector3(0, 0, 1)
-    )
-    .multiplyScalar((Math.random() - 0.5) * 0.3);
-  
-  midPoint.add(perpendicular);
-  
-  const curve = new THREE.QuadraticBezierCurve3(startVec, midPoint, endVec);
-  const points = curve.getPoints(30);
+  const points = [startVec, endVec];
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
   return (
@@ -117,9 +107,10 @@ function Synapse({ start, end, active, pulse, strength }: SynapseProps) {
       <primitive 
         ref={lineRef}
         object={new THREE.Line(geometry, new THREE.LineBasicMaterial({
-          color: active ? 0x00ffff : 0x002244,
-          opacity: active ? 0.8 : 0.1,
-          transparent: true
+          color: active ? 0x8b5cf6 : 0x6b46c1,
+          opacity: active ? 0.8 : 0.2,
+          transparent: true,
+          linewidth: 2
         }))} 
       />
       
@@ -128,9 +119,10 @@ function Synapse({ start, end, active, pulse, strength }: SynapseProps) {
         <primitive 
           ref={glowLineRef}
           object={new THREE.Line(geometry, new THREE.LineBasicMaterial({
-            color: 0x66ffff,
-            opacity: 0.4,
-            transparent: true
+            color: 0xa855f7,
+            opacity: 0.5,
+            transparent: true,
+            linewidth: 4
           }))} 
         />
       )}
@@ -142,20 +134,49 @@ function BrainStructure() {
   const brainRef = useRef<THREE.Group>(null);
   const [activeNeurons, setActiveNeurons] = useState(new Set<number>());
   
-  // Create simple brain structure with neural activity
+  // Create central brain structure and radiating pathways
   const neurons = [];
-  for (let i = 0; i < 50; i++) {
-    // Create neurons distributed in brain-like shape
+  const pathways = [];
+  
+  // Central brain neurons (dense core)
+  for (let i = 0; i < 25; i++) {
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.random() * Math.PI;
-    const r = 0.8 + Math.random() * 0.4;
+    const r = 0.2 + Math.random() * 0.4;
     
     const x = r * Math.sin(phi) * Math.cos(theta);
-    const y = r * Math.sin(phi) * Math.sin(theta) * 0.8; // Slightly flattened
-    const z = r * Math.cos(phi) * 0.9;
+    const y = r * Math.sin(phi) * Math.sin(theta);
+    const z = r * Math.cos(phi);
     
     neurons.push({
       position: [x, y, z] as [number, number, number],
+      id: i,
+      type: 'core'
+    });
+  }
+  
+  // Radiating pathway nodes
+  for (let i = 0; i < 80; i++) {
+    const angle = (i / 80) * Math.PI * 2;
+    const elevation = (Math.random() - 0.5) * Math.PI * 0.8;
+    const distance = 1.8 + Math.random() * 1.2;
+    
+    const x = distance * Math.cos(elevation) * Math.cos(angle);
+    const y = distance * Math.cos(elevation) * Math.sin(angle);
+    const z = distance * Math.sin(elevation);
+    
+    neurons.push({
+      position: [x, y, z] as [number, number, number],
+      id: i + 25,
+      type: 'pathway'
+    });
+    
+    // Create pathway connections from core to outer nodes
+    const coreNodeIndex = Math.floor(Math.random() * 25);
+    const coreNode = neurons[coreNodeIndex];
+    pathways.push({
+      start: coreNode.position,
+      end: [x, y, z] as [number, number, number],
       id: i
     });
   }
@@ -163,11 +184,17 @@ function BrainStructure() {
   useFrame((state) => {
     const time = state.clock.elapsedTime;
     
-    // Simple wave-based activation
+    // Create wave patterns radiating from center
     const activeSet = new Set<number>();
     neurons.forEach((neuron, index) => {
-      const wave = Math.sin(time * 2 + index * 0.5) * 0.5 + 0.5;
-      if (wave > 0.7) {
+      const distance = Math.sqrt(
+        neuron.position[0] ** 2 + 
+        neuron.position[1] ** 2 + 
+        neuron.position[2] ** 2
+      );
+      
+      const wave = Math.sin(time * 2.5 - distance * 1.5) * 0.5 + 0.5;
+      if (wave > 0.65) {
         activeSet.add(index);
       }
     });
@@ -176,58 +203,61 @@ function BrainStructure() {
     
     // Gentle rotation
     if (brainRef.current) {
-      brainRef.current.rotation.y = time * 0.1;
+      brainRef.current.rotation.y = time * 0.06;
     }
   });
 
   return (
     <group ref={brainRef}>
-      {/* Main brain hemispheres */}
+      {/* Central brain structure */}
       <group>
-        {/* Left hemisphere */}
-        <mesh position={[-0.4, 0, 0]}>
-          <sphereGeometry args={[1.2, 32, 16, 0, Math.PI]} />
+        {/* Main brain mass */}
+        <mesh>
+          <sphereGeometry args={[0.6, 16, 12]} />
           <meshBasicMaterial 
-            color="#001122" 
+            color="#8b5cf6" 
             transparent 
-            opacity={0.3}
+            opacity={0.15}
             wireframe
           />
         </mesh>
         
-        {/* Right hemisphere */}
-        <mesh position={[0.4, 0, 0]} rotation={[0, Math.PI, 0]}>
-          <sphereGeometry args={[1.2, 32, 16, 0, Math.PI]} />
+        {/* Brain hemispheres outline */}
+        <mesh position={[-0.1, 0, 0]}>
+          <sphereGeometry args={[0.5, 12, 8, 0, Math.PI]} />
           <meshBasicMaterial 
-            color="#001122" 
+            color="#6b46c1" 
             transparent 
-            opacity={0.3}
+            opacity={0.2}
             wireframe
           />
         </mesh>
         
-        {/* Brain stem */}
-        <mesh position={[0, -1.0, 0]}>
-          <cylinderGeometry args={[0.2, 0.3, 0.8, 8]} />
+        <mesh position={[0.1, 0, 0]} rotation={[0, Math.PI, 0]}>
+          <sphereGeometry args={[0.5, 12, 8, 0, Math.PI]} />
           <meshBasicMaterial 
-            color="#002244" 
+            color="#6b46c1" 
             transparent 
-            opacity={0.4}
-            wireframe
-          />
-        </mesh>
-        
-        {/* Cerebellum */}
-        <mesh position={[0, -0.6, -0.8]}>
-          <sphereGeometry args={[0.5, 16, 12]} />
-          <meshBasicMaterial 
-            color="#001133" 
-            transparent 
-            opacity={0.3}
+            opacity={0.2}
             wireframe
           />
         </mesh>
       </group>
+      
+      {/* Radiating pathways */}
+      {pathways.map((pathway, index) => {
+        const isActive = activeNeurons.has(index + 25);
+        return (
+          <Synapse
+            key={`pathway-${index}`}
+            start={pathway.start}
+            end={pathway.end}
+            active={isActive}
+            pulse={index * 0.2}
+            strength={isActive ? 0.9 : 0.3}
+          />
+        );
+      })}
       
       {/* Neural nodes */}
       {neurons.map((neuron, index) => (
@@ -235,8 +265,8 @@ function BrainStructure() {
           key={index}
           position={neuron.position}
           active={activeNeurons.has(index)}
-          intensity={activeNeurons.has(index) ? 0.8 : 0}
-          region="cortex"
+          intensity={activeNeurons.has(index) ? 1.0 : 0.4}
+          region={neuron.type === 'core' ? 'cortex' : 'frontal'}
         />
       ))}
     </group>
@@ -280,13 +310,13 @@ export function NeuralBrainVisualization() {
             <CardContent>
               <div className="h-96 w-full">
                 <Canvas 
-                  camera={{ position: [0, 0, 4], fov: 60 }}
-                  style={{ background: '#000011' }}
+                  camera={{ position: [0, 0, 5], fov: 60 }}
+                  style={{ background: '#ffffff' }}
                 >
-                  <ambientLight intensity={0.1} color="#001122" />
-                  <pointLight position={[0, 0, 5]} intensity={0.5} color="#00ffff" />
-                  <pointLight position={[3, 3, 3]} intensity={0.3} color="#0099ff" />
-                  <pointLight position={[-3, -3, 3]} intensity={0.3} color="#0066ff" />
+                  <ambientLight intensity={0.3} color="#ffffff" />
+                  <pointLight position={[0, 0, 5]} intensity={0.4} color="#8b5cf6" />
+                  <pointLight position={[3, 3, 3]} intensity={0.2} color="#a855f7" />
+                  <pointLight position={[-3, -3, 3]} intensity={0.2} color="#6b46c1" />
                   <BrainStructure />
                   <OrbitControls 
                     enablePan={false} 

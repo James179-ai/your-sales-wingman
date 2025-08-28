@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ArthurChatbot } from "@/components/arthur/ArthurChatbot";
 import { 
   Users, 
@@ -15,6 +16,7 @@ import {
   Bot,
   MessageCircle
 } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 const mockKPIs = [
@@ -74,6 +76,40 @@ const mockCampaigns = [
     responseRate: "19%"
   }
 ];
+
+// Chart data with colors
+const performanceData = [
+  { name: "Mon", connections: 12, responses: 3, meetings: 1 },
+  { name: "Tue", connections: 19, responses: 5, meetings: 2 },
+  { name: "Wed", connections: 15, responses: 4, meetings: 1 },
+  { name: "Thu", connections: 22, responses: 8, meetings: 3 },
+  { name: "Fri", connections: 18, responses: 6, meetings: 2 },
+  { name: "Sat", connections: 8, responses: 2, meetings: 0 },
+  { name: "Sun", connections: 5, responses: 1, meetings: 0 }
+];
+
+const campaignSuccessData = [
+  { name: "Tech Startups", value: 23, fill: "hsl(var(--chart-1))" },
+  { name: "SaaS Companies", value: 13, fill: "hsl(var(--chart-2))" },
+  { name: "Marketing Directors", value: 19, fill: "hsl(var(--chart-3))" },
+  { name: "Healthcare", value: 31, fill: "hsl(var(--chart-4))" },
+  { name: "Finance", value: 28, fill: "hsl(var(--chart-5))" }
+];
+
+const chartConfig = {
+  connections: {
+    label: "Connections",
+    color: "hsl(var(--chart-1))"
+  },
+  responses: {
+    label: "Responses", 
+    color: "hsl(var(--chart-2))"
+  },
+  meetings: {
+    label: "Meetings",
+    color: "hsl(var(--chart-3))"
+  }
+};
 
 export function Dashboard() {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
@@ -139,22 +175,79 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="p-6 bg-gradient-glass border-border-subtle">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">Arthur's Performance Insights</h3>
+            <h3 className="text-lg font-semibold text-foreground">Arthur's Weekly Performance</h3>
             <BarChart3 className="w-5 h-5 text-muted-foreground" />
           </div>
-          <div className="h-64 flex items-center justify-center text-muted-foreground bg-surface-elevated rounded-lg">
-            <p>Chart will be implemented with Recharts</p>
-          </div>
+          <ChartContainer config={chartConfig} className="h-64">
+            <BarChart data={performanceData}>
+              <XAxis 
+                dataKey="name" 
+                tickLine={false}
+                axisLine={false}
+                className="text-xs fill-muted-foreground"
+              />
+              <YAxis 
+                tickLine={false}
+                axisLine={false}
+                className="text-xs fill-muted-foreground"
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar 
+                dataKey="connections" 
+                fill="hsl(var(--chart-1))" 
+                radius={[4, 4, 0, 0]}
+              />
+              <Bar 
+                dataKey="responses" 
+                fill="hsl(var(--chart-2))" 
+                radius={[4, 4, 0, 0]}
+              />
+              <Bar 
+                dataKey="meetings" 
+                fill="hsl(var(--chart-3))" 
+                radius={[4, 4, 0, 0]}
+              />
+            </BarChart>
+          </ChartContainer>
         </Card>
 
         <Card className="p-6 bg-gradient-glass border-border-subtle">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">Campaign Success Rates</h3>
+            <h3 className="text-lg font-semibold text-foreground">Campaign Success by Industry</h3>
             <TrendingUp className="w-5 h-5 text-muted-foreground" />
           </div>
-          <div className="h-64 flex items-center justify-center text-muted-foreground bg-surface-elevated rounded-lg">
-            <p>Response rate chart placeholder</p>
-          </div>
+          <ChartContainer config={chartConfig} className="h-64">
+            <PieChart>
+              <Pie
+                data={campaignSuccessData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {campaignSuccessData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                ))}
+              </Pie>
+              <ChartTooltip 
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
+                        <p className="text-sm font-medium">{payload[0].payload.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Response Rate: {payload[0].value}%
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+            </PieChart>
+          </ChartContainer>
         </Card>
       </div>
 

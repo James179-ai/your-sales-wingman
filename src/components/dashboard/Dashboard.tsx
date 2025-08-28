@@ -1,14 +1,17 @@
+import { useState } from "react";
 import { KPICard } from "./KPICard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { ArthurChatbot } from "@/components/arthur/ArthurChatbot";
 import { 
   Users, 
   MessageSquare, 
   Calendar, 
   TrendingUp,
   Plus,
-  BarChart3
+  BarChart3,
+  Bot
 } from "lucide-react";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
@@ -71,6 +74,8 @@ const mockCampaigns = [
 ];
 
 export function Dashboard() {
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -87,10 +92,20 @@ export function Dashboard() {
             </p>
           </div>
         </div>
-        <Button variant="primary" className="gap-2">
-          <Plus className="w-4 h-4" />
-          Let Arthur Start a New Campaign
-        </Button>
+        <div className="flex gap-3">
+          <Button 
+            variant="primary" 
+            className="gap-2"
+            onClick={() => setIsChatbotOpen(true)}
+          >
+            <Bot className="w-4 h-4" />
+            Plan with Arthur
+          </Button>
+          <Button variant="secondary" className="gap-2">
+            <Plus className="w-4 h-4" />
+            Let Arthur Start a New Campaign
+          </Button>
+        </div>
       </div>
 
       {/* KPI Cards */}
@@ -167,6 +182,11 @@ export function Dashboard() {
           </div>
         </div>
       </Card>
+
+      <ArthurChatbot 
+        open={isChatbotOpen} 
+        onClose={() => setIsChatbotOpen(false)} 
+      />
     </div>
   );
 }

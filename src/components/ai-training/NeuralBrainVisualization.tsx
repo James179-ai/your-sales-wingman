@@ -141,257 +141,104 @@ function Synapse({ start, end, active, pulse, strength }: SynapseProps) {
 function BrainStructure() {
   const brainRef = useRef<THREE.Group>(null);
   const [activeNeurons, setActiveNeurons] = useState(new Set<number>());
-  const [activeSynapses, setActiveSynapses] = useState(new Set<number>());
   
-  // Create anatomically accurate brain structure
-  const createBrainStructure = () => {
-    const regions = {
-      leftCortex: [],
-      rightCortex: [],
-      hippocampus: [],
-      brainstem: [],
-      cerebellum: [],
-      corpus: []
-    };
-
-    // Left hemisphere - outer cortex layer
-    for (let i = 0; i < 30; i++) {
-      // Use spherical coordinates for realistic brain shape
-      const theta = Math.random() * Math.PI * 0.85; // Limit to upper portion
-      const phi = Math.random() * Math.PI; // Half sphere
-      const r = 1.3 + Math.random() * 0.2;
-      
-      const x = -Math.abs(r * Math.sin(theta) * Math.cos(phi)) - 0.1;
-      const y = r * Math.sin(theta) * Math.sin(phi) * 0.9;
-      const z = r * Math.cos(theta) * 0.7;
-      
-      regions.leftCortex.push([x, y, z] as [number, number, number]);
-    }
-
-    // Right hemisphere - outer cortex layer
-    for (let i = 0; i < 30; i++) {
-      const theta = Math.random() * Math.PI * 0.85;
-      const phi = Math.random() * Math.PI;
-      const r = 1.3 + Math.random() * 0.2;
-      
-      const x = Math.abs(r * Math.sin(theta) * Math.cos(phi)) + 0.1;
-      const y = r * Math.sin(theta) * Math.sin(phi) * 0.9;
-      const z = r * Math.cos(theta) * 0.7;
-      
-      regions.rightCortex.push([x, y, z] as [number, number, number]);
-    }
-
-    // Corpus callosum - bridge between hemispheres
-    for (let i = 0; i < 8; i++) {
-      const t = (i / 7) * 0.6 - 0.3;
-      regions.corpus.push([
-        t,
-        0.3 + Math.sin(i) * 0.1,
-        0.2 + Math.cos(i) * 0.1
-      ] as [number, number, number]);
-    }
-
-    // Hippocampus - deeper brain structure
-    for (let i = 0; i < 10; i++) {
-      const side = i < 5 ? -1 : 1;
-      const offset = (i % 5) * 0.1;
-      regions.hippocampus.push([
-        side * (0.6 + offset),
-        -0.2 + Math.sin(i) * 0.1,
-        -0.3 + Math.cos(i) * 0.2
-      ] as [number, number, number]);
-    }
-
-    // Brain stem - central column
-    for (let i = 0; i < 8; i++) {
-      const y = -0.8 - i * 0.15;
-      regions.brainstem.push([
-        (Math.random() - 0.5) * 0.2,
-        y,
-        -0.4 + Math.random() * 0.2
-      ] as [number, number, number]);
-    }
-
-    // Cerebellum - back of brain, folded structure
-    for (let i = 0; i < 15; i++) {
-      const angle = (i / 15) * Math.PI * 2;
-      const r = 0.4 + Math.random() * 0.15;
-      regions.cerebellum.push([
-        Math.cos(angle) * r * 0.8,
-        -0.4 + Math.sin(angle) * 0.2,
-        -1.0 + Math.random() * 0.2
-      ] as [number, number, number]);
-    }
-
-    return regions;
-  };
-
-  const brainRegions = createBrainStructure();
-  const allNeurons = [
-    ...brainRegions.leftCortex.map((pos, i) => ({ pos, region: 'cortex' as const, id: i })),
-    ...brainRegions.rightCortex.map((pos, i) => ({ pos, region: 'cortex' as const, id: i + 30 })),
-    ...brainRegions.corpus.map((pos, i) => ({ pos, region: 'frontal' as const, id: i + 60 })),
-    ...brainRegions.hippocampus.map((pos, i) => ({ pos, region: 'hippocampus' as const, id: i + 68 })),
-    ...brainRegions.brainstem.map((pos, i) => ({ pos, region: 'amygdala' as const, id: i + 78 })),
-    ...brainRegions.cerebellum.map((pos, i) => ({ pos, region: 'amygdala' as const, id: i + 86 }))
-  ];
-
-  // Create synaptic connections
-  const synapses = [];
-  for (let i = 0; i < allNeurons.length; i++) {
-    for (let j = i + 1; j < allNeurons.length; j++) {
-      const neuron1 = allNeurons[i];
-      const neuron2 = allNeurons[j];
-      const distance = Math.sqrt(
-        Math.pow(neuron1.pos[0] - neuron2.pos[0], 2) +
-        Math.pow(neuron1.pos[1] - neuron2.pos[1], 2) +
-        Math.pow(neuron1.pos[2] - neuron2.pos[2], 2)
-      );
-      
-      // Connect nearby neurons with higher probability
-      if (distance < 0.8 && Math.random() > 0.85) {
-        synapses.push({
-          start: neuron1.pos,
-          end: neuron2.pos,
-          strength: 1 - distance / 0.8,
-          id: synapses.length
-        });
-      }
-    }
+  // Create simple brain structure with neural activity
+  const neurons = [];
+  for (let i = 0; i < 50; i++) {
+    // Create neurons distributed in brain-like shape
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.random() * Math.PI;
+    const r = 0.8 + Math.random() * 0.4;
+    
+    const x = r * Math.sin(phi) * Math.cos(theta);
+    const y = r * Math.sin(phi) * Math.sin(theta) * 0.8; // Slightly flattened
+    const z = r * Math.cos(phi) * 0.9;
+    
+    neurons.push({
+      position: [x, y, z] as [number, number, number],
+      id: i
+    });
   }
 
   useFrame((state) => {
     const time = state.clock.elapsedTime;
     
-    // Simulate neural firing patterns
-    const firingWaves = [
-      Math.sin(time * 0.8) * 0.5 + 0.5, // Slow wave
-      Math.sin(time * 2.1) * 0.5 + 0.5, // Medium wave
-      Math.sin(time * 3.7) * 0.5 + 0.5  // Fast wave
-    ];
-
+    // Simple wave-based activation
     const activeSet = new Set<number>();
-    const synapseSet = new Set<number>();
-    
-    allNeurons.forEach((neuron, index) => {
-      // Different regions fire at different frequencies
-      let firingProbability = 0;
-      switch (neuron.region) {
-        case 'cortex':
-          firingProbability = firingWaves[0] * 0.6 + firingWaves[1] * 0.3;
-          break;
-        case 'hippocampus':
-          firingProbability = firingWaves[2] * 0.8;
-          break;
-        case 'amygdala':
-          firingProbability = firingWaves[1] * 0.9;
-          break;
-        case 'frontal':
-          firingProbability = firingWaves[0] * 0.7 + firingWaves[2] * 0.2;
-          break;
-      }
-      
-      const neuronPhase = (index / allNeurons.length + time * 0.1) % 1;
-      if (neuronPhase < firingProbability * 0.3) {
+    neurons.forEach((neuron, index) => {
+      const wave = Math.sin(time * 2 + index * 0.5) * 0.5 + 0.5;
+      if (wave > 0.7) {
         activeSet.add(index);
       }
     });
     
-    // Activate synapses based on connected neurons
-    synapses.forEach((synapse, index) => {
-      const startNeuron = allNeurons.find(n => 
-        n.pos[0] === synapse.start[0] && 
-        n.pos[1] === synapse.start[1] && 
-        n.pos[2] === synapse.start[2]
-      );
-      const endNeuron = allNeurons.find(n => 
-        n.pos[0] === synapse.end[0] && 
-        n.pos[1] === synapse.end[1] && 
-        n.pos[2] === synapse.end[2]
-      );
-      
-      if (startNeuron && endNeuron && 
-          (activeSet.has(startNeuron.id) || activeSet.has(endNeuron.id))) {
-        synapseSet.add(index);
-      }
-    });
-    
     setActiveNeurons(activeSet);
-    setActiveSynapses(synapseSet);
     
-    // Gentle brain rotation
+    // Gentle rotation
     if (brainRef.current) {
-      brainRef.current.rotation.y = Math.sin(time * 0.1) * 0.1;
-      brainRef.current.rotation.x = Math.sin(time * 0.07) * 0.05;
+      brainRef.current.rotation.y = time * 0.1;
     }
   });
 
   return (
     <group ref={brainRef}>
-      {/* Neurons */}
-      {allNeurons.map((neuron, index) => (
+      {/* Main brain hemispheres */}
+      <group>
+        {/* Left hemisphere */}
+        <mesh position={[-0.4, 0, 0]}>
+          <sphereGeometry args={[1.2, 32, 16, 0, Math.PI]} />
+          <meshBasicMaterial 
+            color="#001122" 
+            transparent 
+            opacity={0.3}
+            wireframe
+          />
+        </mesh>
+        
+        {/* Right hemisphere */}
+        <mesh position={[0.4, 0, 0]} rotation={[0, Math.PI, 0]}>
+          <sphereGeometry args={[1.2, 32, 16, 0, Math.PI]} />
+          <meshBasicMaterial 
+            color="#001122" 
+            transparent 
+            opacity={0.3}
+            wireframe
+          />
+        </mesh>
+        
+        {/* Brain stem */}
+        <mesh position={[0, -1.0, 0]}>
+          <cylinderGeometry args={[0.2, 0.3, 0.8, 8]} />
+          <meshBasicMaterial 
+            color="#002244" 
+            transparent 
+            opacity={0.4}
+            wireframe
+          />
+        </mesh>
+        
+        {/* Cerebellum */}
+        <mesh position={[0, -0.6, -0.8]}>
+          <sphereGeometry args={[0.5, 16, 12]} />
+          <meshBasicMaterial 
+            color="#001133" 
+            transparent 
+            opacity={0.3}
+            wireframe
+          />
+        </mesh>
+      </group>
+      
+      {/* Neural nodes */}
+      {neurons.map((neuron, index) => (
         <Neuron
           key={index}
-          position={neuron.pos}
-          active={activeNeurons.has(neuron.id)}
-          intensity={activeNeurons.has(neuron.id) ? Math.random() * 0.8 + 0.2 : 0}
-          region={neuron.region}
+          position={neuron.position}
+          active={activeNeurons.has(index)}
+          intensity={activeNeurons.has(index) ? 0.8 : 0}
+          region="cortex"
         />
       ))}
-      
-      {/* Synapses */}
-      {synapses.map((synapse, index) => (
-        <Synapse
-          key={index}
-          start={synapse.start}
-          end={synapse.end}
-          active={activeSynapses.has(index)}
-          pulse={Date.now() * 0.001 + index * 0.1}
-          strength={synapse.strength}
-        />
-      ))}
-      
-      {/* Brain hemisphere wireframes */}
-      <mesh position={[-0.3, 0, 0]} rotation={[0, 0, 0]}>
-        <sphereGeometry args={[1.5, 24, 16, 0, Math.PI]} />
-        <meshBasicMaterial 
-          color="#003366" 
-          transparent 
-          opacity={0.08} 
-          wireframe
-        />
-      </mesh>
-      <mesh position={[0.3, 0, 0]} rotation={[0, Math.PI, 0]}>
-        <sphereGeometry args={[1.5, 24, 16, 0, Math.PI]} />
-        <meshBasicMaterial 
-          color="#003366" 
-          transparent 
-          opacity={0.08} 
-          wireframe
-        />
-      </mesh>
-      
-      {/* Cerebellum */}
-      <mesh position={[0, -0.4, -1.0]}>
-        <sphereGeometry args={[0.6, 16, 12]} />
-        <meshBasicMaterial 
-          color="#002244" 
-          transparent 
-          opacity={0.15} 
-          wireframe
-        />
-      </mesh>
-      
-      {/* Brain stem */}
-      <mesh position={[0, -1.4, -0.4]}>
-        <cylinderGeometry args={[0.15, 0.25, 1.2, 8]} />
-        <meshBasicMaterial 
-          color="#004488" 
-          transparent 
-          opacity={0.2} 
-          wireframe
-        />
-      </mesh>
     </group>
   );
 }

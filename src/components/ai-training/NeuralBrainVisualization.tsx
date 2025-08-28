@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import arthurAvatar from '@/assets/ai-salesman-avatar.jpg';
 
 interface CircuitNode {
   id: number;
@@ -240,8 +241,23 @@ export function NeuralBrainVisualization() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <Card>
-            <CardHeader>
-              <CardTitle>Arthur's Neural Network</CardTitle>
+            <CardHeader className="relative">
+              <div className="flex items-center justify-between">
+                <CardTitle>Arthur's Neural Network</CardTitle>
+                <div className="relative">
+                  <img 
+                    src={arthurAvatar} 
+                    alt="Arthur AI Avatar" 
+                    className="w-16 h-16 rounded-full border-2 border-primary/20"
+                  />
+                  <div className="absolute -top-2 -left-32 bg-white border border-gray-200 rounded-lg p-3 shadow-lg max-w-xs animate-fade-in">
+                    <div className="text-sm text-gray-700">
+                      "Watch my neural pathways light up as I learn your unique writing style!"
+                    </div>
+                    <div className="absolute top-4 right-0 w-0 h-0 border-l-8 border-l-white border-t-4 border-t-transparent border-b-4 border-b-transparent transform translate-x-full"></div>
+                  </div>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
               <CircuitBrain />

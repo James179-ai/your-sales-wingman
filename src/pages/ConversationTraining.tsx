@@ -598,52 +598,54 @@ const ConversationTraining = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Conversation List */}
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold">Active Conversations</h2>
-            {conversations.map((conversation) => (
-              <Card 
-                key={conversation.id}
-                className={`cursor-pointer transition-colors ${
-                  selectedConversation === conversation.id ? 'ring-2 ring-primary' : ''
-                }`}
-                onClick={() => setSelectedConversation(conversation.id)}
-              >
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Avatar className="h-10 w-10">
-                        <AvatarImage src={conversation.prospect.avatar} />
-                        <AvatarFallback>
-                          {conversation.prospect.name.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <CardTitle className="text-sm">{conversation.prospect.name}</CardTitle>
-                        <p className="text-xs text-muted-foreground">{conversation.prospect.company}</p>
+            <h2 className="text-lg font-semibold sticky top-0 bg-background pb-2">Active Conversations</h2>
+            <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
+              {conversations.map((conversation) => (
+                <Card 
+                  key={conversation.id}
+                  className={`cursor-pointer transition-colors ${
+                    selectedConversation === conversation.id ? 'ring-2 ring-primary' : ''
+                  }`}
+                  onClick={() => setSelectedConversation(conversation.id)}
+                >
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={conversation.prospect.avatar} />
+                          <AvatarFallback>
+                            {conversation.prospect.name.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <CardTitle className="text-sm">{conversation.prospect.name}</CardTitle>
+                          <p className="text-xs text-muted-foreground">{conversation.prospect.company}</p>
+                        </div>
                       </div>
+                      <Badge className={getStatusColor(conversation.status)}>
+                        {getStatusText(conversation.status)}
+                      </Badge>
                     </div>
-                    <Badge className={getStatusColor(conversation.status)}>
-                      {getStatusText(conversation.status)}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <p className="text-xs text-muted-foreground">
-                      {conversation.messages.length} messages
-                    </p>
-                    {conversation.trainingPoints.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {conversation.trainingPoints.map((point, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
-                            {point}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <p className="text-xs text-muted-foreground">
+                        {conversation.messages.length} messages
+                      </p>
+                      {conversation.trainingPoints.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {conversation.trainingPoints.map((point, index) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {point}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
 
           {/* Conversation Detail */}

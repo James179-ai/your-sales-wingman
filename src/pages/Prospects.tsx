@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AddProspectModal } from "@/components/prospects/AddProspectModal";
 import { 
   Search, 
   Filter, 
@@ -101,6 +102,7 @@ export default function Prospects() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const filteredProspects = prospects.filter(prospect => {
     const matchesSearch = prospect.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -110,6 +112,11 @@ export default function Prospects() {
     const matchesPriority = priorityFilter === "all" || prospect.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesPriority;
   });
+
+  const handleAddProspects = (newProspects: any[]) => {
+    // In a real app, this would update the prospects list
+    console.log("New prospects added:", newProspects);
+  };
 
   return (
     <AppLayout>
@@ -129,7 +136,7 @@ export default function Prospects() {
               <Upload className="w-4 h-4 mr-2" />
               Import
             </Button>
-            <Button className="bg-gradient-primary text-primary-foreground hover:opacity-90">
+            <Button className="bg-gradient-primary text-primary-foreground hover:opacity-90" onClick={() => setShowAddModal(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Add Prospect
             </Button>
@@ -326,6 +333,12 @@ export default function Prospects() {
           </CardContent>
         </Card>
       </div>
+
+      <AddProspectModal 
+        open={showAddModal}
+        onOpenChange={setShowAddModal}
+        onProspectsAdded={handleAddProspects}
+      />
     </AppLayout>
   );
 }

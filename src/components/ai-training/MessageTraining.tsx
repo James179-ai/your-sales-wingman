@@ -5,7 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
-import { Send, RefreshCw, Check } from "lucide-react";
+import { Send, RefreshCw, Check, MessageSquare } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface MessageSuggestion {
   id: string;
@@ -48,6 +49,7 @@ const mockMessages: MessageSuggestion[] = [
 export function MessageTraining() {
   const [messages, setMessages] = useState<MessageSuggestion[]>(mockMessages);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleMessageEdit = (id: string, newMessage: string) => {
     setMessages(prev => prev.map(msg => 
@@ -103,11 +105,20 @@ export function MessageTraining() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Message Training</h2>
-        <p className="text-muted-foreground">
-          Edit Arthur's suggestions to train the AI on your preferred writing style
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Message Training</h2>
+          <p className="text-muted-foreground">
+            Edit Arthur's suggestions to train the AI on your preferred writing style
+          </p>
+        </div>
+        <Button 
+          onClick={() => navigate('/ai-training/conversations')}
+          className="flex items-center space-x-2"
+        >
+          <MessageSquare className="h-4 w-4" />
+          <span>View All Conversations</span>
+        </Button>
       </div>
 
       <div className="space-y-4">

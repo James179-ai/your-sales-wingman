@@ -13,6 +13,7 @@ import Activity from "./pages/Activity";
 import Team from "./pages/Team";
 import Billing from "./pages/Billing";
 import AITraining from "./pages/AITraining";
+import ConversationTraining from "./pages/ConversationTraining";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/billing" element={<Billing />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/ai-training" element={<AITraining />} />
+          <Route path="/ai-training/conversations" element={<ConversationTraining />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -11,7 +11,8 @@ import {
   CreditCard,
   Activity,
   Menu,
-  X
+  X,
+  Brain
 } from "lucide-react";
 
 const navigation = [
@@ -20,6 +21,7 @@ const navigation = [
   { name: "Prospects", icon: Users, href: "/prospects", current: false },
   { name: "Messages", icon: MessageSquare, href: "/messages", current: false },
   { name: "Activity", icon: Activity, href: "/activity", current: false },
+  { name: "AI Training", icon: Brain, href: "/ai-training", current: false },
   { name: "Team", icon: Users, href: "/team", current: false },
   { name: "Billing", icon: CreditCard, href: "/billing", current: false },
   { name: "Settings", icon: Settings, href: "/settings", current: false },

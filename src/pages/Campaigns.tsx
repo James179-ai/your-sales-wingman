@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CampaignBuilder } from "@/components/campaigns/CampaignBuilder";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { 
   Plus, 
   Search, 
@@ -20,6 +21,7 @@ import {
   Calendar,
   BarChart3
 } from "lucide-react";
+import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 const mockCampaigns = [
   {
@@ -124,15 +126,21 @@ export default function Campaigns() {
       <div className="space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Arthur's Campaign Command Center</h1>
-            <p className="text-muted-foreground mt-1">
-              Here's how your campaigns are performing. Arthur's got everything under control!
-            </p>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-16 w-16 border-2 border-primary/20">
+              <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
+              <AvatarFallback>AI</AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">Your Campaign War Room</h1>
+              <p className="text-muted-foreground mt-1">
+                Hey there! Here's how all your campaigns are performing. I'm pretty proud of these numbers - we make a great team!
+              </p>
+            </div>
           </div>
           <Button variant="primary" onClick={() => navigate('/campaigns/new')}>
             <Plus className="w-4 h-4 mr-2" />
-            Let Arthur Create New Campaign
+            Let Me Build Another Winner
           </Button>
         </div>
 

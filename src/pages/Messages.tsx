@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
@@ -21,6 +21,7 @@ import {
   Calendar
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 // Mock data
 const mockProspects = [
@@ -144,13 +145,19 @@ export default function Messages() {
   return (
     <AppLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
-            Arthur's Message Center
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Here are all your active conversations. Arthur's been keeping them warm!
-          </p>
+        <div className="flex items-center gap-4">
+          <Avatar className="h-16 w-16 border-2 border-primary/20">
+            <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
+            <AvatarFallback>AI</AvatarFallback>
+          </Avatar>
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+              Your Message Hub
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              I've been having some great conversations for you! Check out these promising leads - some are ready to chat.
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-200px)]">

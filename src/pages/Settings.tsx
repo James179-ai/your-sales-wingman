@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { 
   Settings as SettingsIcon, 
   Linkedin, 
@@ -27,6 +28,7 @@ import {
   TestTube
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 export default function Settings() {
   const { toast } = useToast();
@@ -148,13 +150,19 @@ export default function Settings() {
   return (
     <AppLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
-            Arthur's Settings
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Configure how Arthur works for you. He adapts to your preferences!
-          </p>
+        <div className="flex items-center gap-4">
+          <Avatar className="h-16 w-16 border-2 border-primary/20">
+            <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
+            <AvatarFallback>AI</AvatarFallback>
+          </Avatar>
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+              My Configuration Center
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              This is where you can tune how I work for you. I'm quite adaptable - just tell me what you prefer!
+            </p>
+          </div>
         </div>
 
         <Tabs defaultValue="integrations" className="space-y-6">

@@ -21,6 +21,7 @@ import {
   Users,
   Target
 } from "lucide-react";
+import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 // Mock activity data
 const mockActivities = [
@@ -140,20 +141,26 @@ const Activity = () => {
       <div className="space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Arthur's Activity Report</h1>
-            <p className="text-muted-foreground mt-2">
-              Watch how Arthur's been working hard for you! Every action tracked in real-time.
-            </p>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-16 w-16 border-2 border-primary/20">
+              <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
+              <AvatarFallback>AI</AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">My Work Report</h1>
+              <p className="text-muted-foreground mt-2">
+                Here's everything I've been up to! I love keeping you in the loop - every message sent, every connection made.
+              </p>
+            </div>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm">
               <Download className="w-4 h-4 mr-2" />
-              Export
+              Export My Work
             </Button>
             <Button variant="outline" size="sm">
               <Filter className="w-4 h-4 mr-2" />
-              Filters
+              Filter My Activities
             </Button>
           </div>
         </div>

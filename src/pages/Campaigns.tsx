@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -99,6 +100,7 @@ const statusConfig = {
 };
 
 export default function Campaigns() {
+  const navigate = useNavigate();
   const [showBuilder, setShowBuilder] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
@@ -128,7 +130,7 @@ export default function Campaigns() {
               Manage your LinkedIn outreach campaigns
             </p>
           </div>
-          <Button variant="primary" onClick={() => setShowBuilder(true)}>
+          <Button variant="primary" onClick={() => navigate('/campaigns/new')}>
             <Plus className="w-4 h-4 mr-2" />
             New Campaign
           </Button>
@@ -312,7 +314,7 @@ export default function Campaigns() {
                 "Get started by creating your first LinkedIn outreach campaign."
               }
             </p>
-            <Button variant="primary" onClick={() => setShowBuilder(true)}>
+            <Button variant="primary" onClick={() => navigate('/campaigns/new')}>
               <Plus className="w-4 h-4 mr-2" />
               Create Campaign
             </Button>

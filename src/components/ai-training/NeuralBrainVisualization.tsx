@@ -143,81 +143,97 @@ function BrainStructure() {
   const [activeNeurons, setActiveNeurons] = useState(new Set<number>());
   const [activeSynapses, setActiveSynapses] = useState(new Set<number>());
   
-  // Create brain-like hemisphere structure
-  const createBrainRegions = () => {
+  // Create anatomically accurate brain structure
+  const createBrainStructure = () => {
     const regions = {
       leftCortex: [],
       rightCortex: [],
       hippocampus: [],
-      amygdala: [],
-      frontalLobe: []
+      brainstem: [],
+      cerebellum: [],
+      corpus: []
     };
 
-    // Left hemisphere cortex (more analytical)
-    for (let i = 0; i < 25; i++) {
-      const theta = Math.random() * Math.PI;
-      const phi = Math.random() * Math.PI;
-      const r = 1.2 + Math.random() * 0.4;
+    // Left hemisphere - outer cortex layer
+    for (let i = 0; i < 30; i++) {
+      // Use spherical coordinates for realistic brain shape
+      const theta = Math.random() * Math.PI * 0.85; // Limit to upper portion
+      const phi = Math.random() * Math.PI; // Half sphere
+      const r = 1.3 + Math.random() * 0.2;
       
-      regions.leftCortex.push([
-        -Math.abs(r * Math.sin(theta) * Math.cos(phi)), // Ensure left side
-        r * Math.sin(theta) * Math.sin(phi),
-        r * Math.cos(theta)
-      ] as [number, number, number]);
+      const x = -Math.abs(r * Math.sin(theta) * Math.cos(phi)) - 0.1;
+      const y = r * Math.sin(theta) * Math.sin(phi) * 0.9;
+      const z = r * Math.cos(theta) * 0.7;
+      
+      regions.leftCortex.push([x, y, z] as [number, number, number]);
     }
 
-    // Right hemisphere cortex (more creative)
-    for (let i = 0; i < 25; i++) {
-      const theta = Math.random() * Math.PI;
+    // Right hemisphere - outer cortex layer
+    for (let i = 0; i < 30; i++) {
+      const theta = Math.random() * Math.PI * 0.85;
       const phi = Math.random() * Math.PI;
-      const r = 1.2 + Math.random() * 0.4;
+      const r = 1.3 + Math.random() * 0.2;
       
-      regions.rightCortex.push([
-        Math.abs(r * Math.sin(theta) * Math.cos(phi)), // Ensure right side
-        r * Math.sin(theta) * Math.sin(phi),
-        r * Math.cos(theta)
-      ] as [number, number, number]);
+      const x = Math.abs(r * Math.sin(theta) * Math.cos(phi)) + 0.1;
+      const y = r * Math.sin(theta) * Math.sin(phi) * 0.9;
+      const z = r * Math.cos(theta) * 0.7;
+      
+      regions.rightCortex.push([x, y, z] as [number, number, number]);
     }
 
-    // Hippocampus (memory formation)
+    // Corpus callosum - bridge between hemispheres
     for (let i = 0; i < 8; i++) {
-      const angle = (i / 8) * Math.PI * 2;
+      const t = (i / 7) * 0.6 - 0.3;
+      regions.corpus.push([
+        t,
+        0.3 + Math.sin(i) * 0.1,
+        0.2 + Math.cos(i) * 0.1
+      ] as [number, number, number]);
+    }
+
+    // Hippocampus - deeper brain structure
+    for (let i = 0; i < 10; i++) {
+      const side = i < 5 ? -1 : 1;
+      const offset = (i % 5) * 0.1;
       regions.hippocampus.push([
-        Math.cos(angle) * 0.3,
-        -0.5 + Math.sin(angle) * 0.2,
-        -0.8 + Math.random() * 0.2
+        side * (0.6 + offset),
+        -0.2 + Math.sin(i) * 0.1,
+        -0.3 + Math.cos(i) * 0.2
       ] as [number, number, number]);
     }
 
-    // Amygdala (emotion processing)
-    for (let i = 0; i < 6; i++) {
-      const side = i < 3 ? -1 : 1;
-      regions.amygdala.push([
-        side * (0.4 + Math.random() * 0.2),
-        -0.3 + Math.random() * 0.2,
-        -0.5 + Math.random() * 0.3
+    // Brain stem - central column
+    for (let i = 0; i < 8; i++) {
+      const y = -0.8 - i * 0.15;
+      regions.brainstem.push([
+        (Math.random() - 0.5) * 0.2,
+        y,
+        -0.4 + Math.random() * 0.2
       ] as [number, number, number]);
     }
 
-    // Frontal lobe (decision making)
+    // Cerebellum - back of brain, folded structure
     for (let i = 0; i < 15; i++) {
-      regions.frontalLobe.push([
-        (Math.random() - 0.5) * 1.5,
-        0.8 + Math.random() * 0.5,
-        0.2 + Math.random() * 0.6
+      const angle = (i / 15) * Math.PI * 2;
+      const r = 0.4 + Math.random() * 0.15;
+      regions.cerebellum.push([
+        Math.cos(angle) * r * 0.8,
+        -0.4 + Math.sin(angle) * 0.2,
+        -1.0 + Math.random() * 0.2
       ] as [number, number, number]);
     }
 
     return regions;
   };
 
-  const brainRegions = createBrainRegions();
+  const brainRegions = createBrainStructure();
   const allNeurons = [
     ...brainRegions.leftCortex.map((pos, i) => ({ pos, region: 'cortex' as const, id: i })),
-    ...brainRegions.rightCortex.map((pos, i) => ({ pos, region: 'cortex' as const, id: i + 25 })),
-    ...brainRegions.hippocampus.map((pos, i) => ({ pos, region: 'hippocampus' as const, id: i + 50 })),
-    ...brainRegions.amygdala.map((pos, i) => ({ pos, region: 'amygdala' as const, id: i + 58 })),
-    ...brainRegions.frontalLobe.map((pos, i) => ({ pos, region: 'frontal' as const, id: i + 64 }))
+    ...brainRegions.rightCortex.map((pos, i) => ({ pos, region: 'cortex' as const, id: i + 30 })),
+    ...brainRegions.corpus.map((pos, i) => ({ pos, region: 'frontal' as const, id: i + 60 })),
+    ...brainRegions.hippocampus.map((pos, i) => ({ pos, region: 'hippocampus' as const, id: i + 68 })),
+    ...brainRegions.brainstem.map((pos, i) => ({ pos, region: 'amygdala' as const, id: i + 78 })),
+    ...brainRegions.cerebellum.map((pos, i) => ({ pos, region: 'amygdala' as const, id: i + 86 }))
   ];
 
   // Create synaptic connections
@@ -335,20 +351,31 @@ function BrainStructure() {
         />
       ))}
       
-      {/* Brain wireframe outline */}
-      <mesh position={[-0.4, 0, 0]} rotation={[0, Math.PI * 0.1, 0]}>
-        <sphereGeometry args={[1.4, 24, 16, 0, Math.PI]} />
+      {/* Brain hemisphere wireframes */}
+      <mesh position={[-0.3, 0, 0]} rotation={[0, 0, 0]}>
+        <sphereGeometry args={[1.5, 24, 16, 0, Math.PI]} />
         <meshBasicMaterial 
-          color="#00aaff" 
+          color="#003366" 
           transparent 
-          opacity={0.15} 
+          opacity={0.08} 
           wireframe
         />
       </mesh>
-      <mesh position={[0.4, 0, 0]} rotation={[0, -Math.PI * 0.1, 0]}>
-        <sphereGeometry args={[1.4, 24, 16, 0, Math.PI]} />
+      <mesh position={[0.3, 0, 0]} rotation={[0, Math.PI, 0]}>
+        <sphereGeometry args={[1.5, 24, 16, 0, Math.PI]} />
         <meshBasicMaterial 
-          color="#00aaff" 
+          color="#003366" 
+          transparent 
+          opacity={0.08} 
+          wireframe
+        />
+      </mesh>
+      
+      {/* Cerebellum */}
+      <mesh position={[0, -0.4, -1.0]}>
+        <sphereGeometry args={[0.6, 16, 12]} />
+        <meshBasicMaterial 
+          color="#002244" 
           transparent 
           opacity={0.15} 
           wireframe
@@ -356,12 +383,12 @@ function BrainStructure() {
       </mesh>
       
       {/* Brain stem */}
-      <mesh position={[0, -1.2, -0.5]}>
-        <cylinderGeometry args={[0.2, 0.3, 0.8, 8]} />
+      <mesh position={[0, -1.4, -0.4]}>
+        <cylinderGeometry args={[0.15, 0.25, 1.2, 8]} />
         <meshBasicMaterial 
-          color="#0088cc" 
+          color="#004488" 
           transparent 
-          opacity={0.3} 
+          opacity={0.2} 
           wireframe
         />
       </mesh>

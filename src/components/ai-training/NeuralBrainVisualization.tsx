@@ -1,275 +1,211 @@
-import { useRef, useEffect, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import * as THREE from 'three';
 
-interface NeuronProps {
-  position: [number, number, number];
+interface CircuitNode {
+  id: number;
+  x: number;
+  y: number;
   active: boolean;
-  intensity: number;
-  region: 'cortex' | 'hippocampus' | 'amygdala' | 'frontal';
+  type: 'junction' | 'processor' | 'memory';
 }
 
-function Neuron({ position, active, intensity, region }: NeuronProps) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const glowRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state) => {
-    if (meshRef.current && active) {
-      const pulseFactor = 1 + Math.sin(state.clock.elapsedTime * 8) * 0.4 * intensity;
-      meshRef.current.scale.setScalar(pulseFactor);
-      
-      if (glowRef.current) {
-        glowRef.current.scale.setScalar(pulseFactor * 2.5);
-      }
-    }
-  });
-
-  const nodeSize = region === 'cortex' ? 0.04 : 0.06;
-  const glowSize = region === 'cortex' ? 0.08 : 0.12;
-
-  return (
-    <group position={position}>
-      {/* Main neuron node */}
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[nodeSize, 12, 12]} />
-        <meshBasicMaterial 
-          color={active ? '#8b5cf6' : '#6b46c1'}
-          transparent
-          opacity={active ? 1 : 0.6}
-        />
-      </mesh>
-      
-      {/* Outer glow effect */}
-      {active && (
-        <mesh ref={glowRef}>
-          <sphereGeometry args={[glowSize, 12, 12]} />
-          <meshBasicMaterial 
-            color="#a855f7"
-            transparent
-            opacity={0.3 * intensity}
-          />
-        </mesh>
-      )}
-      
-      {/* Bright core for active neurons */}
-      {active && (
-        <mesh>
-          <sphereGeometry args={[nodeSize * 0.5, 8, 8]} />
-          <meshBasicMaterial 
-            color="#ffffff"
-            transparent
-            opacity={0.9}
-          />
-        </mesh>
-      )}
-    </group>
-  );
-}
-
-interface SynapseProps {
-  start: [number, number, number];
-  end: [number, number, number];
+interface CircuitPath {
+  id: number;
+  points: { x: number; y: number }[];
   active: boolean;
-  pulse: number;
-  strength: number;
 }
 
-function Synapse({ start, end, active, pulse, strength }: SynapseProps) {
-  const lineRef = useRef<THREE.Line>(null);
-  const glowLineRef = useRef<THREE.Line>(null);
-  
-  useFrame((state) => {
-    if (lineRef.current) {
-      const material = lineRef.current.material as THREE.LineBasicMaterial;
-      const pulseBrightness = active ? 0.7 + Math.sin(state.clock.elapsedTime * 6 + pulse) * 0.3 : 0.2;
-      material.opacity = pulseBrightness * strength;
-      
-      if (glowLineRef.current && active) {
-        const glowMaterial = glowLineRef.current.material as THREE.LineBasicMaterial;
-        glowMaterial.opacity = pulseBrightness * 0.4;
+function CircuitBrain() {
+  const [nodes, setNodes] = useState<CircuitNode[]>([]);
+  const [paths, setPaths] = useState<CircuitPath[]>([]);
+  const [activeNodes, setActiveNodes] = useState(new Set<number>());
+
+  useEffect(() => {
+    // Create brain outline points and internal circuit structure
+    const brainNodes: CircuitNode[] = [];
+    const brainPaths: CircuitPath[] = [];
+    
+    // Main processing areas
+    const processingAreas = [
+      { x: 180, y: 120, area: 'frontal' },
+      { x: 120, y: 160, area: 'temporal' },
+      { x: 280, y: 160, area: 'parietal' },
+      { x: 200, y: 200, area: 'occipital' }
+    ];
+
+    // Create circuit nodes in brain regions
+    processingAreas.forEach((area, areaIndex) => {
+      for (let i = 0; i < 8; i++) {
+        const angle = (i / 8) * Math.PI * 2;
+        const radius = 30 + Math.random() * 20;
+        brainNodes.push({
+          id: areaIndex * 8 + i,
+          x: area.x + Math.cos(angle) * radius,
+          y: area.y + Math.sin(angle) * radius,
+          active: false,
+          type: i % 3 === 0 ? 'processor' : i % 3 === 1 ? 'memory' : 'junction'
+        });
       }
-    }
-  });
+    });
 
-  // Create straight lines for radiating effect
-  const startVec = new THREE.Vector3(...start);
-  const endVec = new THREE.Vector3(...end);
-  const points = [startVec, endVec];
-  const geometry = new THREE.BufferGeometry().setFromPoints(points);
-
-  return (
-    <group>
-      {/* Main synapse line */}
-      <primitive 
-        ref={lineRef}
-        object={new THREE.Line(geometry, new THREE.LineBasicMaterial({
-          color: active ? 0x8b5cf6 : 0x6b46c1,
-          opacity: active ? 0.8 : 0.2,
-          transparent: true,
-          linewidth: 2
-        }))} 
-      />
+    // Create interconnecting paths
+    for (let i = 0; i < brainNodes.length - 1; i++) {
+      const startNode = brainNodes[i];
+      const endNode = brainNodes[i + 1];
       
-      {/* Glow effect for active synapses */}
-      {active && (
-        <primitive 
-          ref={glowLineRef}
-          object={new THREE.Line(geometry, new THREE.LineBasicMaterial({
-            color: 0xa855f7,
-            opacity: 0.5,
-            transparent: true,
-            linewidth: 4
-          }))} 
-        />
-      )}
-    </group>
-  );
-}
+      // Create L-shaped or curved paths
+      const midX = startNode.x + (endNode.x - startNode.x) * 0.5;
+      const midY = startNode.y;
+      
+      brainPaths.push({
+        id: i,
+        points: [
+          { x: startNode.x, y: startNode.y },
+          { x: midX, y: midY },
+          { x: midX, y: endNode.y },
+          { x: endNode.x, y: endNode.y }
+        ],
+        active: false
+      });
+    }
 
-function BrainStructure() {
-  const brainRef = useRef<THREE.Group>(null);
-  const [activeNeurons, setActiveNeurons] = useState(new Set<number>());
-  
-  // Create central brain structure and radiating pathways
-  const neurons = [];
-  const pathways = [];
-  
-  // Central brain neurons (dense core)
-  for (let i = 0; i < 25; i++) {
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.random() * Math.PI;
-    const r = 0.2 + Math.random() * 0.4;
-    
-    const x = r * Math.sin(phi) * Math.cos(theta);
-    const y = r * Math.sin(phi) * Math.sin(theta);
-    const z = r * Math.cos(phi);
-    
-    neurons.push({
-      position: [x, y, z] as [number, number, number],
-      id: i,
-      type: 'core'
-    });
-  }
-  
-  // Radiating pathway nodes
-  for (let i = 0; i < 80; i++) {
-    const angle = (i / 80) * Math.PI * 2;
-    const elevation = (Math.random() - 0.5) * Math.PI * 0.8;
-    const distance = 1.8 + Math.random() * 1.2;
-    
-    const x = distance * Math.cos(elevation) * Math.cos(angle);
-    const y = distance * Math.cos(elevation) * Math.sin(angle);
-    const z = distance * Math.sin(elevation);
-    
-    neurons.push({
-      position: [x, y, z] as [number, number, number],
-      id: i + 25,
-      type: 'pathway'
-    });
-    
-    // Create pathway connections from core to outer nodes
-    const coreNodeIndex = Math.floor(Math.random() * 25);
-    const coreNode = neurons[coreNodeIndex];
-    pathways.push({
-      start: coreNode.position,
-      end: [x, y, z] as [number, number, number],
-      id: i
-    });
-  }
+    setNodes(brainNodes);
+    setPaths(brainPaths);
+  }, []);
 
-  useFrame((state) => {
-    const time = state.clock.elapsedTime;
-    
-    // Create wave patterns radiating from center
-    const activeSet = new Set<number>();
-    neurons.forEach((neuron, index) => {
-      const distance = Math.sqrt(
-        neuron.position[0] ** 2 + 
-        neuron.position[1] ** 2 + 
-        neuron.position[2] ** 2
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Simulate neural activity with wave patterns
+      const activeSet = new Set<number>();
+      const time = Date.now() / 1000;
+      
+      nodes.forEach((node, index) => {
+        const wave = Math.sin(time * 2 + index * 0.3) * 0.5 + 0.5;
+        if (wave > 0.6) {
+          activeSet.add(index);
+        }
+      });
+      
+      setActiveNodes(activeSet);
+      
+      // Update paths activity based on connected nodes
+      setPaths(prevPaths => 
+        prevPaths.map(path => ({
+          ...path,
+          active: activeSet.has(path.id) || activeSet.has(path.id + 1)
+        }))
       );
       
-      const wave = Math.sin(time * 2.5 - distance * 1.5) * 0.5 + 0.5;
-      if (wave > 0.65) {
-        activeSet.add(index);
-      }
-    });
-    
-    setActiveNeurons(activeSet);
-    
-    // Gentle rotation
-    if (brainRef.current) {
-      brainRef.current.rotation.y = time * 0.06;
-    }
-  });
+      setNodes(prevNodes =>
+        prevNodes.map((node, index) => ({
+          ...node,
+          active: activeSet.has(index)
+        }))
+      );
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [nodes.length]);
 
   return (
-    <group ref={brainRef}>
-      {/* Central brain structure */}
-      <group>
-        {/* Main brain mass */}
-        <mesh>
-          <sphereGeometry args={[0.6, 16, 12]} />
-          <meshBasicMaterial 
-            color="#8b5cf6" 
-            transparent 
-            opacity={0.15}
-            wireframe
-          />
-        </mesh>
-        
-        {/* Brain hemispheres outline */}
-        <mesh position={[-0.1, 0, 0]}>
-          <sphereGeometry args={[0.5, 12, 8, 0, Math.PI]} />
-          <meshBasicMaterial 
-            color="#6b46c1" 
-            transparent 
-            opacity={0.2}
-            wireframe
-          />
-        </mesh>
-        
-        <mesh position={[0.1, 0, 0]} rotation={[0, Math.PI, 0]}>
-          <sphereGeometry args={[0.5, 12, 8, 0, Math.PI]} />
-          <meshBasicMaterial 
-            color="#6b46c1" 
-            transparent 
-            opacity={0.2}
-            wireframe
-          />
-        </mesh>
-      </group>
-      
-      {/* Radiating pathways */}
-      {pathways.map((pathway, index) => {
-        const isActive = activeNeurons.has(index + 25);
-        return (
-          <Synapse
-            key={`pathway-${index}`}
-            start={pathway.start}
-            end={pathway.end}
-            active={isActive}
-            pulse={index * 0.2}
-            strength={isActive ? 0.9 : 0.3}
-          />
-        );
-      })}
-      
-      {/* Neural nodes */}
-      {neurons.map((neuron, index) => (
-        <Neuron
-          key={index}
-          position={neuron.position}
-          active={activeNeurons.has(index)}
-          intensity={activeNeurons.has(index) ? 1.0 : 0.4}
-          region={neuron.type === 'core' ? 'cortex' : 'frontal'}
+    <div className="relative w-full h-96 bg-white">
+      <svg 
+        width="100%" 
+        height="100%" 
+        viewBox="0 0 400 300"
+        className="absolute inset-0"
+      >
+        {/* Brain outline */}
+        <path
+          d="M 80,150 
+             C 80,80 120,60 200,60
+             C 280,60 320,80 320,150
+             C 320,180 300,200 280,210
+             C 260,220 240,230 200,230
+             C 160,230 140,220 120,210
+             C 100,200 80,180 80,150 Z"
+          fill="none"
+          stroke="#6b7280"
+          strokeWidth="2"
+          opacity="0.3"
         />
-      ))}
-    </group>
+        
+        {/* Circuit paths */}
+        {paths.map((path) => (
+          <g key={`path-${path.id}`}>
+            <polyline
+              points={path.points.map(p => `${p.x},${p.y}`).join(' ')}
+              fill="none"
+              stroke={path.active ? "#8b5cf6" : "#9ca3af"}
+              strokeWidth={path.active ? "2" : "1"}
+              opacity={path.active ? "0.8" : "0.4"}
+              className={path.active ? "animate-pulse" : ""}
+            />
+            {path.active && (
+              <polyline
+                points={path.points.map(p => `${p.x},${p.y}`).join(' ')}
+                fill="none"
+                stroke="#a855f7"
+                strokeWidth="4"
+                opacity="0.3"
+              />
+            )}
+          </g>
+        ))}
+        
+        {/* Circuit nodes */}
+        {nodes.map((node) => (
+          <g key={`node-${node.id}`}>
+            {node.active && (
+              <circle
+                cx={node.x}
+                cy={node.y}
+                r={node.type === 'processor' ? "8" : node.type === 'memory' ? "6" : "4"}
+                fill="#a855f7"
+                opacity="0.4"
+                className="animate-ping"
+              />
+            )}
+            <circle
+              cx={node.x}
+              cy={node.y}
+              r={node.type === 'processor' ? "4" : node.type === 'memory' ? "3" : "2"}
+              fill={node.active ? "#8b5cf6" : "#6b7280"}
+              className={node.active ? "animate-pulse" : ""}
+            />
+            {node.type === 'processor' && (
+              <rect
+                x={node.x - 2}
+                y={node.y - 2}
+                width="4"
+                height="4"
+                fill={node.active ? "#ffffff" : "#d1d5db"}
+                opacity="0.8"
+              />
+            )}
+          </g>
+        ))}
+        
+        {/* Labels */}
+        <text x="60" y="100" fontSize="12" fill="#6b7280" className="font-medium">
+          INTELLIGENCE
+        </text>
+        <text x="320" y="120" fontSize="12" fill="#6b7280" className="font-medium">
+          CREATIVE
+        </text>
+        <text x="160" y="50" fontSize="12" fill="#6b7280" className="font-medium">
+          HUMAN
+        </text>
+        <text x="300" y="180" fontSize="12" fill="#6b7280" className="font-medium">
+          IDEA
+        </text>
+        <text x="140" y="250" fontSize="12" fill="#6b7280" className="font-medium">
+          BRAIN
+        </text>
+      </svg>
+    </div>
   );
 }
 
@@ -308,27 +244,9 @@ export function NeuralBrainVisualization() {
               <CardTitle>Arthur's Neural Network</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-96 w-full">
-                <Canvas 
-                  camera={{ position: [0, 0, 5], fov: 60 }}
-                  style={{ background: '#ffffff' }}
-                >
-                  <ambientLight intensity={0.3} color="#ffffff" />
-                  <pointLight position={[0, 0, 5]} intensity={0.4} color="#8b5cf6" />
-                  <pointLight position={[3, 3, 3]} intensity={0.2} color="#a855f7" />
-                  <pointLight position={[-3, -3, 3]} intensity={0.2} color="#6b46c1" />
-                  <BrainStructure />
-                  <OrbitControls 
-                    enablePan={false} 
-                    minDistance={2} 
-                    maxDistance={8}
-                    autoRotate
-                    autoRotateSpeed={0.3}
-                  />
-                </Canvas>
-              </div>
+              <CircuitBrain />
               <div className="mt-4 text-sm text-muted-foreground text-center">
-                <p className="animate-fade-in">Neural pathways lighting up • Click and drag to rotate • Scroll to zoom</p>
+                <p className="animate-fade-in">Circuit pathways processing neural signals • Real-time AI learning visualization</p>
               </div>
             </CardContent>
           </Card>

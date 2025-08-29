@@ -119,7 +119,18 @@ export default function Messages() {
   const [newMessage, setNewMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [aiEnabled, setAiEnabled] = useState(true);
+  const [aiEnabledByProspect, setAiEnabledByProspect] = useState<Record<string, boolean>>({});
+
+  const isAiEnabledForProspect = (prospectId: string) => {
+    return aiEnabledByProspect[prospectId] ?? true; // Default to enabled
+  };
+
+  const toggleAiForProspect = (prospectId: string) => {
+    setAiEnabledByProspect(prev => ({
+      ...prev,
+      [prospectId]: !isAiEnabledForProspect(prospectId)
+    }));
+  };
 
   const filteredProspects = mockProspects.filter(prospect => {
     const matchesSearch = prospect.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -154,34 +165,18 @@ export default function Messages() {
   return (
     <AppLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Avatar className="h-16 w-16 border-2 border-primary/20">
-              <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
-              <AvatarFallback>AI</AvatarFallback>
-            </Avatar>
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
-                Your Message Hub
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                I've been having some great conversations for you! Check out these promising leads - some are ready to chat.
-              </p>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-3 bg-white/40 backdrop-blur-xl border border-white/20 rounded-lg p-4 shadow-glass">
-            <Label htmlFor="ai-toggle" className="text-sm font-medium">
-              AI Assistant
-            </Label>
-            <Switch
-              id="ai-toggle"
-              checked={aiEnabled}
-              onCheckedChange={setAiEnabled}
-            />
-            <span className={`text-sm font-medium ${aiEnabled ? 'text-success' : 'text-muted-foreground'}`}>
-              {aiEnabled ? 'ON' : 'OFF'}
-            </span>
+        <div className="flex items-center gap-4">
+          <Avatar className="h-16 w-16 border-2 border-primary/20">
+            <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
+            <AvatarFallback>AI</AvatarFallback>
+          </Avatar>
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+              Your Message Hub
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              I've been having some great conversations for you! Check out these promising leads - some are ready to chat.
+            </p>
           </div>
         </div>
 
@@ -307,6 +302,20 @@ export default function Messages() {
                       {React.createElement(statusConfig[selectedProspect.status].icon, { className: "h-3 w-3 mr-1" })}
                       {statusConfig[selectedProspect.status].label}
                     </Badge>
+                    
+                    <div className="flex items-center space-x-3 bg-white/40 backdrop-blur-xl border border-white/20 rounded-lg px-3 py-2 shadow-glass">
+                      <Label htmlFor={`ai-toggle-${selectedProspect.id}`} className="text-sm font-medium">
+                        AI
+                      </Label>
+                      <Switch
+                        id={`ai-toggle-${selectedProspect.id}`}
+                        checked={isAiEnabledForProspect(selectedProspect.id)}
+                        onCheckedChange={() => toggleAiForProspect(selectedProspect.id)}
+                      />
+                      <span className={`text-sm font-medium ${isAiEnabledForProspect(selectedProspect.id) ? 'text-success' : 'text-muted-foreground'}`}>
+                        {isAiEnabledForProspect(selectedProspect.id) ? 'ON' : 'OFF'}
+                      </span>
+                    </div>
                     
                     <Button variant="outline" size="sm" className="border-white/30 hover:bg-white/60">
                       <Calendar className="h-4 w-4 mr-2" />

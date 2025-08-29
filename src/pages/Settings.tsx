@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { TypewriterText } from "@/components/ui/typewriter-text";
 import { 
   Settings as SettingsIcon, 
   Linkedin, 
@@ -36,6 +37,12 @@ export default function Settings() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [typewriterKey, setTypewriterKey] = useState(0);
+
+  // Trigger typewriter on component mount
+  useEffect(() => {
+    setTypewriterKey(Date.now());
+  }, []);
   
   // Current plan info
   const currentPlan = {
@@ -44,6 +51,12 @@ export default function Settings() {
     weeklyLimit: 50,
     monthlyLimit: 200
   };
+
+  const arthurMessages = [
+    "This is where you can tune how I work for you. I'm quite adaptable - just tell me what you prefer!",
+    "Welcome to my configuration center! Let's make sure I'm set up perfectly for your success.",
+    "Time to fine-tune my settings! I want to work exactly the way you need me to."
+  ];
   
   // Integration status - mock data
   const [integrations, setIntegrations] = useState({
@@ -170,8 +183,12 @@ export default function Settings() {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
               My Configuration Center
             </h1>
-            <p className="text-muted-foreground mt-1">
-              This is where you can tune how I work for you. I'm quite adaptable - just tell me what you prefer!
+            <p className="text-muted-foreground mt-1 min-h-[3rem] flex items-center">
+              <TypewriterText 
+                texts={arthurMessages}
+                speed={30}
+                triggerKey={typewriterKey}
+              />
             </p>
           </div>
         </div>

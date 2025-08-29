@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CampaignBuilder } from "@/components/campaigns/CampaignBuilder";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { TypewriterText } from "@/components/ui/typewriter-text";
 import { 
   Plus, 
   Search, 
@@ -101,11 +102,23 @@ const statusConfig = {
   completed: { label: "Completed", color: "bg-primary", textColor: "text-primary" }
 };
 
+const arthurMessages = [
+  "Hey there! Here's how all your campaigns are performing. I'm pretty proud of these numbers - we make a great team!",
+  "Welcome to your campaign war room! I've been fine-tuning everything to maximize your results.",
+  "Check out these beautiful campaigns I've built for you! Each one is crafted for maximum impact."
+];
+
 export default function Campaigns() {
   const navigate = useNavigate();
   const [showBuilder, setShowBuilder] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [typewriterKey, setTypewriterKey] = useState(0);
+
+  // Trigger typewriter on component mount
+  useEffect(() => {
+    setTypewriterKey(Date.now());
+  }, []);
 
   const filteredCampaigns = mockCampaigns.filter(campaign => {
     const matchesSearch = campaign.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -132,9 +145,15 @@ export default function Campaigns() {
               <AvatarFallback>AI</AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Your Campaign War Room</h1>
-              <p className="text-muted-foreground mt-1">
-                Hey there! Here's how all your campaigns are performing. I'm pretty proud of these numbers - we make a great team!
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+                Your Campaign War Room
+              </h1>
+              <p className="text-muted-foreground mt-1 min-h-[3rem] flex items-center">
+                <TypewriterText 
+                  texts={arthurMessages}
+                  speed={30}
+                  triggerKey={typewriterKey}
+                />
               </p>
             </div>
           </div>

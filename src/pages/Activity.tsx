@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { TypewriterText } from "@/components/ui/typewriter-text";
 import { 
   MessageCircle, 
   UserPlus, 
@@ -111,11 +112,23 @@ const statusConfig = {
   info: { label: "Info", color: "gray" }
 };
 
+const arthurMessages = [
+  "Here's everything I've been up to! I love keeping you in the loop - every message sent, every connection made.",
+  "Check out my work report! I've been busy building relationships and driving results for you.",
+  "My activity feed is looking great! Every action I take is designed to grow your business."
+];
+
 const Activity = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [activeTab, setActiveTab] = useState("all");
+  const [typewriterKey, setTypewriterKey] = useState(0);
+
+  // Trigger typewriter on component mount
+  useEffect(() => {
+    setTypewriterKey(Date.now());
+  }, []);
 
   // Filter activities
   const filteredActivities = mockActivities.filter(activity => {
@@ -153,9 +166,15 @@ const Activity = () => {
               <AvatarFallback>AI</AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">My Work Report</h1>
-              <p className="text-muted-foreground mt-2">
-                Here's everything I've been up to! I love keeping you in the loop - every message sent, every connection made.
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+                My Work Report
+              </h1>
+              <p className="text-muted-foreground mt-1 min-h-[3rem] flex items-center">
+                <TypewriterText 
+                  texts={arthurMessages}
+                  speed={30}
+                  triggerKey={typewriterKey}
+                />
               </p>
             </div>
           </div>

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { KPICard } from "./KPICard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ArthurChatbot } from "@/components/arthur/ArthurChatbot";
+import { TypewriterText } from "@/components/ui/typewriter-text";
 import { 
   Users, 
   MessageSquare, 
@@ -98,9 +99,21 @@ const chartConfig = {
   }
 };
 
+const arthurMessages = [
+  "Good evening! I've been crushing your goals today - check out these amazing numbers!",
+  "Hey there! Your pipeline is looking fantastic. I've been busy building your success story.",
+  "What a productive day! I've been working hard on your campaigns and the results speak for themselves."
+];
+
 export function Dashboard() {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [typewriterKey, setTypewriterKey] = useState(0);
   const navigate = useNavigate();
+
+  // Trigger typewriter on component mount
+  useEffect(() => {
+    setTypewriterKey(Date.now());
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -112,9 +125,15 @@ export function Dashboard() {
             <AvatarFallback>AI</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Good Evening, Karl-Martin</h1>
-            <p className="text-muted-foreground mt-1">
-              Arthur here! I've been working hard on your pipeline. Here's what we accomplished today.
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+              Good Evening, Karl-Martin
+            </h1>
+            <p className="text-muted-foreground mt-1 min-h-[3rem] flex items-center">
+              <TypewriterText 
+                texts={arthurMessages}
+                speed={30}
+                triggerKey={typewriterKey}
+              />
             </p>
           </div>
         </div>

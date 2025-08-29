@@ -3,8 +3,14 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Target, TrendingUp, Users, Calendar, MessageSquare, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const currentGoals = [
   {
@@ -112,6 +118,66 @@ const getStatusColor = (status: string) => {
 
 const Goals = () => {
   const navigate = useNavigate();
+  const [goals, setGoals] = useState(currentGoals);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    target: "",
+    unit: "",
+    deadline: "",
+    category: "connections"
+  });
+
+  const iconMap = {
+    connections: Users,
+    responses: MessageSquare,
+    meetings: Calendar,
+    revenue: TrendingUp
+  };
+
+  const colorMap = {
+    connections: "hsl(var(--chart-1))",
+    responses: "hsl(var(--chart-2))",
+    meetings: "hsl(var(--chart-3))",
+    revenue: "hsl(var(--chart-4))"
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const newGoal = {
+      id: Math.max(...goals.map(g => g.id)) + 1,
+      title: formData.title,
+      description: formData.description,
+      current: 0,
+      target: parseInt(formData.target),
+      unit: formData.unit,
+      progress: 0,
+      status: "on-track" as const,
+      deadline: formData.deadline,
+      icon: iconMap[formData.category as keyof typeof iconMap],
+      color: colorMap[formData.category as keyof typeof colorMap]
+    };
+
+    setGoals(prev => [...prev, newGoal]);
+    setIsDialogOpen(false);
+    setFormData({
+      title: "",
+      description: "",
+      target: "",
+      unit: "",
+      deadline: "",
+      category: "connections"
+    });
+  };
 
   return (
     <AppLayout>
@@ -134,17 +200,108 @@ const Goals = () => {
               </p>
             </div>
           </div>
-          <Button variant="primary" className="gap-2">
-            <Plus className="w-4 h-4" />
-            Add New Goal
-          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="primary" className="gap-2">
+                <Plus className="w-4 h-4" />
+                Add New Goal
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add New Goal</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Goal Title</Label>
+                  <Input
+                    id="title"
+                    value={formData.title}
+                    onChange={(e) => handleInputChange("title", e.target.value)}
+                    placeholder="e.g., Monthly Response Rate Target"
+                    required
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) => handleInputChange("description", e.target.value)}
+                    placeholder="Describe what this goal aims to achieve"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="target">Target Value</Label>
+                    <Input
+                      id="target"
+                      type="number"
+                      value={formData.target}
+                      onChange={(e) => handleInputChange("target", e.target.value)}
+                      placeholder="100"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="unit">Unit</Label>
+                    <Input
+                      id="unit"
+                      value={formData.unit}
+                      onChange={(e) => handleInputChange("unit", e.target.value)}
+                      placeholder="%, $, or leave blank"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="connections">Connections</SelectItem>
+                      <SelectItem value="responses">Responses</SelectItem>
+                      <SelectItem value="meetings">Meetings</SelectItem>
+                      <SelectItem value="revenue">Revenue</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="deadline">Deadline</Label>
+                  <Input
+                    id="deadline"
+                    value={formData.deadline}
+                    onChange={(e) => handleInputChange("deadline", e.target.value)}
+                    placeholder="e.g., End of January 2025"
+                    required
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" variant="primary">
+                    Create Goal
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Current Goals */}
         <div>
           <h2 className="text-xl font-semibold text-foreground mb-6">Current Goals</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {currentGoals.map((goal) => {
+            {goals.map((goal) => {
               const IconComponent = goal.icon;
               return (
                 <Card key={goal.id} className="p-6 bg-gradient-glass border-border-subtle">

@@ -24,6 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { TypewriterText } from "@/components/ui/typewriter-text";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 import sarahJohnsonAvatar from "@/assets/prospects/sarah-johnson.jpg";
 import michaelChenAvatar from "@/assets/prospects/michael-chen.jpg";
@@ -115,6 +116,12 @@ const statusConfig = {
   connected: { label: "Connected", color: "bg-accent/10 text-accent-foreground border-accent/20", icon: ArrowRight }
 };
 
+const arthurMessages = [
+  "I've been having some great conversations for you! Check out these promising leads - some are ready to chat.",
+  "Your outreach is performing wonderfully! I've identified several hot prospects who want to connect with you.",
+  "Fantastic news! I've been building relationships with quality leads and some are eager to discuss your solution."
+];
+
 export default function Messages() {
   const [selectedProspect, setSelectedProspect] = useState(mockProspects[0]);
   const [newMessage, setNewMessage] = useState("");
@@ -176,8 +183,12 @@ export default function Messages() {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
               Your Message Hub
             </h1>
-            <p className="text-muted-foreground mt-1">
-              I've been having some great conversations for you! Check out these promising leads - some are ready to chat.
+            <p className="text-muted-foreground mt-1 min-h-[3rem] flex items-center">
+              <TypewriterText 
+                texts={arthurMessages}
+                speed={30}
+                delay={4000}
+              />
             </p>
           </div>
         </div>

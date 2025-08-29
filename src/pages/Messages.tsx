@@ -21,6 +21,8 @@ import {
   Calendar
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 import sarahJohnsonAvatar from "@/assets/prospects/sarah-johnson.jpg";
 import michaelChenAvatar from "@/assets/prospects/michael-chen.jpg";
@@ -117,6 +119,7 @@ export default function Messages() {
   const [newMessage, setNewMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [aiEnabled, setAiEnabled] = useState(true);
 
   const filteredProspects = mockProspects.filter(prospect => {
     const matchesSearch = prospect.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -151,18 +154,34 @@ export default function Messages() {
   return (
     <AppLayout>
       <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16 border-2 border-primary/20">
-            <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
-            <AvatarFallback>AI</AvatarFallback>
-          </Avatar>
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
-              Your Message Hub
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              I've been having some great conversations for you! Check out these promising leads - some are ready to chat.
-            </p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Avatar className="h-16 w-16 border-2 border-primary/20">
+              <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
+              <AvatarFallback>AI</AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+                Your Message Hub
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                I've been having some great conversations for you! Check out these promising leads - some are ready to chat.
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-3 bg-white/40 backdrop-blur-xl border border-white/20 rounded-lg p-4 shadow-glass">
+            <Label htmlFor="ai-toggle" className="text-sm font-medium">
+              AI Assistant
+            </Label>
+            <Switch
+              id="ai-toggle"
+              checked={aiEnabled}
+              onCheckedChange={setAiEnabled}
+            />
+            <span className={`text-sm font-medium ${aiEnabled ? 'text-success' : 'text-muted-foreground'}`}>
+              {aiEnabled ? 'ON' : 'OFF'}
+            </span>
           </div>
         </div>
 

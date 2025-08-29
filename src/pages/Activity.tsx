@@ -159,16 +159,10 @@ const Activity = () => {
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
-              Export My Work
-            </Button>
-            <Button variant="outline" size="sm">
-              <Filter className="w-4 h-4 mr-2" />
-              Filter My Activities
-            </Button>
-          </div>
+          <Button variant="outline" size="sm">
+            <Download className="w-4 h-4 mr-2" />
+            Export My Work
+          </Button>
         </div>
 
         {/* Stats Overview */}

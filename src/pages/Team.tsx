@@ -35,6 +35,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -123,6 +133,10 @@ const Team = () => {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("Sales Rep");
   const [inviteName, setInviteName] = useState("");
+  const [showPermissionsModal, setShowPermissionsModal] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<any>(null);
+  const [showRemoveDialog, setShowRemoveDialog] = useState(false);
+  const [memberToRemove, setMemberToRemove] = useState<any>(null);
 
   // Filter team members
   const filteredMembers = mockTeamMembers.filter(member => {
@@ -160,6 +174,32 @@ const Team = () => {
       
       // Show success message (you can integrate with toast later)
       alert(`Invitation sent to ${inviteName} (${inviteEmail})`);
+    }
+  };
+
+  const handleSendMessage = (member: any) => {
+    // Navigate to messages or open compose modal
+    console.log("Sending message to:", member.name);
+    alert(`Opening message composer for ${member.name}`);
+  };
+
+  const handleEditPermissions = (member: any) => {
+    setSelectedMember(member);
+    setShowPermissionsModal(true);
+  };
+
+  const handleRemoveMember = (member: any) => {
+    setMemberToRemove(member);
+    setShowRemoveDialog(true);
+  };
+
+  const confirmRemoveMember = () => {
+    if (memberToRemove) {
+      // Here you would typically call an API to remove the member
+      console.log("Removing member:", memberToRemove.name);
+      alert(`${memberToRemove.name} has been removed from the team`);
+      setShowRemoveDialog(false);
+      setMemberToRemove(null);
     }
   };
 
@@ -282,19 +322,22 @@ const Team = () => {
                           <MoreHorizontal className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                          <Mail className="w-4 h-4 mr-2" />
-                          Send Message
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Settings className="w-4 h-4 mr-2" />
-                          Edit Permissions
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
-                          Remove Member
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
+                       <DropdownMenuContent align="end" className="bg-background border">
+                         <DropdownMenuItem onClick={() => handleSendMessage(member)}>
+                           <Mail className="w-4 h-4 mr-2" />
+                           Send Message
+                         </DropdownMenuItem>
+                         <DropdownMenuItem onClick={() => handleEditPermissions(member)}>
+                           <Settings className="w-4 h-4 mr-2" />
+                           Edit Permissions
+                         </DropdownMenuItem>
+                         <DropdownMenuItem 
+                           className="text-destructive focus:text-destructive"
+                           onClick={() => handleRemoveMember(member)}
+                         >
+                           Remove Member
+                         </DropdownMenuItem>
+                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
                 </CardHeader>
@@ -332,16 +375,26 @@ const Team = () => {
                     <p>Last active: {formatLastActive(member.lastActive)}</p>
                   </div>
                   
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1">
-                      <Mail className="w-4 h-4 mr-1" />
-                      Message
-                    </Button>
-                    <Button variant="outline" size="sm" className="flex-1">
-                      <Settings className="w-4 h-4 mr-1" />
-                      Settings
-                    </Button>
-                  </div>
+                   <div className="flex gap-2">
+                     <Button 
+                       variant="outline" 
+                       size="sm" 
+                       className="flex-1"
+                       onClick={() => handleSendMessage(member)}
+                     >
+                       <Mail className="w-4 h-4 mr-1" />
+                       Message
+                     </Button>
+                     <Button 
+                       variant="outline" 
+                       size="sm" 
+                       className="flex-1"
+                       onClick={() => handleEditPermissions(member)}
+                     >
+                       <Settings className="w-4 h-4 mr-1" />
+                       Settings
+                     </Button>
+                   </div>
                 </CardContent>
               </Card>
             );
@@ -423,6 +476,72 @@ const Team = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Edit Permissions Modal */}
+      <Dialog open={showPermissionsModal} onOpenChange={setShowPermissionsModal}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit Permissions</DialogTitle>
+            <DialogDescription>
+              Modify permissions for {selectedMember?.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="member-role" className="text-right">
+                Role
+              </Label>
+              <Select defaultValue={selectedMember?.role}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Admin">Admin</SelectItem>
+                  <SelectItem value="Sales Manager">Sales Manager</SelectItem>
+                  <SelectItem value="Sales Rep">Sales Rep</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Permissions</Label>
+              <div className="space-y-2">
+                {selectedMember?.permissions.map((permission: string) => (
+                  <div key={permission} className="flex items-center space-x-2">
+                    <input type="checkbox" id={permission} defaultChecked />
+                    <label htmlFor={permission} className="text-sm">
+                      {permission.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setShowPermissionsModal(false)}>
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Remove Member Confirmation Dialog */}
+      <AlertDialog open={showRemoveDialog} onOpenChange={setShowRemoveDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove Team Member</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to remove {memberToRemove?.name} from the team? 
+              This action cannot be undone and they will lose access to all team resources.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmRemoveMember} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Remove Member
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AppLayout>
   );
 };

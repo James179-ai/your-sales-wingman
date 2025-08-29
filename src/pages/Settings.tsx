@@ -40,9 +40,9 @@ export default function Settings() {
   // Current plan info
   const currentPlan = {
     name: "Professional",
-    dailyLimit: 20,
-    weeklyLimit: 100,
-    monthlyLimit: 400
+    dailyLimit: 10,
+    weeklyLimit: 50,
+    monthlyLimit: 200
   };
   
   // Integration status - mock data
@@ -523,8 +523,8 @@ export default function Settings() {
                   </div>
                 </div>
                 
-                <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-                  <p className="text-sm text-primary-foreground">
+                <div className="p-4 rounded-xl bg-primary/20 border border-primary/30">
+                  <p className="text-sm text-foreground font-medium">
                     <Shield className="h-4 w-4 inline mr-2" />
                     These limits are set by your current {currentPlan.name} plan. 
                     To change your connection limits, upgrade your plan.

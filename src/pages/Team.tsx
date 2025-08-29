@@ -54,6 +54,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+// Import team profile pictures
+import johnSmithAvatar from "@/assets/team/john-smith.jpg";
+import sarahJohnsonAvatar from "@/assets/team/sarah-johnson.jpg";
+import mikeDavisAvatar from "@/assets/team/mike-davis.jpg";
+import emmaWilsonAvatar from "@/assets/team/emma-wilson.jpg";
+
 // Mock team data
 const mockTeamMembers = [
   {
@@ -62,7 +68,7 @@ const mockTeamMembers = [
     email: "john@closerly.com",
     role: "Admin",
     status: "active",
-    avatar: "/placeholder.svg",
+    avatar: johnSmithAvatar,
     joinDate: "2024-01-01",
     lastActive: "2024-01-15T10:30:00Z",
     campaigns: 12,
@@ -76,7 +82,7 @@ const mockTeamMembers = [
     email: "sarah@closerly.com",
     role: "Sales Manager",
     status: "active",
-    avatar: "/placeholder.svg",
+    avatar: sarahJohnsonAvatar,
     joinDate: "2024-01-05",
     lastActive: "2024-01-15T09:45:00Z",
     campaigns: 8,
@@ -90,7 +96,7 @@ const mockTeamMembers = [
     email: "mike@closerly.com",
     role: "Sales Rep",
     status: "active",
-    avatar: "/placeholder.svg",
+    avatar: mikeDavisAvatar,
     joinDate: "2024-01-10",
     lastActive: "2024-01-15T08:20:00Z",
     campaigns: 5,
@@ -104,7 +110,7 @@ const mockTeamMembers = [
     email: "emma@closerly.com",
     role: "Sales Rep",
     status: "inactive",
-    avatar: "/placeholder.svg",
+    avatar: emmaWilsonAvatar,
     joinDate: "2024-01-12",
     lastActive: "2024-01-14T16:00:00Z",
     campaigns: 3,

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,14 +26,24 @@ import {
   Users,
   Zap,
   Save,
-  TestTube
+  TestTube,
+  CreditCard
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 export default function Settings() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Current plan info
+  const currentPlan = {
+    name: "Professional",
+    dailyLimit: 20,
+    weeklyLimit: 100,
+    monthlyLimit: 400
+  };
   
   // Integration status - mock data
   const [integrations, setIntegrations] = useState({
@@ -466,9 +477,14 @@ export default function Settings() {
 
             <Card className="bg-white/40 backdrop-blur-xl border-white/20 shadow-glass">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Shield className="h-5 w-5" />
-                  <span>Connection Limits</span>
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Shield className="h-5 w-5" />
+                    <span>Connection Limits</span>
+                  </div>
+                  <Badge className="bg-primary/10 text-primary border-primary/20">
+                    {currentPlan.name} Plan
+                  </Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -478,11 +494,9 @@ export default function Settings() {
                     <Input
                       id="dailyLimit"
                       type="number"
-                      min="1"
-                      max="50"
-                      value={settings.dailyConnectionLimit}
-                      onChange={(e) => setSettings(prev => ({ ...prev, dailyConnectionLimit: parseInt(e.target.value) }))}
-                      className="bg-white/60 border-white/30"
+                      value={currentPlan.dailyLimit}
+                      readOnly
+                      className="bg-gray-100/60 border-gray-300/30 cursor-not-allowed"
                     />
                   </div>
                   
@@ -491,11 +505,9 @@ export default function Settings() {
                     <Input
                       id="weeklyLimit"
                       type="number"
-                      min="1"
-                      max="300"
-                      value={settings.weeklyConnectionLimit}
-                      onChange={(e) => setSettings(prev => ({ ...prev, weeklyConnectionLimit: parseInt(e.target.value) }))}
-                      className="bg-white/60 border-white/30"
+                      value={currentPlan.weeklyLimit}
+                      readOnly
+                      className="bg-gray-100/60 border-gray-300/30 cursor-not-allowed"
                     />
                   </div>
                   
@@ -504,30 +516,27 @@ export default function Settings() {
                     <Input
                       id="monthlyLimit"
                       type="number"
-                      min="1"
-                      max="1000"
-                      value={settings.monthlyConnectionLimit}
-                      onChange={(e) => setSettings(prev => ({ ...prev, monthlyConnectionLimit: parseInt(e.target.value) }))}
-                      className="bg-white/60 border-white/30"
+                      value={currentPlan.monthlyLimit}
+                      readOnly
+                      className="bg-gray-100/60 border-gray-300/30 cursor-not-allowed"
                     />
                   </div>
                 </div>
                 
-                <div className="p-4 rounded-xl bg-warning/10 border border-warning/20">
-                  <p className="text-sm text-warning-foreground">
+                <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
+                  <p className="text-sm text-primary-foreground">
                     <Shield className="h-4 w-4 inline mr-2" />
-                    Recommended limits help prevent LinkedIn account restrictions. 
-                    Higher limits may increase the risk of account suspension.
+                    These limits are set by your current {currentPlan.name} plan. 
+                    To change your connection limits, upgrade your plan.
                   </p>
                 </div>
 
                 <Button 
-                  onClick={() => handleSave("Limits")}
-                  disabled={isLoading}
+                  onClick={() => navigate('/billing')}
                   className="bg-gradient-primary hover:opacity-90"
                 >
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Limit Settings
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Upgrade Plan
                 </Button>
               </CardContent>
             </Card>

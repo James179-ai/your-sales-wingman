@@ -22,6 +22,12 @@ import {
   Target
 } from "lucide-react";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
+import johnSmithAvatar from "@/assets/prospects/john-smith.jpg";
+import sarahJohnsonAvatar from "@/assets/prospects/sarah-johnson-new.jpg";
+import mikeDavisAvatar from "@/assets/prospects/mike-davis.jpg";
+import emmaWilsonAvatar from "@/assets/prospects/emma-wilson.jpg";
+import alexChenAvatar from "@/assets/prospects/alex-chen.jpg";
+import lisaParkAvatar from "@/assets/prospects/lisa-park.jpg";
 
 // Mock activity data
 const mockActivities = [
@@ -33,7 +39,7 @@ const mockActivities = [
     campaign: "Q1 Outreach",
     timestamp: "2024-01-15T10:30:00Z",
     status: "delivered",
-    avatar: "/placeholder.svg"
+    avatar: johnSmithAvatar
   },
   {
     id: 2,
@@ -43,7 +49,7 @@ const mockActivities = [
     campaign: "Tech Leaders",
     timestamp: "2024-01-15T09:15:00Z",
     status: "success",
-    avatar: "/placeholder.svg"
+    avatar: sarahJohnsonAvatar
   },
   {
     id: 3,
@@ -53,7 +59,7 @@ const mockActivities = [
     campaign: "Enterprise Sales",
     timestamp: "2024-01-15T08:45:00Z",
     status: "success",
-    avatar: "/placeholder.svg"
+    avatar: mikeDavisAvatar
   },
   {
     id: 4,
@@ -63,7 +69,7 @@ const mockActivities = [
     campaign: "Startup Founders",
     timestamp: "2024-01-14T16:20:00Z",
     status: "info",
-    avatar: "/placeholder.svg"
+    avatar: emmaWilsonAvatar
   },
   {
     id: 5,
@@ -73,7 +79,7 @@ const mockActivities = [
     campaign: "Q1 Outreach",
     timestamp: "2024-01-14T14:10:00Z",
     status: "success",
-    avatar: "/placeholder.svg"
+    avatar: alexChenAvatar
   },
   {
     id: 6,
@@ -83,7 +89,7 @@ const mockActivities = [
     campaign: "Marketing Directors",
     timestamp: "2024-01-14T11:30:00Z",
     status: "pending",
-    avatar: "/placeholder.svg"
+    avatar: lisaParkAvatar
   }
 ];
 

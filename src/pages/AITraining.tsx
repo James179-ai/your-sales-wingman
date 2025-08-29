@@ -1,7 +1,6 @@
 import { AppLayout } from "@/components/layout/AppLayout";
 import { MessageTraining } from "@/components/ai-training/MessageTraining";
 import { StyleGuideUpload } from "@/components/ai-training/StyleGuideUpload";
-import { NeuralBrainVisualization } from "@/components/ai-training/NeuralBrainVisualization";
 
 const AITraining = () => {
   return (
@@ -17,8 +16,6 @@ const AITraining = () => {
         <MessageTraining />
         
         <StyleGuideUpload />
-        
-        <NeuralBrainVisualization />
       </div>
     </AppLayout>
   );

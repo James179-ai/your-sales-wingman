@@ -429,21 +429,23 @@ const Goals = () => {
               <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Target className="w-8 h-8 text-success" />
               </div>
-              <p className="text-2xl font-bold text-foreground">75%</p>
+              <p className="text-2xl font-bold text-foreground">
+                {goals.length > 0 ? Math.round((goals.filter(g => g.status === "on-track").length / goals.length) * 100) : 0}%
+              </p>
               <p className="text-sm text-muted-foreground">Goals on Track</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-chart-1/10 rounded-full flex items-center justify-center mx-auto mb-3">
                 <TrendingUp className="w-8 h-8 text-chart-1" />
               </div>
-              <p className="text-2xl font-bold text-foreground">6</p>
+              <p className="text-2xl font-bold text-foreground">{goals.length + completedGoals.length}</p>
               <p className="text-sm text-muted-foreground">Total Goals Set</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-chart-2/10 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Users className="w-8 h-8 text-chart-2" />
               </div>
-              <p className="text-2xl font-bold text-foreground">2</p>
+              <p className="text-2xl font-bold text-foreground">{completedGoals.length}</p>
               <p className="text-sm text-muted-foreground">Goals Achieved</p>
             </div>
           </div>

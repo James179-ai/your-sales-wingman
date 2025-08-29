@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -128,6 +128,12 @@ export default function Messages() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [aiEnabledByProspect, setAiEnabledByProspect] = useState<Record<string, boolean>>({});
+  const [typewriterKey, setTypewriterKey] = useState(0);
+
+  // Trigger typewriter on component mount
+  useEffect(() => {
+    setTypewriterKey(Date.now());
+  }, []);
 
   const isAiEnabledForProspect = (prospectId: string) => {
     return aiEnabledByProspect[prospectId] ?? true; // Default to enabled
@@ -187,7 +193,7 @@ export default function Messages() {
               <TypewriterText 
                 texts={arthurMessages}
                 speed={30}
-                delay={4000}
+                triggerKey={typewriterKey}
               />
             </p>
           </div>

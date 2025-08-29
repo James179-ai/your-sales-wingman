@@ -1,51 +1,59 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface TypewriterTextProps {
   texts: string[];
   speed?: number;
-  delay?: number;
   className?: string;
+  triggerKey?: string | number; // Key to trigger re-typing
 }
 
 export const TypewriterText = ({ 
   texts, 
   speed = 50, 
-  delay = 3000, 
-  className = "" 
+  className = "",
+  triggerKey = 0
 }: TypewriterTextProps) => {
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
-  const [isTyping, setIsTyping] = useState(true);
+  const [isComplete, setIsComplete] = useState(false);
+  const currentTextRef = useRef("");
+  const hasStartedRef = useRef(false);
 
   useEffect(() => {
-    const currentText = texts[currentTextIndex];
-    let timeoutId: NodeJS.Timeout;
+    // Reset and start typing when triggerKey changes
+    setDisplayedText("");
+    setIsComplete(false);
+    hasStartedRef.current = false;
+    
+    // Select random text
+    const randomIndex = Math.floor(Math.random() * texts.length);
+    currentTextRef.current = texts[randomIndex];
+  }, [triggerKey, texts]);
 
-    if (isTyping) {
-      if (displayedText.length < currentText.length) {
-        timeoutId = setTimeout(() => {
-          setDisplayedText(currentText.slice(0, displayedText.length + 1));
-        }, speed);
+  useEffect(() => {
+    if (isComplete || hasStartedRef.current) return;
+    
+    hasStartedRef.current = true;
+    let index = 0;
+    
+    const typeText = () => {
+      if (index < currentTextRef.current.length) {
+        setDisplayedText(currentTextRef.current.slice(0, index + 1));
+        index++;
+        setTimeout(typeText, speed);
       } else {
-        // Finished typing, wait before switching to next text
-        timeoutId = setTimeout(() => {
-          setIsTyping(false);
-          setDisplayedText("");
-          setCurrentTextIndex((prev) => (prev + 1) % texts.length);
-        }, delay);
+        setIsComplete(true);
       }
-    } else {
-      // Start typing the next text
-      setIsTyping(true);
-    }
+    };
 
-    return () => clearTimeout(timeoutId);
-  }, [displayedText, currentTextIndex, isTyping, texts, speed, delay]);
+    const startDelay = setTimeout(typeText, 300); // Small delay before starting
+    
+    return () => clearTimeout(startDelay);
+  }, [speed, triggerKey]);
 
   return (
     <span className={className}>
       {displayedText}
-      <span className="animate-pulse">|</span>
+      {!isComplete && <span className="animate-pulse">|</span>}
     </span>
   );
 };

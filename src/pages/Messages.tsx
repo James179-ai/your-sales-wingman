@@ -342,11 +342,6 @@ export default function Messages() {
                         <p>Toggle AI responses for this conversation.<br />When ON, Arthur will automatically respond to messages.</p>
                       </TooltipContent>
                     </Tooltip>
-                    
-                    <Button variant="outline" size="sm" className="border-white/30 hover:bg-white/60">
-                      <Calendar className="h-4 w-4 mr-2" />
-                      Let Arthur Book Meeting
-                    </Button>
                   </div>
                 </div>
               </CardContent>

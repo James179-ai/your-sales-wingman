@@ -199,7 +199,10 @@ export function Dashboard() {
           </div>
           <div className="mt-4 text-center">
             <p className="text-sm text-muted-foreground mb-2">Current quarter performance</p>
-            <button className="text-sm text-chart-1 hover:underline">
+            <button 
+              className="text-sm text-chart-1 hover:underline cursor-pointer"
+              onClick={() => navigate('/goals')}
+            >
               All goals →
             </button>
           </div>

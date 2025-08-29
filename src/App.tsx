@@ -16,6 +16,7 @@ import AITraining from "./pages/AITraining";
 import ConversationTraining from "./pages/ConversationTraining";
 import NotFound from "./pages/NotFound";
 import ConnectionsReport from "./pages/ConnectionsReport";
+import Goals from "./pages/Goals";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/ai-training" element={<AITraining />} />
           <Route path="/ai-training/conversations" element={<ConversationTraining />} />
           <Route path="/connections-report" element={<ConnectionsReport />} />
+          <Route path="/goals" element={<Goals />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

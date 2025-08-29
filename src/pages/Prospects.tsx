@@ -26,6 +26,12 @@ import {
   Edit
 } from "lucide-react";
 
+// Import prospect images
+import sarahJohnsonImg from "@/assets/prospects/sarah-johnson.jpg";
+import michaelChenImg from "@/assets/prospects/michael-chen.jpg";
+import emilyRodriguezImg from "@/assets/prospects/emily-rodriguez.jpg";
+import davidKimImg from "@/assets/prospects/david-kim.jpg";
+
 const prospects = [
   {
     id: 1,
@@ -39,7 +45,7 @@ const prospects = [
     priority: "high",
     lastContact: "2024-01-15",
     tags: ["Enterprise", "Marketing"],
-    avatar: "/placeholder.svg"
+    avatar: sarahJohnsonImg
   },
   {
     id: 2,
@@ -53,7 +59,7 @@ const prospects = [
     priority: "high",
     lastContact: "2024-01-12",
     tags: ["Startup", "SaaS"],
-    avatar: "/placeholder.svg"
+    avatar: michaelChenImg
   },
   {
     id: 3,
@@ -67,7 +73,7 @@ const prospects = [
     priority: "medium",
     lastContact: "2024-01-10",
     tags: ["Enterprise", "Sales"],
-    avatar: "/placeholder.svg"
+    avatar: emilyRodriguezImg
   },
   {
     id: 4,
@@ -81,7 +87,7 @@ const prospects = [
     priority: "low",
     lastContact: "2024-01-08",
     tags: ["SMB", "Marketing"],
-    avatar: "/placeholder.svg"
+    avatar: davidKimImg
   }
 ];
 

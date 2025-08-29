@@ -8,6 +8,10 @@ import { useToast } from "@/hooks/use-toast";
 import { Send, RefreshCw, Check, MessageSquare } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+// Import prospect images
+import sarahJohnsonImg from "@/assets/prospects/sarah-johnson.jpg";
+import michaelChenImg from "@/assets/prospects/michael-chen.jpg";
+
 interface MessageSuggestion {
   id: string;
   prospect: {
@@ -27,6 +31,7 @@ const mockMessages: MessageSuggestion[] = [
     prospect: {
       name: 'Sarah Johnson',
       company: 'TechCorp',
+      avatar: sarahJohnsonImg,
     },
     originalMessage: "Hi Sarah, I noticed you're working at TechCorp and thought you might be interested in our sales automation platform. Would love to connect and share how we've helped similar companies increase their conversion rates by 40%.",
     editedMessage: "Hi Sarah, I noticed you're working at TechCorp and thought you might be interested in our sales automation platform. Would love to connect and share how we've helped similar companies increase their conversion rates by 40%.",
@@ -38,6 +43,7 @@ const mockMessages: MessageSuggestion[] = [
     prospect: {
       name: 'Michael Chen',
       company: 'StartupXYZ',
+      avatar: michaelChenImg,
     },
     originalMessage: "Hey Michael, saw your recent post about scaling challenges. Our platform has helped startups like yours streamline their sales process. Interested in a quick chat?",
     editedMessage: "Hey Michael, saw your recent post about scaling challenges. Our platform has helped startups like yours streamline their sales process. Interested in a quick chat?",

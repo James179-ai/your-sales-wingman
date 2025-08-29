@@ -137,9 +137,10 @@ const Team = () => {
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
   const [memberToRemove, setMemberToRemove] = useState<any>(null);
+  const [teamMembers, setTeamMembers] = useState(mockTeamMembers);
 
   // Filter team members
-  const filteredMembers = mockTeamMembers.filter(member => {
+  const filteredMembers = teamMembers.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          member.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = selectedRole === "all" || member.role === selectedRole;
@@ -195,7 +196,11 @@ const Team = () => {
 
   const confirmRemoveMember = () => {
     if (memberToRemove) {
-      // Here you would typically call an API to remove the member
+      // Remove the member from the team members array
+      setTeamMembers(prevMembers => 
+        prevMembers.filter(member => member.id !== memberToRemove.id)
+      );
+      
       console.log("Removing member:", memberToRemove.name);
       alert(`${memberToRemove.name} has been removed from the team`);
       setShowRemoveDialog(false);
@@ -228,7 +233,7 @@ const Team = () => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{mockTeamMembers.length}</div>
+              <div className="text-2xl font-bold">{teamMembers.length}</div>
               <p className="text-xs text-muted-foreground">
                 +2 this month
               </p>
@@ -242,7 +247,7 @@ const Team = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {mockTeamMembers.filter(m => m.status === 'active').length}
+                {teamMembers.filter(m => m.status === 'active').length}
               </div>
               <p className="text-xs text-muted-foreground">
                 75% active rate
@@ -257,7 +262,7 @@ const Team = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {mockTeamMembers.reduce((sum, member) => sum + member.campaigns, 0)}
+                {teamMembers.reduce((sum, member) => sum + member.campaigns, 0)}
               </div>
               <p className="text-xs text-muted-foreground">
                 Across all team members
@@ -272,7 +277,7 @@ const Team = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {Math.round(mockTeamMembers.reduce((sum, member) => sum + member.responseRate, 0) / mockTeamMembers.length)}%
+                {teamMembers.length > 0 ? Math.round(teamMembers.reduce((sum, member) => sum + member.responseRate, 0) / teamMembers.length) : 0}%
               </div>
               <p className="text-xs text-muted-foreground">
                 Team average

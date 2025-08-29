@@ -187,7 +187,7 @@ const Billing = () => {
               
               <div className="pt-4 space-y-2">
                 <Button className="w-full">Manage Plan</Button>
-                <Button variant="outline" className="w-full">Cancel Subscription</Button>
+                <Button variant="destructive" className="w-full">Cancel Subscription</Button>
               </div>
             </CardContent>
           </Card>

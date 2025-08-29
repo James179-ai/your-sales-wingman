@@ -27,6 +27,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Mock team data
 const mockTeamMembers = [
@@ -104,6 +120,9 @@ const Team = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState("all");
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState("Sales Rep");
+  const [inviteName, setInviteName] = useState("");
 
   // Filter team members
   const filteredMembers = mockTeamMembers.filter(member => {
@@ -128,6 +147,22 @@ const Team = () => {
     }
   };
 
+  const handleInviteMember = () => {
+    if (inviteEmail && inviteName && inviteRole) {
+      // Here you would typically send an invitation email
+      console.log("Inviting member:", { name: inviteName, email: inviteEmail, role: inviteRole });
+      
+      // Reset form and close modal
+      setInviteName("");
+      setInviteEmail("");
+      setInviteRole("Sales Rep");
+      setShowInviteModal(false);
+      
+      // Show success message (you can integrate with toast later)
+      alert(`Invitation sent to ${inviteName} (${inviteEmail})`);
+    }
+  };
+
   return (
     <AppLayout>
       <div className="space-y-8">
@@ -139,7 +174,7 @@ const Team = () => {
               Manage your team members, roles, and permissions
             </p>
           </div>
-          <Button>
+          <Button onClick={() => setShowInviteModal(true)}>
             <UserPlus className="w-4 h-4 mr-2" />
             Invite Member
           </Button>
@@ -321,7 +356,7 @@ const Team = () => {
               <p className="mt-1 text-sm text-muted-foreground">
                 Try adjusting your search criteria or invite new members.
               </p>
-              <Button className="mt-4">
+              <Button className="mt-4" onClick={() => setShowInviteModal(true)}>
                 <UserPlus className="w-4 h-4 mr-2" />
                 Invite Member
               </Button>
@@ -329,6 +364,65 @@ const Team = () => {
           </Card>
         )}
       </div>
+
+      {/* Invite Member Modal */}
+      <Dialog open={showInviteModal} onOpenChange={setShowInviteModal}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Invite Team Member</DialogTitle>
+            <DialogDescription>
+              Send an invitation to a new team member. They'll receive an email with instructions to join your team.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Name
+              </Label>
+              <Input
+                id="name"
+                value={inviteName}
+                onChange={(e) => setInviteName(e.target.value)}
+                placeholder="John Doe"
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="email" className="text-right">
+                Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                placeholder="john@company.com"
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="role" className="text-right">
+                Role
+              </Label>
+              <Select value={inviteRole} onValueChange={setInviteRole}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Admin">Admin</SelectItem>
+                  <SelectItem value="Sales Manager">Sales Manager</SelectItem>
+                  <SelectItem value="Sales Rep">Sales Rep</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit" onClick={handleInviteMember} disabled={!inviteEmail || !inviteName}>
+              Send Invitation
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AppLayout>
   );
 };

@@ -14,6 +14,7 @@ import {
   BarChart3
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { useNavigate } from "react-router-dom";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 const mockKPIs = [
@@ -99,6 +100,7 @@ const chartConfig = {
 
 export function Dashboard() {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="space-y-8">
@@ -155,7 +157,10 @@ export function Dashboard() {
             </BarChart>
           </ChartContainer>
           <div className="mt-4">
-            <button className="text-sm text-chart-1 hover:underline">
+            <button 
+              className="text-sm text-chart-1 hover:underline cursor-pointer"
+              onClick={() => navigate('/connections-report')}
+            >
               View full report →
             </button>
           </div>

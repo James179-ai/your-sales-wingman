@@ -302,10 +302,6 @@ const Activity = () => {
                         <span>{formatTime(activity.timestamp)}</span>
                       </div>
                     </div>
-                    
-                    <Button variant="ghost" size="sm">
-                      <Eye className="w-4 h-4" />
-                    </Button>
                   </div>
                 );
               })}

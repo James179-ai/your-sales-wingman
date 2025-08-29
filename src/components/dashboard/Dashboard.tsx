@@ -3,7 +3,6 @@ import { KPICard } from "./KPICard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ArthurChatbot } from "@/components/arthur/ArthurChatbot";
 import { 
@@ -12,9 +11,7 @@ import {
   Calendar, 
   TrendingUp,
   Plus,
-  BarChart3,
-  Bot,
-  MessageCircle
+  BarChart3
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
@@ -120,32 +117,6 @@ export function Dashboard() {
           </div>
         </div>
         <div className="flex gap-3">
-          <Button 
-            variant="primary" 
-            className="gap-2"
-            onClick={() => setIsChatbotOpen(true)}
-          >
-            <Bot className="w-4 h-4" />
-            Plan with Arthur
-          </Button>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" className="border-green-500 text-green-600 hover:bg-green-50">
-                  <MessageCircle className="w-4 h-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-xs">
-                <div className="space-y-2">
-                  <p className="font-medium">Connect Arthur to WhatsApp</p>
-                  <p className="text-sm text-muted-foreground">
-                    Stay updated with everything Arthur does and chat with him directly through WhatsApp. 
-                    Get instant notifications about new connections, responses, and meetings!
-                  </p>
-                </div>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
           <Button variant="secondary" className="gap-2">
             <Plus className="w-4 h-4" />
             Let Arthur Start a New Campaign

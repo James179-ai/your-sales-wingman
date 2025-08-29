@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Target, TrendingUp, Users, Calendar, MessageSquare, Plus } from "lucide-react";
+import { ArrowLeft, Target, TrendingUp, Users, Calendar, MessageSquare, Plus, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -179,6 +180,10 @@ const Goals = () => {
     });
   };
 
+  const handleDeleteGoal = (goalId: number) => {
+    setGoals(prev => prev.filter(goal => goal.id !== goalId));
+  };
+
   return (
     <AppLayout>
       <div className="space-y-8">
@@ -321,10 +326,36 @@ const Goals = () => {
                         <p className="text-sm text-muted-foreground">{goal.description}</p>
                       </div>
                     </div>
-                    <Badge className={getStatusColor(goal.status)} variant="secondary">
-                      {goal.status === "on-track" ? "On Track" : 
-                       goal.status === "behind" ? "Behind" : goal.status}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge className={getStatusColor(goal.status)} variant="secondary">
+                        {goal.status === "on-track" ? "On Track" : 
+                         goal.status === "behind" ? "Behind" : goal.status}
+                      </Badge>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive">
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Goal</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete "{goal.title}"? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction 
+                              onClick={() => handleDeleteGoal(goal.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </div>
                   
                   <div className="space-y-3">

@@ -18,11 +18,13 @@ import {
   AlertCircle,
   ArrowRight,
   Filter,
-  Calendar
+  Calendar,
+  Info
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 import sarahJohnsonAvatar from "@/assets/prospects/sarah-johnson.jpg";
 import michaelChenAvatar from "@/assets/prospects/michael-chen.jpg";
@@ -164,7 +166,8 @@ export default function Messages() {
 
   return (
     <AppLayout>
-      <div className="space-y-6">
+      <TooltipProvider>
+        <div className="space-y-6">
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16 border-2 border-primary/20">
             <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
@@ -303,18 +306,29 @@ export default function Messages() {
                       {statusConfig[selectedProspect.status].label}
                     </Badge>
                     
-                    <div className="flex items-center space-x-3 bg-white/40 backdrop-blur-xl border border-white/20 rounded-lg px-3 py-2 shadow-glass">
-                      <Label htmlFor={`ai-toggle-${selectedProspect.id}`} className="text-sm font-medium">
-                        AI
-                      </Label>
-                      <Switch
-                        id={`ai-toggle-${selectedProspect.id}`}
-                        checked={isAiEnabledForProspect(selectedProspect.id)}
-                        onCheckedChange={() => toggleAiForProspect(selectedProspect.id)}
-                      />
-                      <span className={`text-sm font-medium ${isAiEnabledForProspect(selectedProspect.id) ? 'text-success' : 'text-muted-foreground'}`}>
-                        {isAiEnabledForProspect(selectedProspect.id) ? 'ON' : 'OFF'}
-                      </span>
+                    <div className="flex flex-col items-center space-y-2 bg-white/40 backdrop-blur-xl border border-white/20 rounded-lg px-3 py-2 shadow-glass">
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Info className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Toggle AI responses for this conversation.<br />When ON, Arthur will automatically respond to messages.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                      
+                      <div className="flex items-center space-x-2">
+                        <Label htmlFor={`ai-toggle-${selectedProspect.id}`} className="text-sm font-medium">
+                          AI
+                        </Label>
+                        <Switch
+                          id={`ai-toggle-${selectedProspect.id}`}
+                          checked={isAiEnabledForProspect(selectedProspect.id)}
+                          onCheckedChange={() => toggleAiForProspect(selectedProspect.id)}
+                        />
+                        <span className={`text-sm font-medium ${isAiEnabledForProspect(selectedProspect.id) ? 'text-success' : 'text-muted-foreground'}`}>
+                          {isAiEnabledForProspect(selectedProspect.id) ? 'ON' : 'OFF'}
+                        </span>
+                      </div>
                     </div>
                     
                     <Button variant="outline" size="sm" className="border-white/30 hover:bg-white/60">
@@ -388,7 +402,8 @@ export default function Messages() {
             </Card>
           </div>
         </div>
-      </div>
+        </div>
+      </TooltipProvider>
     </AppLayout>
   );
 }

@@ -214,7 +214,7 @@ export function Dashboard() {
         <div className="p-6 border-b border-border-subtle">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-foreground">Campaigns Arthur is Managing</h3>
-            <Button variant="outline" size="sm">View All</Button>
+            <Button variant="outline" size="sm" onClick={() => navigate('/campaigns')}>View All</Button>
           </div>
         </div>
         <div className="p-6">

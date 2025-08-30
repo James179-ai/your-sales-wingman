@@ -17,7 +17,7 @@ interface MessageSuggestion {
   prospect: {
     name: string;
     company: string;
-    avatar?: string;
+    avatar: string;
   };
   originalMessage: string;
   editedMessage: string;

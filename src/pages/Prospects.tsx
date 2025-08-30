@@ -92,16 +92,16 @@ const prospects = [
 ];
 
 const statusColors = {
-  active: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  active: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
   contacted: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
   replied: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
   bounced: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
 };
 
 const priorityColors = {
-  high: "text-red-600 dark:text-red-400",
-  medium: "text-yellow-600 dark:text-yellow-400",
-  low: "text-green-600 dark:text-green-400"
+  high: "text-red-500 dark:text-red-400",
+  medium: "text-amber-500 dark:text-amber-400",
+  low: "text-emerald-500 dark:text-emerald-400"
 };
 
 export default function Prospects() {

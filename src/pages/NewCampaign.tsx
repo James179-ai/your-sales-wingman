@@ -417,57 +417,61 @@ const NewCampaign = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                 {industries.map((industry) => (
                   <div key={industry} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={industry}
-                      checked={campaignData.targetIndustries.includes(industry) || (industry === "Other" && !!customIndustry)}
-                      onCheckedChange={(checked) => {
-                        if (industry === "Other") {
-                          if (checked && customIndustry) {
-                            updateCampaignData({
-                              targetIndustries: [...campaignData.targetIndustries.filter(i => i !== "Other"), customIndustry]
-                            });
-                          } else if (!checked) {
-                            updateCampaignData({
-                              targetIndustries: campaignData.targetIndustries.filter(i => i !== customIndustry && i !== "Other")
-                            });
-                            setCustomIndustry("");
-                          }
-                        } else {
-                          if (checked) {
-                            updateCampaignData({
-                              targetIndustries: [...campaignData.targetIndustries, industry]
-                            });
-                          } else {
-                            updateCampaignData({
-                              targetIndustries: campaignData.targetIndustries.filter(i => i !== industry)
-                            });
-                          }
-                        }
-                      }}
+                     <Checkbox
+                       id={industry}
+                       checked={campaignData.targetIndustries.includes(industry) || (industry === "Other" && campaignData.targetIndustries.includes("Other"))}
+                       onCheckedChange={(checked) => {
+                         if (industry === "Other") {
+                           if (checked) {
+                             updateCampaignData({
+                               targetIndustries: [...campaignData.targetIndustries.filter(i => i !== "Other"), "Other"]
+                             });
+                           } else {
+                             updateCampaignData({
+                               targetIndustries: campaignData.targetIndustries.filter(i => i !== "Other" && !customIndustry.includes(i))
+                             });
+                             setCustomIndustry("");
+                           }
+                         } else {
+                           if (checked) {
+                             updateCampaignData({
+                               targetIndustries: [...campaignData.targetIndustries, industry]
+                             });
+                           } else {
+                             updateCampaignData({
+                               targetIndustries: campaignData.targetIndustries.filter(i => i !== industry)
+                             });
+                           }
+                         }
+                       }}
                     />
                     <Label htmlFor={industry} className="text-sm">{industry}</Label>
                   </div>
                 ))}
               </div>
               
-              {campaignData.targetIndustries.includes("Other") || customIndustry ? (
-                <div className="space-y-2">
-                  <Label htmlFor="customIndustry">Custom Industry</Label>
-                  <Input
-                    id="customIndustry"
-                    placeholder="Enter custom industry..."
-                    value={customIndustry}
-                    onChange={(e) => {
-                      setCustomIndustry(e.target.value);
-                      if (e.target.value) {
-                        updateCampaignData({
-                          targetIndustries: [...campaignData.targetIndustries.filter(i => i !== customIndustry && i !== "Other"), e.target.value]
-                        });
-                      }
-                    }}
-                  />
-                </div>
-              ) : null}
+               {campaignData.targetIndustries.includes("Other") ? (
+                 <div className="space-y-2">
+                   <Label htmlFor="customIndustry">Custom Industry</Label>
+                   <Input
+                     id="customIndustry"
+                     placeholder="Enter custom industry..."
+                     value={customIndustry}
+                     onChange={(e) => {
+                       setCustomIndustry(e.target.value);
+                       if (e.target.value) {
+                         updateCampaignData({
+                           targetIndustries: [...campaignData.targetIndustries.filter(i => i !== "Other" && i !== customIndustry), "Other", e.target.value]
+                         });
+                       } else {
+                         updateCampaignData({
+                           targetIndustries: [...campaignData.targetIndustries.filter(i => i !== customIndustry), "Other"]
+                         });
+                       }
+                     }}
+                   />
+                 </div>
+               ) : null}
             </div>
 
             <div className="space-y-3">
@@ -475,58 +479,62 @@ const NewCampaign = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                 {roles.map((role) => (
                   <div key={role} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={role}
-                      checked={campaignData.targetRoles.includes(role) || (role === "Other" && !!customRole)}
-                      onCheckedChange={(checked) => {
-                        if (role === "Other") {
-                          if (checked && customRole) {
-                            updateCampaignData({
-                              targetRoles: [...campaignData.targetRoles.filter(r => r !== "Other"), customRole]
-                            });
-                          } else if (!checked) {
-                            updateCampaignData({
-                              targetRoles: campaignData.targetRoles.filter(r => r !== customRole && r !== "Other")
-                            });
-                            setCustomRole("");
-                          }
-                        } else {
-                          if (checked) {
-                            updateCampaignData({
-                              targetRoles: [...campaignData.targetRoles, role]
-                            });
-                          } else {
-                            updateCampaignData({
-                              targetRoles: campaignData.targetRoles.filter(r => r !== role)
-                            });
-                          }
-                        }
-                      }}
+                     <Checkbox
+                       id={role}
+                       checked={campaignData.targetRoles.includes(role) || (role === "Other" && campaignData.targetRoles.includes("Other"))}
+                       onCheckedChange={(checked) => {
+                         if (role === "Other") {
+                           if (checked) {
+                             updateCampaignData({
+                               targetRoles: [...campaignData.targetRoles.filter(r => r !== "Other"), "Other"]
+                             });
+                           } else {
+                             updateCampaignData({
+                               targetRoles: campaignData.targetRoles.filter(r => r !== "Other" && !customRole.includes(r))
+                             });
+                             setCustomRole("");
+                           }
+                         } else {
+                           if (checked) {
+                             updateCampaignData({
+                               targetRoles: [...campaignData.targetRoles, role]
+                             });
+                           } else {
+                             updateCampaignData({
+                               targetRoles: campaignData.targetRoles.filter(r => r !== role)
+                             });
+                           }
+                         }
+                       }}
                     />
                     <Label htmlFor={role} className="text-sm">{role}</Label>
                   </div>
                 ))}
               </div>
               
-              {campaignData.targetRoles.includes("Other") || customRole ? (
-                <div className="space-y-2">
-                  <Label htmlFor="customRole">Custom Role</Label>
-                  <Input
-                    id="customRole"
-                    placeholder="Enter custom role..."
-                    value={customRole}
-                    onChange={(e) => {
-                      setCustomRole(e.target.value);
-                      if (e.target.value) {
-                        updateCampaignData({
-                          targetRoles: [...campaignData.targetRoles.filter(r => r !== customRole && r !== "Other"), e.target.value]
-                        });
-                      }
-                    }}
-                  />
-                </div>
-              ) : null}
-            </div>
+               {campaignData.targetRoles.includes("Other") ? (
+                 <div className="space-y-2">
+                   <Label htmlFor="customRole">Custom Role</Label>
+                   <Input
+                     id="customRole"
+                     placeholder="Enter custom role..."
+                     value={customRole}
+                     onChange={(e) => {
+                       setCustomRole(e.target.value);
+                       if (e.target.value) {
+                         updateCampaignData({
+                           targetRoles: [...campaignData.targetRoles.filter(r => r !== "Other" && r !== customRole), "Other", e.target.value]
+                         });
+                       } else {
+                         updateCampaignData({
+                           targetRoles: [...campaignData.targetRoles.filter(r => r !== customRole), "Other"]
+                         });
+                       }
+                     }}
+                   />
+                 </div>
+               ) : null}
+             </div>
 
             <div className="space-y-3">
               <Label>Company Size</Label>

@@ -762,25 +762,43 @@ const NewCampaign = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="dailyLimit">Daily Sending Limit</Label>
-                <Input
-                  id="dailyLimit"
-                  type="number"
-                  min="1"
-                  max="100"
-                  value={campaignData.dailyLimit}
-                  onChange={(e) => updateCampaignData({ dailyLimit: parseInt(e.target.value) || 1 })}
-                />
+                <div className="relative">
+                  <Input
+                    id="dailyLimit"
+                    type="number"
+                    value={campaignData.dailyLimit}
+                    disabled
+                    className="bg-muted cursor-not-allowed"
+                  />
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                    <Badge variant="secondary" className="text-xs">
+                      Basic Plan
+                    </Badge>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Upgrade your subscription to increase limits
+                </p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="weeklyLimit">Weekly Sending Limit</Label>
-                <Input
-                  id="weeklyLimit"
-                  type="number"
-                  min="1"
-                  max="500"
-                  value={campaignData.weeklyLimit}
-                  onChange={(e) => updateCampaignData({ weeklyLimit: parseInt(e.target.value) || 1 })}
-                />
+                <div className="relative">
+                  <Input
+                    id="weeklyLimit"
+                    type="number"
+                    value={campaignData.weeklyLimit}
+                    disabled
+                    className="bg-muted cursor-not-allowed"
+                  />
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                    <Badge variant="secondary" className="text-xs">
+                      Basic Plan
+                    </Badge>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Upgrade your subscription to increase limits
+                </p>
               </div>
             </div>
 

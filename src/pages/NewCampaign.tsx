@@ -41,6 +41,10 @@ import {
 } from "lucide-react";
 
 interface CampaignData {
+  // Company Analysis
+  websiteUrl: string;
+  companySummary: string;
+  
   // Basic Info
   name: string;
   description: string;
@@ -84,11 +88,12 @@ interface CampaignData {
 }
 
 const steps = [
-  { id: 1, name: "Campaign Info", icon: Target },
-  { id: 2, name: "Target Audience", icon: Users },
-  { id: 3, name: "Messages", icon: MessageSquare },
-  { id: 4, name: "Schedule", icon: CalendarIcon },
-  { id: 5, name: "Review & Launch", icon: Send }
+  { id: 1, name: "Company Analysis", icon: Globe },
+  { id: 2, name: "Campaign Info", icon: Target },
+  { id: 3, name: "Target Audience", icon: Users },
+  { id: 4, name: "Messages", icon: MessageSquare },
+  { id: 5, name: "Schedule", icon: CalendarIcon },
+  { id: 6, name: "Review & Launch", icon: Send }
 ];
 
 const industries = [
@@ -137,6 +142,8 @@ const NewCampaign = () => {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [campaignData, setCampaignData] = useState<CampaignData>({
+    websiteUrl: "",
+    companySummary: "",
     name: "",
     description: "",
     objective: "",
@@ -167,6 +174,8 @@ const NewCampaign = () => {
     trackOpens: true,
     trackClicks: true
   });
+
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const updateCampaignData = (updates: Partial<CampaignData>) => {
     setCampaignData(prev => ({ ...prev, ...updates }));
@@ -206,15 +215,45 @@ const NewCampaign = () => {
     updateMessage(messageId, { content: template.content });
   };
 
+  const analyzeWebsite = async () => {
+    if (!campaignData.websiteUrl) return;
+    
+    setIsAnalyzing(true);
+    try {
+      // Simulate AI analysis - in real app, this would call an API
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // Generate a sample summary based on the example provided
+      const summary = `${campaignData.websiteUrl.replace(/https?:\/\//, '').replace(/www\./, '').split('.')[0]} is a leading company in their industry, delivering innovative solutions and exceptional service to customers worldwide. We combine cutting-edge technology with deep industry expertise to create value for our clients. What makes us unique is our ability to deliver customized solutions at scale, providing flexibility and reliability that drives growth. Our advanced systems and dedicated team ensure fast turnaround times and superior quality, making us a trusted partner for businesses looking to accelerate their success.`;
+      
+      updateCampaignData({ companySummary: summary });
+      
+      toast({
+        title: "Analysis Complete",
+        description: "Company summary generated successfully"
+      });
+    } catch (error) {
+      toast({
+        title: "Analysis Failed",
+        description: "Could not analyze the website. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   const validateStep = (step: number): boolean => {
     switch (step) {
       case 1:
-        return !!(campaignData.name && campaignData.objective);
+        return !!(campaignData.websiteUrl && campaignData.companySummary);
       case 2:
-        return campaignData.targetIndustries.length > 0 || campaignData.targetRoles.length > 0;
+        return !!(campaignData.name && campaignData.objective);
       case 3:
-        return campaignData.messages.every(msg => msg.content.trim().length > 0);
+        return campaignData.targetIndustries.length > 0 || campaignData.targetRoles.length > 0;
       case 4:
+        return campaignData.messages.every(msg => msg.content.trim().length > 0);
+      case 5:
         return !!(campaignData.startDate && campaignData.dailyLimit > 0);
       default:
         return true;
@@ -223,7 +262,7 @@ const NewCampaign = () => {
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, 5));
+      setCurrentStep(prev => Math.min(prev + 1, 6));
     } else {
       toast({
         title: "Please complete required fields",
@@ -257,6 +296,76 @@ const NewCampaign = () => {
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <Globe className="w-16 h-16 mx-auto mb-4 text-primary" />
+              <h2 className="text-2xl font-semibold mb-2">Let's analyze your business</h2>
+              <p className="text-muted-foreground">
+                Arthur will analyze your website to understand your products/services and create a personalized outreach strategy.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="websiteUrl">Company Website URL *</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="websiteUrl"
+                    placeholder="https://yourcompany.com"
+                    value={campaignData.websiteUrl}
+                    onChange={(e) => updateCampaignData({ websiteUrl: e.target.value })}
+                    disabled={isAnalyzing}
+                  />
+                  <Button 
+                    onClick={analyzeWebsite}
+                    disabled={!campaignData.websiteUrl || isAnalyzing}
+                    className="gap-2"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        Analyzing...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        Analyze
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              {campaignData.companySummary && (
+                <div className="space-y-2">
+                  <Label htmlFor="companySummary">Company Summary</Label>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Arthur generated this summary based on your website. You can edit it to better reflect your business.
+                  </p>
+                  <Textarea
+                    id="companySummary"
+                    value={campaignData.companySummary}
+                    onChange={(e) => updateCampaignData({ companySummary: e.target.value })}
+                    rows={6}
+                    className="min-h-[120px]"
+                  />
+                </div>
+              )}
+
+              {!campaignData.companySummary && campaignData.websiteUrl && !isAnalyzing && (
+                <Card className="p-6 text-center border-dashed">
+                  <Sparkles className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                  <p className="text-muted-foreground">
+                    Click "Analyze" to let Arthur understand your business
+                  </p>
+                </Card>
+              )}
+            </div>
+          </div>
+        );
+
+      case 2:
         return (
           <div className="space-y-6">
             <div className="space-y-2">
@@ -298,7 +407,7 @@ const NewCampaign = () => {
           </div>
         );
 
-      case 2:
+      case 3:
         return (
           <div className="space-y-6">
             <div className="space-y-3">
@@ -402,7 +511,7 @@ const NewCampaign = () => {
           </div>
         );
 
-      case 3:
+      case 4:
         return (
           <div className="space-y-6">
             {campaignData.messages.map((message, index) => (
@@ -517,7 +626,7 @@ const NewCampaign = () => {
           </div>
         );
 
-      case 4:
+      case 5:
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -657,7 +766,7 @@ const NewCampaign = () => {
           </div>
         );
 
-      case 5:
+      case 6:
         return (
           <div className="space-y-6">
             <Card>

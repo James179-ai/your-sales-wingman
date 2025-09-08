@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { getCampaigns } from "@/utils/campaignStorage";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -114,13 +115,17 @@ export default function Campaigns() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [typewriterKey, setTypewriterKey] = useState(0);
+  const [campaigns, setCampaigns] = useState(mockCampaigns);
 
-  // Trigger typewriter on component mount
+  // Load campaigns from storage and trigger typewriter on component mount
   useEffect(() => {
     setTypewriterKey(Date.now());
+    const savedCampaigns = getCampaigns();
+    // Combine saved campaigns with mock campaigns, with saved campaigns first
+    setCampaigns([...savedCampaigns, ...mockCampaigns]);
   }, []);
 
-  const filteredCampaigns = mockCampaigns.filter(campaign => {
+  const filteredCampaigns = campaigns.filter(campaign => {
     const matchesSearch = campaign.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesTab = activeTab === "all" || campaign.status === activeTab;
     return matchesSearch && matchesTab;
@@ -169,7 +174,7 @@ export default function Campaigns() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Campaigns Arthur Built</p>
-                <p className="text-2xl font-bold text-foreground">{mockCampaigns.length}</p>
+                <p className="text-2xl font-bold text-foreground">{campaigns.length}</p>
               </div>
               <BarChart3 className="w-8 h-8 text-primary" />
             </div>
@@ -179,7 +184,7 @@ export default function Campaigns() {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Currently Running</p>
                 <p className="text-2xl font-bold text-foreground">
-                  {mockCampaigns.filter(c => c.status === 'active').length}
+                  {campaigns.filter(c => c.status === 'active').length}
                 </p>
               </div>
               <Play className="w-8 h-8 text-success" />
@@ -190,7 +195,7 @@ export default function Campaigns() {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Prospects Arthur Found</p>
                 <p className="text-2xl font-bold text-foreground">
-                  {mockCampaigns.reduce((sum, c) => sum + c.prospects, 0)}
+                  {campaigns.reduce((sum, c) => sum + c.prospects, 0)}
                 </p>
               </div>
               <Users className="w-8 h-8 text-primary" />

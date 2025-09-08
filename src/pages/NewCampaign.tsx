@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { createElement } from "react";
+import { saveCampaign } from "@/utils/campaignStorage";
 import { 
   ArrowLeft,
   ArrowRight,
@@ -279,19 +280,38 @@ const NewCampaign = () => {
   };
 
   const saveDraft = () => {
-    toast({
-      title: "Draft Saved",
-      description: "Your campaign has been saved as a draft"
-    });
+    try {
+      saveCampaign(campaignData, 'draft');
+      toast({
+        title: "Draft Saved",
+        description: "Your campaign has been saved as a draft"
+      });
+      navigate("/campaigns");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save draft. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const launchCampaign = () => {
     if (validateStep(currentStep)) {
-      toast({
-        title: "Campaign Launched!",
-        description: `"${campaignData.name}" has been launched successfully`
-      });
-      navigate("/campaigns");
+      try {
+        saveCampaign(campaignData, 'active');
+        toast({
+          title: "Campaign Launched!",
+          description: `"${campaignData.name}" has been launched successfully`
+        });
+        navigate("/campaigns");
+      } catch (error) {
+        toast({
+          title: "Error", 
+          description: "Failed to launch campaign. Please try again.",
+          variant: "destructive"
+        });
+      }
     }
   };
 

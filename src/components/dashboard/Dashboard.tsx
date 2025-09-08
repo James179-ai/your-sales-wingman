@@ -138,7 +138,7 @@ export function Dashboard() {
           </div>
         </div>
         <div className="flex gap-3">
-          <Button variant="primary" className="gap-2">
+          <Button variant="primary" className="gap-2" onClick={() => navigate('/campaigns/new')}>
             <Plus className="w-4 h-4" />
             Let Arthur Start a New Campaign
           </Button>

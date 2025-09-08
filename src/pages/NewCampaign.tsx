@@ -98,12 +98,12 @@ const steps = [
 
 const industries = [
   "Technology", "Healthcare", "Finance", "Manufacturing", "Retail", 
-  "Consulting", "Education", "Real Estate", "Media", "Non-profit"
+  "Consulting", "Education", "Real Estate", "Media", "Non-profit", "Other"
 ];
 
 const roles = [
   "CEO", "CTO", "VP Engineering", "VP Sales", "VP Marketing", 
-  "Director", "Manager", "Senior Engineer", "Software Engineer", "Designer"
+  "Director", "Manager", "Senior Engineer", "Software Engineer", "Designer", "Other"
 ];
 
 const companySizes = [
@@ -176,6 +176,8 @@ const NewCampaign = () => {
   });
 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [customIndustry, setCustomIndustry] = useState("");
+  const [customRole, setCustomRole] = useState("");
 
   const updateCampaignData = (updates: Partial<CampaignData>) => {
     setCampaignData(prev => ({ ...prev, ...updates }));
@@ -417,16 +419,29 @@ const NewCampaign = () => {
                   <div key={industry} className="flex items-center space-x-2">
                     <Checkbox
                       id={industry}
-                      checked={campaignData.targetIndustries.includes(industry)}
+                      checked={campaignData.targetIndustries.includes(industry) || (industry === "Other" && !!customIndustry)}
                       onCheckedChange={(checked) => {
-                        if (checked) {
-                          updateCampaignData({
-                            targetIndustries: [...campaignData.targetIndustries, industry]
-                          });
+                        if (industry === "Other") {
+                          if (checked && customIndustry) {
+                            updateCampaignData({
+                              targetIndustries: [...campaignData.targetIndustries.filter(i => i !== "Other"), customIndustry]
+                            });
+                          } else if (!checked) {
+                            updateCampaignData({
+                              targetIndustries: campaignData.targetIndustries.filter(i => i !== customIndustry && i !== "Other")
+                            });
+                            setCustomIndustry("");
+                          }
                         } else {
-                          updateCampaignData({
-                            targetIndustries: campaignData.targetIndustries.filter(i => i !== industry)
-                          });
+                          if (checked) {
+                            updateCampaignData({
+                              targetIndustries: [...campaignData.targetIndustries, industry]
+                            });
+                          } else {
+                            updateCampaignData({
+                              targetIndustries: campaignData.targetIndustries.filter(i => i !== industry)
+                            });
+                          }
                         }
                       }}
                     />
@@ -434,6 +449,25 @@ const NewCampaign = () => {
                   </div>
                 ))}
               </div>
+              
+              {campaignData.targetIndustries.includes("Other") || customIndustry ? (
+                <div className="space-y-2">
+                  <Label htmlFor="customIndustry">Custom Industry</Label>
+                  <Input
+                    id="customIndustry"
+                    placeholder="Enter custom industry..."
+                    value={customIndustry}
+                    onChange={(e) => {
+                      setCustomIndustry(e.target.value);
+                      if (e.target.value) {
+                        updateCampaignData({
+                          targetIndustries: [...campaignData.targetIndustries.filter(i => i !== customIndustry && i !== "Other"), e.target.value]
+                        });
+                      }
+                    }}
+                  />
+                </div>
+              ) : null}
             </div>
 
             <div className="space-y-3">
@@ -443,16 +477,29 @@ const NewCampaign = () => {
                   <div key={role} className="flex items-center space-x-2">
                     <Checkbox
                       id={role}
-                      checked={campaignData.targetRoles.includes(role)}
+                      checked={campaignData.targetRoles.includes(role) || (role === "Other" && !!customRole)}
                       onCheckedChange={(checked) => {
-                        if (checked) {
-                          updateCampaignData({
-                            targetRoles: [...campaignData.targetRoles, role]
-                          });
+                        if (role === "Other") {
+                          if (checked && customRole) {
+                            updateCampaignData({
+                              targetRoles: [...campaignData.targetRoles.filter(r => r !== "Other"), customRole]
+                            });
+                          } else if (!checked) {
+                            updateCampaignData({
+                              targetRoles: campaignData.targetRoles.filter(r => r !== customRole && r !== "Other")
+                            });
+                            setCustomRole("");
+                          }
                         } else {
-                          updateCampaignData({
-                            targetRoles: campaignData.targetRoles.filter(r => r !== role)
-                          });
+                          if (checked) {
+                            updateCampaignData({
+                              targetRoles: [...campaignData.targetRoles, role]
+                            });
+                          } else {
+                            updateCampaignData({
+                              targetRoles: campaignData.targetRoles.filter(r => r !== role)
+                            });
+                          }
                         }
                       }}
                     />
@@ -460,6 +507,25 @@ const NewCampaign = () => {
                   </div>
                 ))}
               </div>
+              
+              {campaignData.targetRoles.includes("Other") || customRole ? (
+                <div className="space-y-2">
+                  <Label htmlFor="customRole">Custom Role</Label>
+                  <Input
+                    id="customRole"
+                    placeholder="Enter custom role..."
+                    value={customRole}
+                    onChange={(e) => {
+                      setCustomRole(e.target.value);
+                      if (e.target.value) {
+                        updateCampaignData({
+                          targetRoles: [...campaignData.targetRoles.filter(r => r !== customRole && r !== "Other"), e.target.value]
+                        });
+                      }
+                    }}
+                  />
+                </div>
+              ) : null}
             </div>
 
             <div className="space-y-3">

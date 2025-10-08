@@ -9,18 +9,18 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        primary: "bg-gradient-primary text-primary-foreground hover:opacity-90 shadow-md hover:shadow-lg transition-all duration-200",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow-md transition-all duration-300",
+        primary: "bg-gradient-primary text-white hover:opacity-90 hover:scale-105 shadow-lg hover:shadow-glow transition-all duration-300 font-semibold",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm hover:shadow-md transition-all duration-300",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border-2 border-primary/20 bg-background hover:bg-primary/5 hover:border-primary/40 hover:shadow-md transition-all duration-300",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary-hover",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+          "bg-gradient-secondary text-white hover:opacity-90 hover:scale-105 shadow-md hover:shadow-glow transition-all duration-300 font-semibold",
+        ghost: "hover:bg-accent/10 hover:text-accent-foreground transition-all duration-300",
         link: "text-primary underline-offset-4 hover:underline",
-        sidebar: "justify-start text-muted-foreground hover:text-foreground hover:bg-surface-elevated border-none bg-transparent",
-        "sidebar-active": "justify-start bg-primary/10 text-primary hover:bg-primary/15 border-none font-medium",
+        sidebar: "justify-start text-muted-foreground hover:text-foreground hover:bg-surface-elevated/50 border-none bg-transparent transition-all duration-200",
+        "sidebar-active": "justify-start bg-gradient-primary text-white hover:opacity-90 border-none font-semibold shadow-md relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-accent before:rounded-r",
       },
       size: {
         default: "h-10 px-4 py-2",

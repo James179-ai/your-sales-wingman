@@ -116,19 +116,22 @@ export function Dashboard() {
   }, []);
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16 border-2 border-primary/20">
-            <AvatarImage src={aiSalesmanAvatar} alt="AI Sales Assistant" />
-            <AvatarFallback>AI</AvatarFallback>
-          </Avatar>
+    <div className="space-y-8 animate-fade-in">
+      {/* Header with enhanced styling */}
+      <div className="flex items-center justify-between p-6 bg-gradient-glass rounded-2xl border border-border-subtle/50 shadow-lg">
+        <div className="flex items-center gap-5">
+          <div className="relative animate-float">
+            <Avatar className="h-20 w-20 border-4 border-primary/30 shadow-glow ring-2 ring-primary/10">
+              <AvatarImage src={aiSalesmanAvatar} alt="Arthur - Your AI Sales Assistant" />
+              <AvatarFallback className="bg-gradient-primary text-white text-xl font-bold">AI</AvatarFallback>
+            </Avatar>
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-success rounded-full border-2 border-background animate-pulse" />
+          </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-1">
               Good Evening, Karl-Martin
             </h1>
-            <p className="text-muted-foreground mt-1 min-h-[3rem] flex items-center">
+            <p className="text-text-secondary text-base min-h-[3rem] flex items-center font-medium">
               <TypewriterText 
                 texts={arthurMessages}
                 speed={30}
@@ -138,133 +141,172 @@ export function Dashboard() {
           </div>
         </div>
         <div className="flex gap-3">
-          <Button variant="primary" className="gap-2" onClick={() => navigate('/campaigns/new')}>
-            <Plus className="w-4 h-4" />
-            Let Arthur Start a New Campaign
+          <Button variant="primary" size="lg" className="gap-2 text-base px-6" onClick={() => navigate('/campaigns/new')}>
+            <Plus className="w-5 h-5" />
+            Start New Campaign
           </Button>
         </div>
       </div>
 
-      {/* KPI Cards */}
+      {/* KPI Cards with staggered animation */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {mockKPIs.map((kpi, index) => (
-          <KPICard key={index} {...kpi} />
+          <div key={index} className="animate-fade-up" style={{ animationDelay: `${index * 0.1}s` }}>
+            <KPICard {...kpi} />
+          </div>
         ))}
       </div>
 
-      {/* Simple Charts Section */}
+      {/* Enhanced Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6 bg-gradient-glass border-border-subtle">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-foreground mb-2">Weekly Connections</h3>
-            <p className="text-sm text-muted-foreground">Connections sent this week</p>
-          </div>
-          <ChartContainer config={chartConfig} className="h-48">
-            <BarChart data={weeklyData}>
-              <XAxis 
-                dataKey="name" 
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-              />
-              <YAxis hide />
-              <Bar 
-                dataKey="value" 
-                fill="hsl(var(--chart-1))" 
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ChartContainer>
-          <div className="mt-4">
-            <button 
-              className="text-sm text-chart-1 hover:underline cursor-pointer"
-              onClick={() => navigate('/connections-report')}
-            >
-              View full report →
-            </button>
+        <Card className="p-7 glassmorphism border-border-subtle/50 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10">
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center shadow-md">
+                  <BarChart3 className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground">Weekly Connections</h3>
+              </div>
+              <p className="text-sm text-muted-foreground font-medium">Connections sent this week</p>
+            </div>
+            <ChartContainer config={chartConfig} className="h-56">
+              <BarChart data={weeklyData}>
+                <defs>
+                  <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(var(--chart-1))" stopOpacity={0.9} />
+                    <stop offset="100%" stopColor="hsl(var(--chart-1))" stopOpacity={0.4} />
+                  </linearGradient>
+                </defs>
+                <XAxis 
+                  dataKey="name" 
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 13, fill: "hsl(var(--muted-foreground))", fontWeight: 600 }}
+                />
+                <YAxis hide />
+                <Bar 
+                  dataKey="value" 
+                  fill="url(#barGradient)"
+                  radius={[8, 8, 0, 0]}
+                />
+              </BarChart>
+            </ChartContainer>
+            <div className="mt-5">
+              <button 
+                className="text-sm font-semibold text-primary hover:text-primary-glow transition-colors flex items-center gap-1 group/link"
+                onClick={() => navigate('/connections-report')}
+              >
+                View full report 
+                <span className="group-hover/link:translate-x-1 transition-transform">→</span>
+              </button>
+            </div>
           </div>
         </Card>
 
-        <Card className="p-6 bg-gradient-glass border-border-subtle">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-foreground mb-2">Response Rate</h3>
-            <p className="text-sm text-muted-foreground">Current quarter goal</p>
-          </div>
-          <div className="flex items-center justify-center">
-            <div className="relative w-32 h-32">
-              <ChartContainer config={chartConfig} className="w-full h-full">
-                <PieChart>
-                  <Pie
-                    data={responseRateData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={45}
-                    outerRadius={60}
-                    startAngle={90}
-                    endAngle={450}
-                    dataKey="value"
-                    stroke="none"
-                  >
-                    {responseRateData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ChartContainer>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-bold text-foreground">73%</span>
+        <Card className="p-7 glassmorphism border-border-subtle/50 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10">
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 bg-gradient-secondary rounded-lg flex items-center justify-center shadow-md">
+                  <TrendingUp className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground">Response Rate</h3>
+              </div>
+              <p className="text-sm text-muted-foreground font-medium">Current quarter goal</p>
+            </div>
+            <div className="flex items-center justify-center py-4">
+              <div className="relative w-40 h-40">
+                <ChartContainer config={chartConfig} className="w-full h-full">
+                  <PieChart>
+                    <defs>
+                      <linearGradient id="pieGradient" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="hsl(var(--chart-1))" />
+                        <stop offset="100%" stopColor="hsl(var(--chart-2))" />
+                      </linearGradient>
+                    </defs>
+                    <Pie
+                      data={responseRateData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={55}
+                      outerRadius={70}
+                      startAngle={90}
+                      endAngle={450}
+                      dataKey="value"
+                      stroke="none"
+                    >
+                      {responseRateData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={index === 0 ? "url(#pieGradient)" : entry.fill} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ChartContainer>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">73%</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="mt-4 text-center">
-            <p className="text-sm text-muted-foreground mb-2">Current quarter performance</p>
-            <button 
-              className="text-sm text-chart-1 hover:underline cursor-pointer"
-              onClick={() => navigate('/goals')}
-            >
-              All goals →
-            </button>
+            <div className="mt-5 text-center">
+              <p className="text-sm text-muted-foreground mb-3 font-medium">Current quarter performance</p>
+              <button 
+                className="text-sm font-semibold text-primary hover:text-primary-glow transition-colors inline-flex items-center gap-1 group/link"
+                onClick={() => navigate('/goals')}
+              >
+                All goals 
+                <span className="group-hover/link:translate-x-1 transition-transform">→</span>
+              </button>
+            </div>
           </div>
         </Card>
       </div>
 
-      {/* Active Campaigns */}
-      <Card className="bg-gradient-glass border-border-subtle">
-        <div className="p-6 border-b border-border-subtle">
+      {/* Active Campaigns with enhanced styling */}
+      <Card className="glassmorphism border-border-subtle/50 shadow-lg overflow-hidden">
+        <div className="p-7 border-b border-border-subtle/50 bg-gradient-glow">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-foreground">Campaigns Arthur is Managing</h3>
+            <h3 className="text-xl font-bold text-foreground">Campaigns Arthur is Managing</h3>
             <Button variant="outline" size="sm" onClick={() => navigate('/campaigns')}>View All</Button>
           </div>
         </div>
-        <div className="p-6">
+        <div className="p-7">
           <div className="space-y-4">
             {mockCampaigns.map((campaign, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-surface-elevated rounded-lg border border-border-subtle">
+              <div 
+                key={index} 
+                className="group flex items-center justify-between p-5 bg-surface-elevated/50 rounded-xl border border-border-subtle/50 hover:border-primary/30 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+              >
                 <div className="flex items-center space-x-4">
-                  <div className={`w-3 h-3 rounded-full ${
+                  <div className={`relative w-4 h-4 rounded-full ${
                     campaign.status === "Active" ? "bg-success" : "bg-warning"
-                  }`} />
+                  } shadow-glow`}>
+                    <div className={`absolute inset-0 rounded-full ${
+                      campaign.status === "Active" ? "bg-success" : "bg-warning"
+                    } animate-ping opacity-75`} />
+                  </div>
                   <div>
-                    <h4 className="font-medium text-foreground">{campaign.name}</h4>
-                    <p className="text-sm text-muted-foreground">{campaign.status}</p>
+                    <h4 className="font-bold text-foreground text-base group-hover:text-primary transition-colors">{campaign.name}</h4>
+                    <p className="text-sm text-muted-foreground font-medium">{campaign.status}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-6 text-sm">
+                <div className="flex items-center space-x-8 text-sm">
                   <div className="text-center">
-                    <p className="font-medium text-foreground">{campaign.connections}</p>
-                    <p className="text-muted-foreground">Connections</p>
+                    <p className="font-bold text-foreground text-lg">{campaign.connections}</p>
+                    <p className="text-muted-foreground text-xs uppercase tracking-wide">Connections</p>
                   </div>
                   <div className="text-center">
-                    <p className="font-medium text-foreground">{campaign.responses}</p>
-                    <p className="text-muted-foreground">Responses</p>
+                    <p className="font-bold text-foreground text-lg">{campaign.responses}</p>
+                    <p className="text-muted-foreground text-xs uppercase tracking-wide">Responses</p>
                   </div>
                   <div className="text-center">
-                    <p className="font-medium text-foreground">{campaign.meetings}</p>
-                    <p className="text-muted-foreground">Meetings</p>
+                    <p className="font-bold text-foreground text-lg">{campaign.meetings}</p>
+                    <p className="text-muted-foreground text-xs uppercase tracking-wide">Meetings</p>
                   </div>
                   <div className="text-center">
-                    <p className="font-medium text-success">{campaign.responseRate}</p>
-                    <p className="text-muted-foreground">Response Rate</p>
+                    <p className="font-bold text-success text-lg">{campaign.responseRate}</p>
+                    <p className="text-muted-foreground text-xs uppercase tracking-wide">Response Rate</p>
                   </div>
                 </div>
               </div>

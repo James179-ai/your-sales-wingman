@@ -34,31 +34,31 @@ export function Sidebar() {
 
   return (
     <div className={cn(
-      "flex flex-col h-full bg-gradient-surface border-r border-border-subtle transition-all duration-300",
+      "flex flex-col h-full bg-gradient-surface border-r border-border-subtle/50 transition-all duration-300 shadow-lg",
       collapsed ? "w-16" : "w-64"
     )}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-border-subtle">
+      <div className="flex items-center justify-between p-5 border-b border-border-subtle/50">
         {!collapsed && (
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <Target className="w-5 h-5 text-white" />
+          <div className="flex items-center space-x-3 animate-fade-in">
+            <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow">
+              <Target className="w-6 h-6 text-white" />
             </div>
-            <span className="font-bold text-lg text-foreground">Closerly</span>
+            <span className="font-bold text-2xl bg-gradient-primary bg-clip-text text-transparent">Closerly</span>
           </div>
         )}
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setCollapsed(!collapsed)}
-          className="hover:bg-surface-elevated"
+          className="hover:bg-surface-elevated/50 transition-colors"
         >
           {collapsed ? <Menu className="w-4 h-4" /> : <X className="w-4 h-4" />}
         </Button>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-4">
+      <nav className="flex-1 space-y-2 p-4">
         {navigation.map((item) => {
           const Icon = item.icon;
           const isActive = currentPath === item.href;
@@ -67,14 +67,20 @@ export function Sidebar() {
               key={item.name}
               to={item.href}
               className={({ isActive: navIsActive }) => cn(
-                "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                collapsed && "justify-center px-2",
+                "relative flex items-center rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-300 group",
+                collapsed && "justify-center px-3",
                 navIsActive
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-muted-foreground hover:text-foreground hover:bg-surface-elevated"
+                  ? "bg-gradient-primary text-white shadow-glow"
+                  : "text-muted-foreground hover:text-foreground hover:bg-surface-elevated/70"
               )}
             >
-              <Icon className={cn("w-5 h-5", !collapsed && "mr-3")} />
+              {isActive && !collapsed && (
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent rounded-r-full" />
+              )}
+              <Icon className={cn(
+                "w-5 h-5 transition-transform group-hover:scale-110", 
+                !collapsed && "mr-3"
+              )} />
               {!collapsed && <span>{item.name}</span>}
             </NavLink>
           );
@@ -82,18 +88,19 @@ export function Sidebar() {
       </nav>
 
       {/* User Profile */}
-      <div className="p-4 border-t border-border-subtle">
+      <div className="p-5 border-t border-border-subtle/50">
         <div className={cn(
-          "flex items-center space-x-3",
-          collapsed && "justify-center"
+          "flex items-center space-x-3 p-3 rounded-xl bg-surface-elevated/50 hover:bg-surface-elevated transition-colors",
+          collapsed && "justify-center p-2"
         )}>
-           <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-             <span className="text-sm font-medium text-primary-foreground">KM</span>
+           <div className="relative w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center shadow-md">
+             <span className="text-sm font-bold text-white">KM</span>
+             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full border-2 border-background" />
            </div>
           {!collapsed && (
-             <div>
-               <p className="text-sm font-medium text-foreground">Karl-Martin</p>
-               <p className="text-xs text-muted-foreground">Arthur's Boss</p>
+             <div className="animate-fade-in">
+               <p className="text-sm font-bold text-foreground">Karl-Martin</p>
+               <p className="text-xs text-muted-foreground font-medium">Arthur's Boss</p>
              </div>
           )}
         </div>

@@ -142,18 +142,21 @@ export default function Campaigns() {
   return (
     <AppLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Avatar className="h-16 w-16 border-2 border-primary/20">
-              <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
-              <AvatarFallback>AI</AvatarFallback>
-            </Avatar>
+        {/* Header with enhanced styling */}
+        <div className="flex items-center justify-between p-6 bg-gradient-glass rounded-2xl border border-border-subtle/50 shadow-lg">
+          <div className="flex items-center gap-5">
+            <div className="relative animate-float">
+              <Avatar className="h-20 w-20 border-4 border-primary/30 shadow-glow ring-2 ring-primary/10">
+                <AvatarImage src={aiSalesmanAvatar} alt="Arthur AI" />
+                <AvatarFallback className="bg-gradient-primary text-white text-xl font-bold">AI</AvatarFallback>
+              </Avatar>
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-success rounded-full border-2 border-background animate-pulse" />
+            </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-1">
                 Your Campaign War Room
               </h1>
-              <p className="text-muted-foreground mt-1 min-h-[3rem] flex items-center">
+              <p className="text-text-secondary text-base min-h-[3rem] flex items-center font-medium">
                 <TypewriterText 
                   texts={arthurMessages}
                   speed={30}
@@ -162,52 +165,64 @@ export default function Campaigns() {
               </p>
             </div>
           </div>
-          <Button variant="primary" onClick={() => navigate('/campaigns/new')}>
-            <Plus className="w-4 h-4 mr-2" />
-            Let Me Build Another Winner
+          <Button variant="primary" size="lg" className="gap-2 text-base px-6" onClick={() => navigate('/campaigns/new')}>
+            <Plus className="w-5 h-5" />
+            Build New Campaign
           </Button>
         </div>
 
-        {/* Stats Overview */}
+        {/* Stats Overview with enhanced styling */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="p-6 bg-gradient-glass border-border-subtle">
-            <div className="flex items-center justify-between">
+          <Card className="group relative overflow-hidden glassmorphism rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-border-subtle/50">
+            <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Campaigns Arthur Built</p>
-                <p className="text-2xl font-bold text-foreground">{campaigns.length}</p>
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Total Campaigns</p>
+                <p className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent mt-2">{campaigns.length}</p>
               </div>
-              <BarChart3 className="w-8 h-8 text-primary" />
+              <div className="w-14 h-14 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform duration-300">
+                <BarChart3 className="w-7 h-7 text-white" />
+              </div>
             </div>
           </Card>
-          <Card className="p-6 bg-gradient-glass border-border-subtle">
-            <div className="flex items-center justify-between">
+          <Card className="group relative overflow-hidden glassmorphism rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-border-subtle/50">
+            <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Currently Running</p>
-                <p className="text-2xl font-bold text-foreground">
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Active Now</p>
+                <p className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent mt-2">
                   {campaigns.filter(c => c.status === 'active').length}
                 </p>
               </div>
-              <Play className="w-8 h-8 text-success" />
+              <div className="w-14 h-14 bg-gradient-accent rounded-xl flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform duration-300">
+                <Play className="w-7 h-7 text-white" />
+              </div>
             </div>
           </Card>
-          <Card className="p-6 bg-gradient-glass border-border-subtle">
-            <div className="flex items-center justify-between">
+          <Card className="group relative overflow-hidden glassmorphism rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-border-subtle/50">
+            <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Prospects Arthur Found</p>
-                <p className="text-2xl font-bold text-foreground">
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Total Prospects</p>
+                <p className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent mt-2">
                   {campaigns.reduce((sum, c) => sum + c.prospects, 0)}
                 </p>
               </div>
-              <Users className="w-8 h-8 text-primary" />
+              <div className="w-14 h-14 bg-gradient-secondary rounded-xl flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform duration-300">
+                <Users className="w-7 h-7 text-white" />
+              </div>
             </div>
           </Card>
-          <Card className="p-6 bg-gradient-glass border-border-subtle">
-            <div className="flex items-center justify-between">
+          <Card className="group relative overflow-hidden glassmorphism rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-border-subtle/50">
+            <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Avg Response Rate</p>
-                <p className="text-2xl font-bold text-foreground">19.2%</p>
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Avg Response</p>
+                <p className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent mt-2">19.2%</p>
               </div>
-              <TrendingUp className="w-8 h-8 text-success" />
+              <div className="w-14 h-14 bg-gradient-accent rounded-xl flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform duration-300">
+                <TrendingUp className="w-7 h-7 text-white" />
+              </div>
             </div>
           </Card>
         </div>
@@ -233,49 +248,50 @@ export default function Campaigns() {
           </Tabs>
         </div>
 
-        {/* Campaigns Grid */}
+        {/* Campaigns Grid with enhanced cards */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredCampaigns.map((campaign) => (
-            <Card key={campaign.id} className="bg-gradient-glass border-border-subtle hover:shadow-lg transition-all duration-200">
-              <div className="p-6">
+            <Card key={campaign.id} className="group relative overflow-hidden glassmorphism rounded-2xl border-border-subtle/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative z-10 p-6">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <h3 className="font-semibold text-foreground truncate">{campaign.name}</h3>
+                      <h3 className="font-bold text-foreground text-lg truncate group-hover:text-primary transition-colors">{campaign.name}</h3>
                       <Badge 
                         variant="outline" 
-                        className={`text-white border-none ${statusConfig[campaign.status as keyof typeof statusConfig].color}`}
+                        className={`text-white border-none shadow-sm ${statusConfig[campaign.status as keyof typeof statusConfig].color}`}
                       >
                         {statusConfig[campaign.status as keyof typeof statusConfig].label}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground font-medium">
                       Created {new Date(campaign.createdAt).toLocaleDateString()}
                     </p>
                   </div>
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="hover:bg-surface-elevated/70 transition-colors">
                     <MoreHorizontal className="w-4 h-4" />
                   </Button>
                 </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="text-center p-3 bg-surface-elevated rounded-lg">
-                    <p className="text-lg font-bold text-foreground">{campaign.prospects}</p>
-                    <p className="text-xs text-muted-foreground">Prospects</p>
+                {/* Stats with gradient backgrounds */}
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="text-center p-4 bg-surface-elevated/50 rounded-xl border border-border-subtle/30 hover:border-primary/30 transition-colors">
+                    <p className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">{campaign.prospects}</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Prospects</p>
                   </div>
-                  <div className="text-center p-3 bg-surface-elevated rounded-lg">
-                    <p className="text-lg font-bold text-foreground">{campaign.connections}</p>
-                    <p className="text-xs text-muted-foreground">Connected</p>
+                  <div className="text-center p-4 bg-surface-elevated/50 rounded-xl border border-border-subtle/30 hover:border-primary/30 transition-colors">
+                    <p className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">{campaign.connections}</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Connected</p>
                   </div>
-                  <div className="text-center p-3 bg-surface-elevated rounded-lg">
-                    <p className="text-lg font-bold text-foreground">{campaign.messages}</p>
-                    <p className="text-xs text-muted-foreground">Messages</p>
+                  <div className="text-center p-4 bg-surface-elevated/50 rounded-xl border border-border-subtle/30 hover:border-primary/30 transition-colors">
+                    <p className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">{campaign.messages}</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Messages</p>
                   </div>
-                  <div className="text-center p-3 bg-surface-elevated rounded-lg">
-                    <p className="text-lg font-bold text-success">{campaign.responseRate}</p>
-                    <p className="text-xs text-muted-foreground">Response Rate</p>
+                  <div className="text-center p-4 bg-surface-elevated/50 rounded-xl border border-border-subtle/30 hover:border-accent/30 transition-colors">
+                    <p className="text-2xl font-bold text-success">{campaign.responseRate}</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Response</p>
                   </div>
                 </div>
 
@@ -305,27 +321,27 @@ export default function Campaigns() {
                   </div>
                 </div>
 
-                {/* Actions */}
+                {/* Actions with gradient buttons */}
                 <div className="flex space-x-2">
                   {campaign.status === 'active' && (
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button variant="outline" size="sm" className="flex-1 font-semibold">
                       <Pause className="w-4 h-4 mr-1" />
                       Pause
                     </Button>
                   )}
                   {campaign.status === 'paused' && (
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button variant="primary" size="sm" className="flex-1 font-semibold">
                       <Play className="w-4 h-4 mr-1" />
                       Resume
                     </Button>
                   )}
                   {campaign.status === 'draft' && (
-                    <Button variant="primary" size="sm" className="flex-1">
+                    <Button variant="primary" size="sm" className="flex-1 font-semibold">
                       <Play className="w-4 h-4 mr-1" />
-                      Activate
+                      Launch
                     </Button>
                   )}
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="hover:bg-surface-elevated/70">
                     <Edit className="w-4 h-4 mr-1" />
                     Edit
                   </Button>
@@ -335,20 +351,22 @@ export default function Campaigns() {
           ))}
         </div>
 
-        {/* Empty State */}
+        {/* Empty State with enhanced styling */}
         {filteredCampaigns.length === 0 && (
-          <Card className="p-12 text-center bg-gradient-glass border-border-subtle">
-            <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-foreground mb-2">No campaigns found</h3>
-            <p className="text-muted-foreground mb-6">
+          <Card className="p-16 text-center glassmorphism border-border-subtle/50 shadow-lg rounded-2xl">
+            <div className="w-20 h-20 bg-gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-glow">
+              <BarChart3 className="w-10 h-10 text-white" />
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-3">No campaigns found</h3>
+            <p className="text-muted-foreground mb-8 text-lg max-w-md mx-auto font-medium">
               {searchTerm ? 
                 "Arthur couldn't find any campaigns matching your search." : 
                 "Ready to get started? Let Arthur build your first campaign and start filling your pipeline!"
               }
             </p>
-            <Button variant="primary" onClick={() => navigate('/campaigns/new')}>
-              <Plus className="w-4 h-4 mr-2" />
-              Let Arthur Start Your First Campaign
+            <Button variant="primary" size="lg" onClick={() => navigate('/campaigns/new')}>
+              <Plus className="w-5 h-5 mr-2" />
+              Start Your First Campaign
             </Button>
           </Card>
         )}

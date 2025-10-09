@@ -30,26 +30,28 @@ export function KPICard({
       {/* Gradient glow effect on hover */}
       <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       
-      <div className="relative z-10 flex items-center justify-between">
-        <div className="flex-1">
-          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">{title}</p>
-          <p className="text-3xl font-bold text-foreground mt-2 bg-gradient-primary bg-clip-text text-transparent">{value}</p>
-          {change && (
-            <p className={cn(
-              "text-sm mt-2 font-medium flex items-center gap-1",
-              changeType === "positive" && "text-success",
-              changeType === "negative" && "text-destructive",
-              changeType === "neutral" && "text-muted-foreground"
-            )}>
-              {change}
-            </p>
+      <div className="relative z-10 flex flex-col gap-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">{title}</p>
+            <p className="text-4xl font-bold text-foreground bg-gradient-primary bg-clip-text text-transparent">{value}</p>
+          </div>
+          {Icon && (
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform duration-300">
+                <Icon className="w-6 h-6 text-white" />
+              </div>
+            </div>
           )}
         </div>
-        {Icon && (
-          <div className="relative">
-            <div className="w-14 h-14 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform duration-300">
-              <Icon className="w-7 h-7 text-white" />
-            </div>
+        {change && (
+          <div className={cn(
+            "text-sm font-medium",
+            changeType === "positive" && "text-success",
+            changeType === "negative" && "text-destructive",
+            changeType === "neutral" && "text-muted-foreground"
+          )}>
+            {change}
           </div>
         )}
       </div>

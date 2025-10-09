@@ -20,31 +20,31 @@ import aiSalesmanAvatar from "@/assets/ai-salesman-avatar.jpg";
 
 const mockKPIs = [
   {
-    title: "Connections Arthur Sent Today",
+    title: "Connections Sent",
     value: 18,
-    change: "Crushing yesterday by +15%!",
+    change: "+15% from yesterday",
     changeType: "positive" as const,
     icon: Users
   },
   {
-    title: "Messages Arthur Crafted",
+    title: "Messages Crafted",
     value: 42,
-    change: "Up +8% from last week",
+    change: "+8% from last week",
     changeType: "positive" as const,
     icon: MessageSquare
   },
   {
-    title: "Response Rate We're Getting",
+    title: "Response Rate",
     value: "23%",
-    change: "Improved +2% this month!",
+    change: "+2% this month",
     changeType: "positive" as const,
     icon: TrendingUp
   },
   {
-    title: "Meetings Arthur Booked",
+    title: "Meetings Booked",
     value: 7,
-    change: "3 more this week - nice!",
-    changeType: "neutral" as const,
+    change: "3 more this week",
+    changeType: "positive" as const,
     icon: Calendar
   }
 ];

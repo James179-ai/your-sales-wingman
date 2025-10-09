@@ -194,20 +194,20 @@ export default function Settings() {
         </div>
 
         <Tabs defaultValue="integrations" className="space-y-6">
-          <TabsList className="bg-white/60 border-white/30">
-            <TabsTrigger value="integrations" className="data-[state=active]:bg-white/80">
+          <TabsList className="bg-surface border-border-subtle">
+            <TabsTrigger value="integrations" className="data-[state=active]:bg-surface-elevated data-[state=active]:text-foreground text-muted-foreground">
               <Zap className="h-4 w-4 mr-2" />
               Integrations
             </TabsTrigger>
-            <TabsTrigger value="messaging" className="data-[state=active]:bg-white/80">
+            <TabsTrigger value="messaging" className="data-[state=active]:bg-surface-elevated data-[state=active]:text-foreground text-muted-foreground">
               <MessageSquare className="h-4 w-4 mr-2" />
               Messaging
             </TabsTrigger>
-            <TabsTrigger value="limits" className="data-[state=active]:bg-white/80">
+            <TabsTrigger value="limits" className="data-[state=active]:bg-surface-elevated data-[state=active]:text-foreground text-muted-foreground">
               <Shield className="h-4 w-4 mr-2" />
               Limits & Time
             </TabsTrigger>
-            <TabsTrigger value="advanced" className="data-[state=active]:bg-white/80">
+            <TabsTrigger value="advanced" className="data-[state=active]:bg-surface-elevated data-[state=active]:text-foreground text-muted-foreground">
               <SettingsIcon className="h-4 w-4 mr-2" />
               Advanced
             </TabsTrigger>

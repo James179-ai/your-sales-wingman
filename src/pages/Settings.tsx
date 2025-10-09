@@ -180,7 +180,7 @@ export default function Settings() {
             <AvatarFallback>AI</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold text-foreground">
               My Configuration Center
             </h1>
             <p className="text-muted-foreground mt-1 min-h-[3rem] flex items-center">

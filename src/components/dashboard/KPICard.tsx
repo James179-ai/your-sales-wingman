@@ -31,7 +31,7 @@ export function KPICard({
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">{title}</p>
-            <p className="text-4xl font-bold text-foreground bg-gradient-primary bg-clip-text text-transparent">{value}</p>
+            <p className="text-4xl font-bold text-foreground">{value}</p>
           </div>
           {Icon && (
             <div className="flex-shrink-0">

@@ -159,9 +159,8 @@ export function Dashboard() {
 
       {/* Enhanced Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-7 glassmorphism border-border-subtle/50 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative z-10">
+        <Card className="p-7 glassmorphism border-border-subtle/50 shadow-lg hover:shadow-xl transition-all duration-300">
+          <div>
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center shadow-md">
@@ -205,9 +204,8 @@ export function Dashboard() {
           </div>
         </Card>
 
-        <Card className="p-7 glassmorphism border-border-subtle/50 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative z-10">
+        <Card className="p-7 glassmorphism border-border-subtle/50 shadow-lg hover:shadow-xl transition-all duration-300">
+          <div>
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 bg-gradient-secondary rounded-lg flex items-center justify-center shadow-md">
@@ -264,8 +262,8 @@ export function Dashboard() {
       </div>
 
       {/* Active Campaigns with enhanced styling */}
-      <Card className="glassmorphism border-border-subtle/50 shadow-lg overflow-hidden">
-        <div className="p-7 border-b border-border-subtle/50 bg-gradient-glow">
+      <Card className="glassmorphism border-border-subtle/50 shadow-lg">
+        <div className="p-7 border-b border-border-subtle/50">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-bold text-foreground">Campaigns Arthur is Managing</h3>
             <Button variant="outline" size="sm" onClick={() => navigate('/campaigns')}>View All</Button>

@@ -27,10 +27,7 @@ export function KPICard({
       "border border-border-subtle/50",
       className
     )}>
-      {/* Gradient glow effect on hover */}
-      <div className="absolute inset-0 bg-gradient-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      
-      <div className="relative z-10 flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">{title}</p>

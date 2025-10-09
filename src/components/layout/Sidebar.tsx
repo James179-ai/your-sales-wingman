@@ -44,7 +44,7 @@ export function Sidebar() {
             <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow">
               <Target className="w-6 h-6 text-white" />
             </div>
-            <span className="font-bold text-2xl bg-gradient-primary bg-clip-text text-transparent">Closerly</span>
+            <span className="font-bold text-2xl text-foreground">Closerly</span>
           </div>
         )}
         <Button

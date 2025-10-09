@@ -153,7 +153,7 @@ export default function Campaigns() {
               <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-success rounded-full border-2 border-background animate-pulse" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-1">
+              <h1 className="text-4xl font-bold text-foreground mb-1">
                 Your Campaign War Room
               </h1>
               <p className="text-text-secondary text-base min-h-[3rem] flex items-center font-medium">
@@ -178,7 +178,7 @@ export default function Campaigns() {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Total Campaigns</p>
-                <p className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent mt-2">{campaigns.length}</p>
+                <p className="text-3xl font-bold text-foreground mt-2">{campaigns.length}</p>
               </div>
               <div className="w-14 h-14 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform duration-300">
                 <BarChart3 className="w-7 h-7 text-white" />
@@ -190,7 +190,7 @@ export default function Campaigns() {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Active Now</p>
-                <p className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent mt-2">
+                <p className="text-3xl font-bold text-foreground mt-2">
                   {campaigns.filter(c => c.status === 'active').length}
                 </p>
               </div>
@@ -204,7 +204,7 @@ export default function Campaigns() {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Total Prospects</p>
-                <p className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent mt-2">
+                <p className="text-3xl font-bold text-foreground mt-2">
                   {campaigns.reduce((sum, c) => sum + c.prospects, 0)}
                 </p>
               </div>
@@ -218,7 +218,7 @@ export default function Campaigns() {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Avg Response</p>
-                <p className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent mt-2">19.2%</p>
+                <p className="text-3xl font-bold text-foreground mt-2">19.2%</p>
               </div>
               <div className="w-14 h-14 bg-gradient-accent rounded-xl flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform duration-300">
                 <TrendingUp className="w-7 h-7 text-white" />
@@ -278,15 +278,15 @@ export default function Campaigns() {
                 {/* Stats with gradient backgrounds */}
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   <div className="text-center p-4 bg-surface-elevated/50 rounded-xl border border-border-subtle/30 hover:border-primary/30 transition-colors">
-                    <p className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">{campaign.prospects}</p>
+                    <p className="text-2xl font-bold text-foreground">{campaign.prospects}</p>
                     <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Prospects</p>
                   </div>
                   <div className="text-center p-4 bg-surface-elevated/50 rounded-xl border border-border-subtle/30 hover:border-primary/30 transition-colors">
-                    <p className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">{campaign.connections}</p>
+                    <p className="text-2xl font-bold text-foreground">{campaign.connections}</p>
                     <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Connected</p>
                   </div>
                   <div className="text-center p-4 bg-surface-elevated/50 rounded-xl border border-border-subtle/30 hover:border-primary/30 transition-colors">
-                    <p className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">{campaign.messages}</p>
+                    <p className="text-2xl font-bold text-foreground">{campaign.messages}</p>
                     <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Messages</p>
                   </div>
                   <div className="text-center p-4 bg-surface-elevated/50 rounded-xl border border-border-subtle/30 hover:border-accent/30 transition-colors">

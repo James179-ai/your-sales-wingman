@@ -128,7 +128,7 @@ export function Dashboard() {
             <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-success rounded-full border-2 border-background animate-pulse" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-1">
+            <h1 className="text-4xl font-bold text-foreground mb-1">
               Good Evening, Karl-Martin
             </h1>
             <p className="text-text-secondary text-base min-h-[3rem] flex items-center font-medium">
@@ -243,7 +243,7 @@ export function Dashboard() {
                   </PieChart>
                 </ChartContainer>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">73%</span>
+                  <span className="text-4xl font-bold text-foreground">73%</span>
                 </div>
               </div>
             </div>

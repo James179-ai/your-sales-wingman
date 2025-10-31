@@ -14,7 +14,142 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      companies: {
+        Row: {
+          company_size: string | null
+          created_at: string
+          description: string | null
+          id: string
+          industry: string | null
+          linkedin_url: string
+          name: string | null
+          raw_data: Json | null
+          updated_at: string
+        }
+        Insert: {
+          company_size?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          industry?: string | null
+          linkedin_url: string
+          name?: string | null
+          raw_data?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          company_size?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          industry?: string | null
+          linkedin_url?: string
+          name?: string | null
+          raw_data?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      company_analysis: {
+        Row: {
+          company_id: string
+          created_at: string
+          decision_makers: string[] | null
+          id: string
+          key_insights: string | null
+          pain_points: string[] | null
+          sales_angles: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          decision_makers?: string[] | null
+          id?: string
+          key_insights?: string | null
+          pain_points?: string[] | null
+          sales_angles?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          decision_makers?: string[] | null
+          id?: string
+          key_insights?: string | null
+          pain_points?: string[] | null
+          sales_angles?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_analysis_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prospects: {
+        Row: {
+          ai_summary: string | null
+          company: string | null
+          company_id: string | null
+          created_at: string
+          email: string | null
+          first_name: string
+          id: string
+          last_action: string | null
+          last_name: string | null
+          linkedin_url: string
+          phone: string | null
+          status: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          ai_summary?: string | null
+          company?: string | null
+          company_id?: string | null
+          created_at?: string
+          email?: string | null
+          first_name: string
+          id?: string
+          last_action?: string | null
+          last_name?: string | null
+          linkedin_url: string
+          phone?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ai_summary?: string | null
+          company?: string | null
+          company_id?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string
+          id?: string
+          last_action?: string | null
+          last_name?: string | null
+          linkedin_url?: string
+          phone?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospects_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

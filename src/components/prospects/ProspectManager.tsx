@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Upload, 
   Plus, 
@@ -15,50 +18,9 @@ import {
   AlertCircle,
   MessageSquare,
   Calendar,
-  XCircle
+  XCircle,
+  Loader2
 } from "lucide-react";
-
-const mockProspects = [
-  {
-    id: 1,
-    firstName: "Sarah",
-    linkedinUrl: "https://linkedin.com/in/sarahchen",
-    status: "connected",
-    profile: {
-      title: "VP of Sales",
-      company: "TechCorp Inc",
-      summary: "Experienced sales leader in B2B SaaS"
-    },
-    aiSummary: "Strong sales background, recently posted about automation challenges",
-    lastActionAt: "2024-01-15T10:30:00Z"
-  },
-  {
-    id: 2,
-    firstName: "Michael",
-    linkedinUrl: "https://linkedin.com/in/michaelr",
-    status: "messaged",
-    profile: {
-      title: "Director of Marketing",
-      company: "Growth Labs",
-      summary: "Digital marketing expert focusing on lead generation"
-    },
-    aiSummary: "Active in marketing communities, interested in growth tools",
-    lastActionAt: "2024-01-14T15:45:00Z"
-  },
-  {
-    id: 3,
-    firstName: "Jennifer",
-    linkedinUrl: "https://linkedin.com/in/jenniferwang",
-    status: "responded_positive",
-    profile: {
-      title: "CEO",
-      company: "StartupXYZ",
-      summary: "Serial entrepreneur in fintech space"
-    },
-    aiSummary: "Founder mindset, looking for scalable solutions",
-    lastActionAt: "2024-01-13T09:15:00Z"
-  }
-];
 
 const statusConfig = {
   new: { label: "New", color: "bg-blue-500", icon: Clock },
@@ -71,13 +33,81 @@ const statusConfig = {
 };
 
 export function ProspectManager() {
-  const [newProspect, setNewProspect] = useState({ firstName: "", linkedinUrl: "" });
+  const [newProspect, setNewProspect] = useState({ firstName: "", linkedinUrl: "", companyLinkedinUrl: "" });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // Fetch prospects from database
+  const { data: prospects, isLoading } = useQuery({
+    queryKey: ['prospects'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('prospects')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  // Add prospect mutation
+  const addProspectMutation = useMutation({
+    mutationFn: async (prospect: { firstName: string; linkedinUrl: string; companyLinkedinUrl?: string }) => {
+      // First, insert the prospect
+      const { data: prospectData, error: prospectError } = await supabase
+        .from('prospects')
+        .insert({
+          first_name: prospect.firstName,
+          linkedin_url: prospect.linkedinUrl,
+        })
+        .select()
+        .single();
+
+      if (prospectError) throw prospectError;
+
+      // If company LinkedIn URL is provided, trigger company analysis
+      if (prospect.companyLinkedinUrl && prospectData) {
+        const { data: analysisData, error: analysisError } = await supabase.functions.invoke('analyze-company', {
+          body: {
+            prospectId: prospectData.id,
+            companyLinkedinUrl: prospect.companyLinkedinUrl,
+          }
+        });
+
+        if (analysisError) {
+          console.error('Company analysis error:', analysisError);
+          toast({
+            title: "Warning",
+            description: "Prospect added but company analysis failed. Please try again later.",
+            variant: "destructive",
+          });
+        }
+      }
+
+      return prospectData;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['prospects'] });
+      toast({
+        title: "Success",
+        description: "Prospect added successfully",
+      });
+      setNewProspect({ firstName: "", linkedinUrl: "", companyLinkedinUrl: "" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to add prospect",
+        variant: "destructive",
+      });
+    }
+  });
 
   const handleAddProspect = () => {
     if (newProspect.firstName && newProspect.linkedinUrl) {
-      // Add prospect logic here
-      setNewProspect({ firstName: "", linkedinUrl: "" });
+      addProspectMutation.mutate(newProspect);
     }
   };
 
@@ -101,7 +131,7 @@ export function ProspectManager() {
         <div className="flex items-center space-x-3">
           <Badge variant="outline" className="gap-2">
             <Users className="w-4 h-4" />
-            {mockProspects.length} Total Prospects
+            {prospects?.length || 0} Total Prospects
           </Badge>
         </div>
       </div>
@@ -119,33 +149,60 @@ export function ProspectManager() {
               <Plus className="w-5 h-5 text-primary" />
               <h3 className="text-lg font-semibold text-foreground">Add Individual Prospect</h3>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input 
-                  id="firstName"
-                  placeholder="John"
-                  value={newProspect.firstName}
-                  onChange={(e) => setNewProspect({...newProspect, firstName: e.target.value})}
-                />
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input 
+                    id="firstName"
+                    placeholder="John"
+                    value={newProspect.firstName}
+                    onChange={(e) => setNewProspect({...newProspect, firstName: e.target.value})}
+                    disabled={addProspectMutation.isPending}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="linkedinUrl">Prospect LinkedIn URL</Label>
+                  <Input 
+                    id="linkedinUrl"
+                    placeholder="https://linkedin.com/in/johndoe"
+                    value={newProspect.linkedinUrl}
+                    onChange={(e) => setNewProspect({...newProspect, linkedinUrl: e.target.value})}
+                    disabled={addProspectMutation.isPending}
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="linkedinUrl">LinkedIn URL</Label>
-                <Input 
-                  id="linkedinUrl"
-                  placeholder="https://linkedin.com/in/johndoe"
-                  value={newProspect.linkedinUrl}
-                  onChange={(e) => setNewProspect({...newProspect, linkedinUrl: e.target.value})}
-                />
-              </div>
-              <div className="flex items-end">
-                <Button 
-                  variant="primary" 
-                  className="w-full"
-                  onClick={handleAddProspect}
-                >
-                  Add Prospect
-                </Button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="companyLinkedinUrl">Company LinkedIn URL (Optional)</Label>
+                  <Input 
+                    id="companyLinkedinUrl"
+                    placeholder="https://linkedin.com/company/techcorp"
+                    value={newProspect.companyLinkedinUrl}
+                    onChange={(e) => setNewProspect({...newProspect, companyLinkedinUrl: e.target.value})}
+                    disabled={addProspectMutation.isPending}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Provide company URL to automatically analyze the company
+                  </p>
+                </div>
+                <div className="flex items-end">
+                  <Button 
+                    variant="primary" 
+                    className="w-full"
+                    onClick={handleAddProspect}
+                    disabled={addProspectMutation.isPending || !newProspect.firstName || !newProspect.linkedinUrl}
+                  >
+                    {addProspectMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Adding...
+                      </>
+                    ) : (
+                      'Add Prospect'
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           </Card>
@@ -203,48 +260,70 @@ export function ProspectManager() {
           <h3 className="text-lg font-semibold text-foreground">Your Prospects</h3>
         </div>
         <div className="p-6">
-          <div className="space-y-4">
-            {mockProspects.map((prospect) => {
-              const StatusIcon = statusConfig[prospect.status as keyof typeof statusConfig].icon;
-              return (
-                <div key={prospect.id} className="flex items-center justify-between p-4 bg-surface-elevated rounded-lg border border-border-subtle">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                      <span className="font-medium text-primary">{prospect.firstName[0]}</span>
-                    </div>
-                    <div>
-                      <div className="flex items-center space-x-2">
-                        <h4 className="font-medium text-foreground">{prospect.firstName}</h4>
-                        <Badge 
-                          variant="outline" 
-                          className={`text-white border-none ${statusConfig[prospect.status as keyof typeof statusConfig].color}`}
-                        >
-                          <StatusIcon className="w-3 h-3 mr-1" />
-                          {statusConfig[prospect.status as keyof typeof statusConfig].label}
-                        </Badge>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : prospects && prospects.length > 0 ? (
+            <div className="space-y-4">
+              {prospects.map((prospect) => {
+                const status = prospect.status || 'new';
+                const StatusIcon = statusConfig[status as keyof typeof statusConfig]?.icon || Clock;
+                return (
+                  <div key={prospect.id} className="flex items-center justify-between p-4 bg-surface-elevated rounded-lg border border-border-subtle">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                        <span className="font-medium text-primary">{prospect.first_name[0]}</span>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        {prospect.profile.title} at {prospect.profile.company}
-                      </p>
-                      {prospect.aiSummary && (
-                        <p className="text-sm text-text-subtle mt-1">
-                          AI Summary: {prospect.aiSummary}
-                        </p>
-                      )}
+                      <div>
+                        <div className="flex items-center space-x-2">
+                          <h4 className="font-medium text-foreground">{prospect.first_name} {prospect.last_name}</h4>
+                          <Badge 
+                            variant="outline" 
+                            className={`text-white border-none ${statusConfig[status as keyof typeof statusConfig]?.color || 'bg-blue-500'}`}
+                          >
+                            <StatusIcon className="w-3 h-3 mr-1" />
+                            {statusConfig[status as keyof typeof statusConfig]?.label || 'New'}
+                          </Badge>
+                        </div>
+                        {prospect.title && prospect.company && (
+                          <p className="text-sm text-muted-foreground">
+                            {prospect.title} at {prospect.company}
+                          </p>
+                        )}
+                        {prospect.ai_summary && (
+                          <p className="text-sm text-text-subtle mt-1">
+                            AI Summary: {prospect.ai_summary}
+                          </p>
+                        )}
+                        <a 
+                          href={prospect.linkedin_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-primary hover:underline"
+                        >
+                          LinkedIn Profile
+                        </a>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Button variant="outline" size="sm">
+                        View Profile
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        Messages
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <Button variant="outline" size="sm">
-                      View Profile
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      Messages
-                    </Button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">No prospects yet. Add your first prospect above!</p>
+            </div>
+          )}
         </div>
       </Card>
     </div>

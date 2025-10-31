@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { ProspectDetailModal } from "./ProspectDetailModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -35,6 +36,7 @@ const statusConfig = {
 export function ProspectManager() {
   const [newProspect, setNewProspect] = useState({ firstName: "", linkedinUrl: "", companyLinkedinUrl: "" });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedProspectId, setSelectedProspectId] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -111,10 +113,79 @@ export function ProspectManager() {
     }
   };
 
+  // CSV import mutation
+  const importCSVMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const text = await file.text();
+      const lines = text.split('\n').filter(line => line.trim());
+      const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
+      
+      const firstNameIndex = headers.findIndex(h => h.includes('first') && h.includes('name'));
+      const linkedinIndex = headers.findIndex(h => h.includes('linkedin') && h.includes('url') && !h.includes('company'));
+      const companyLinkedinIndex = headers.findIndex(h => h.includes('company') && h.includes('linkedin'));
+      
+      if (firstNameIndex === -1 || linkedinIndex === -1) {
+        throw new Error('CSV must contain first_name and linkedin_url columns');
+      }
+
+      const prospects = lines.slice(1).map(line => {
+        const values = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+        return {
+          first_name: values[firstNameIndex],
+          linkedin_url: values[linkedinIndex],
+          company_linkedin_url: companyLinkedinIndex !== -1 ? values[companyLinkedinIndex] : undefined,
+        };
+      }).filter(p => p.first_name && p.linkedin_url);
+
+      // Insert all prospects
+      const { data: insertedProspects, error: insertError } = await supabase
+        .from('prospects')
+        .insert(prospects.map(p => ({ first_name: p.first_name, linkedin_url: p.linkedin_url })))
+        .select();
+
+      if (insertError) throw insertError;
+
+      // Trigger company analysis for prospects with company URLs (in background)
+      insertedProspects?.forEach((prospect, index) => {
+        if (prospects[index].company_linkedin_url) {
+          supabase.functions.invoke('analyze-company', {
+            body: {
+              prospectId: prospect.id,
+              companyLinkedinUrl: prospects[index].company_linkedin_url,
+            }
+          }).catch(err => console.error('Background analysis failed:', err));
+        }
+      });
+
+      return insertedProspects;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['prospects'] });
+      toast({
+        title: "Success",
+        description: `Imported ${data?.length || 0} prospects successfully`,
+      });
+      setSelectedFile(null);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to import CSV",
+        variant: "destructive",
+      });
+    }
+  });
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
+    }
+  };
+
+  const handleImportCSV = () => {
+    if (selectedFile) {
+      importCSVMutation.mutate(selectedFile);
     }
   };
 
@@ -241,11 +312,26 @@ export function ProspectManager() {
               </div>
               {selectedFile && (
                 <div className="flex justify-end space-x-3">
-                  <Button variant="outline" onClick={() => setSelectedFile(null)}>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setSelectedFile(null)}
+                    disabled={importCSVMutation.isPending}
+                  >
                     Cancel
                   </Button>
-                  <Button variant="primary">
-                    Import Prospects
+                  <Button 
+                    variant="primary"
+                    onClick={handleImportCSV}
+                    disabled={importCSVMutation.isPending}
+                  >
+                    {importCSVMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Importing...
+                      </>
+                    ) : (
+                      'Import Prospects'
+                    )}
                   </Button>
                 </div>
               )}
@@ -307,7 +393,11 @@ export function ProspectManager() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => setSelectedProspectId(prospect.id)}
+                      >
                         View Profile
                       </Button>
                       <Button variant="ghost" size="sm">
@@ -326,6 +416,12 @@ export function ProspectManager() {
           )}
         </div>
       </Card>
+
+      <ProspectDetailModal
+        prospectId={selectedProspectId}
+        open={!!selectedProspectId}
+        onOpenChange={(open) => !open && setSelectedProspectId(null)}
+      />
     </div>
   );
 }
